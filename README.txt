@@ -18,7 +18,6 @@ INTRODUCTION
 Devel module contains helper functions and pages for Drupal developers and
 inquisitive admins:
 
- - A block for running custom PHP on a page
  - A block for quickly accessing devel pages
  - A block for masquerading as other users (useful for testing)
  - A mail-system class which redirects outbound email to files
