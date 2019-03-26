@@ -247,4 +247,11 @@ class EntityManagerWrapper extends DefaultPluginManager implements EntityTypeMan
     return $this->entityManager->getActiveDefinition($entity_type_id);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getActiveFieldStorageDefinitions($entity_type_id) {
+    return $this->entityManager->getActiveFieldStorageDefinitions($entity_type_id);
+  }
+
 }
