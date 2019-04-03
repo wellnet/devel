@@ -9,6 +9,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\devel_generate\DevelGenerateBase;
 use Drush\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Component\Datetime\Time;
 
 /**
  * Provides a UserDevelGenerate plugin.
@@ -43,6 +44,13 @@ class UserDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
   protected $dateFormatter;
 
   /**
+   * Provides system time.
+   *
+   * @var \Drupal\Core\Datetime\Time
+   */
+  protected $time;
+
+  /**
    * Constructs a new UserDevelGenerate object.
    *
    * @param array $configuration
@@ -55,12 +63,15 @@ class UserDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
    *   The user storage.
    * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
    *   The date formatter service.
+   * @param \Drupal\Core\Datetime\Time $time
+   *   Provides system time.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityStorageInterface $entity_storage, DateFormatterInterface $date_formatter) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityStorageInterface $entity_storage, DateFormatterInterface $date_formatter, Time $time) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->userStorage = $entity_storage;
     $this->dateFormatter = $date_formatter;
+    $this->time = $time;
   }
 
   /**
@@ -70,7 +81,8 @@ class UserDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
     return new static(
       $configuration, $plugin_id, $plugin_definition,
       $container->get('entity.manager')->getStorage('user'),
-      $container->get('date.formatter')
+      $container->get('date.formatter'),
+      $container->get('datetime.time')
     );
   }
 
@@ -161,7 +173,7 @@ class UserDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
           'pass' => $pass,
           'mail' => $name . '@example.com',
           'status' => 1,
-          'created' => REQUEST_TIME - mt_rand(0, $age),
+          'created' => $this->time->getRequestTime() - mt_rand(0, $age),
           'roles' => array_values($roles),
           // A flag to let hook_user_* know that this is a generated user.
           'devel_generate' => TRUE,
