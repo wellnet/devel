@@ -28,7 +28,7 @@ build:
     testing:
       container_command:
         commands:
-          - "cd ${SOURCE_DIR} && sudo -u www-data composer require drush/drush:^9.6.1"
+          - "cd ${SOURCE_DIR} && sudo -u www-data composer require drush/drush:^9.6.1 && sudo -u www-data composer update twig/twig"
       run_tests.standard:
         types: 'Simpletest,PHPUnit-Unit,PHPUnit-Kernel,PHPUnit-Functional'
       run_tests.js:
