@@ -159,6 +159,8 @@ class EntityManagerWrapper extends DefaultPluginManager implements EntityTypeMan
    */
   public function clearCachedDefinitions() {
     $this->entityManager->clearCachedDefinitions();
+    $this->loaded = NULL;
+    $this->rendered = NULL;
   }
 
   /**
