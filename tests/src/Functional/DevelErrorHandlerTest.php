@@ -21,10 +21,7 @@ class DevelErrorHandlerTest extends BrowserTestBase {
    * Tests devel error handler.
    */
   public function testErrorHandler() {
-
-    $this->markTestSkipped('Not showing correct type of message. With much regret I disable this test so we can keep our suite green. Please fix this and we will re-enable it.');
-
-    $messages_selector = 'div.messages--warning';
+    $messages_selector = 'div.messages--status';
 
     $expected_notice = new FormattableMarkup('%type: @message in %function (line ', [
       '%type' => 'Notice',
