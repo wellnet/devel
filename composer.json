@@ -41,7 +41,12 @@
   "require": {
     "symfony/var-dumper": "~2.7|^3|^4"
   },
-  "suggest": {},
+  "suggest": {
+    "kint-php/kint": "Kint provides an informative display of arrays/objects. Useful for debugging and developing."
+  },
+  "conflict": {
+    "kint-php/kint": "<3"
+  },
   "extra": {
     "drush": {
       "services": {
