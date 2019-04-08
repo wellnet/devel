@@ -87,8 +87,8 @@ class SettingsForm extends ConfigFormBase {
       '#options' => array(
         DEVEL_ERROR_HANDLER_NONE => t('None'),
         DEVEL_ERROR_HANDLER_STANDARD => t('Standard Drupal'),
-        DEVEL_ERROR_HANDLER_BACKTRACE_DPM => t('Backtrace in the message area'),
-        DEVEL_ERROR_HANDLER_BACKTRACE_KINT => t('Backtrace above the rendered page'),
+        DEVEL_ERROR_HANDLER_BACKTRACE_DPM => t('Kint backtrace in the message area'),
+        DEVEL_ERROR_HANDLER_BACKTRACE_KINT => t('Kint backtrace above the rendered page'),
       ),
       '#multiple' => TRUE,
       '#default_value' => empty($error_handlers) ? DEVEL_ERROR_HANDLER_NONE : $error_handlers,
@@ -101,11 +101,11 @@ class SettingsForm extends ConfigFormBase {
           '#items' => [
             $this->t('<em>None</em> is a good option when stepping through the site in your debugger.'),
             $this->t('<em>Standard Drupal</em> does not display all the information that is often needed to resolve an issue.'),
-            $this->t('<em>Backtrace</em> displays nice debug information when any type of error is noticed, but only to users with the %perm permission.', ['%perm' => t('Access developer information')]),
+            $this->t('<em>Kint backtrace</em> displays nice debug information when any type of error is noticed, but only to users with the %perm permission.', ['%perm' => t('Access developer information')]),
           ],
         ],
         [
-          '#markup' => $this->t('Depending on the situation, the theme, the size of the call stack and the arguments, etc., some handlers may not display their messages, or display them on the subsequent page. Select <em>Standard Drupal</em> <strong>and</strong> <em>Backtrace above the rendered page</em> to maximize your chances of not missing any messages.') . '<br />' .
+          '#markup' => $this->t('Depending on the situation, the theme, the size of the call stack and the arguments, etc., some handlers may not display their messages, or display them on the subsequent page. Select <em>Standard Drupal</em> <strong>and</strong> <em>Kint backtrace above the rendered page</em> to maximize your chances of not missing any messages.') . '<br />' .
             $this->t('Demonstrate the current error handler(s):') . ' ' .
             $this->l('notice', $current_url->setOption('query', ['demo' => 'notice'])) . ', ' .
             $this->l('notice+warning', $current_url->setOption('query', ['demo' => 'warning'])). ', ' .

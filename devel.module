@@ -345,34 +345,6 @@ if (!function_exists('ddm')) {
   }
 }
 
-if (!function_exists('kint')) {
-  /**
-   * Prints passed argument(s) using Kint debug tool.
-   *
-   * Wrapper for DevelDumperManager::dump().
-   *
-   * @see \Drupal\devel\DevelDumperManager::dump()
-   */
-  function kint() {
-    $args = func_get_args();
-    return \Drupal::service('devel.dumper')->dump($args, NULL, 'kint');
-  }
-}
-
-if (!function_exists('ksm')) {
-  /**
-   * Prints passed argument(s) to the 'message' area of the page.
-   *
-   * Wrapper for DevelDumperManager::message().
-   *
-   * @see \Drupal\devel\DevelDumperManager::message()
-   */
-  function ksm() {
-    $args = func_get_args();
-    return \Drupal::service('devel.dumper')->message($args, NULL, 'kint');
-  }
-}
-
 /**
  * Wrapper for DevelDumperManager::message().
  *
