@@ -97,8 +97,6 @@ class DevelErrorHandlerTest extends BrowserTestBase {
 
     $this->clickLink('notice+warning');
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertSession()->pageTextContains($expected_notice);
-    $this->assertSession()->pageTextContains($expected_warning);
     $this->assertSession()->elementContains('css', $messages_selector, $expected_notice);
     $this->assertSession()->elementContains('css', $messages_selector, $expected_warning);
 
@@ -123,8 +121,6 @@ class DevelErrorHandlerTest extends BrowserTestBase {
 
     $this->clickLink('notice+warning');
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertSession()->pageTextContains($expected_notice);
-    $this->assertSession()->pageTextContains($expected_warning);
     $this->assertSession()->elementContains('css', $messages_selector, $expected_notice);
     $this->assertSession()->elementContains('css', $messages_selector, $expected_warning);
 
@@ -133,8 +129,6 @@ class DevelErrorHandlerTest extends BrowserTestBase {
     $config->set('error_level', ERROR_REPORTING_DISPLAY_ALL)->save();
     $this->clickLink('notice+warning');
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertSession()->pageTextContains($expected_notice);
-    $this->assertSession()->pageTextContains($expected_warning);
     $this->assertSession()->elementContains('css', $messages_selector, $expected_notice);
     $this->assertSession()->elementContains('css', $messages_selector, $expected_warning);
 
@@ -143,8 +137,6 @@ class DevelErrorHandlerTest extends BrowserTestBase {
     $config->set('error_level', ERROR_REPORTING_DISPLAY_SOME)->save();
     $this->clickLink('notice+warning');
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertSession()->pageTextContains($expected_notice);
-    $this->assertSession()->pageTextContains($expected_warning);
     $this->assertSession()->elementContains('css', $messages_selector, $expected_notice);
     $this->assertSession()->elementContains('css', $messages_selector, $expected_warning);
 
