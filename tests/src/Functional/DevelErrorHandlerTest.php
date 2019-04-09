@@ -21,7 +21,7 @@ class DevelErrorHandlerTest extends BrowserTestBase {
    * Tests devel error handler.
    */
   public function testErrorHandler() {
-    $messages_selector = 'div.messages--error';
+    $messages_selector = 'div.messages';
 
     $expected_notice = new FormattableMarkup('%type: @message in %function (line ', [
       '%type' => 'Notice',
