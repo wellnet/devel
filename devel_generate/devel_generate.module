@@ -35,7 +35,7 @@ function devel_generate_entity_insert(EntityInterface $entity) {
   if ($entity->getEntityTypeId() != 'node' || !isset($entity->devel_generate)) {
     return;
   }
-  /** @var \Drupal\node\NodeInterface $entity */
+  /* @var \Drupal\node\NodeInterface $entity */
   $results = $entity->devel_generate;
 
   if (!empty($results['max_comments'])) {

@@ -92,7 +92,7 @@ abstract class DevelGenerateBase extends PluginBase implements DevelGenerateBase
    *   The entity to be enriched with sample field values.
    */
   public static function populateFields(EntityInterface $entity) {
-    /** @var \Drupal\field\FieldConfigInterface[] $instances */
+    /* @var \Drupal\field\FieldConfigInterface[] $instances */
     $instances = entity_load_multiple_by_properties('field_config', array('entity_type' => $entity->getEntityType()->id(), 'bundle' => $entity->bundle()));
 
     if ($skips = function_exists('drush_get_option') ? drush_get_option('skip-fields', '') : @$_REQUEST['skip-fields']) {

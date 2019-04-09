@@ -177,7 +177,7 @@ class DevelGenerateCommands extends DrushCommands {
     $manager = $this->getManager();
     $args = $commandData->input()->getArguments();
     $commandName = array_shift($args);
-    /** @var DevelGenerateBaseInterface $instance */
+    /* @var DevelGenerateBaseInterface $instance */
     $instance = $manager->createInstance($commandData->annotationData()->get('pluginId'), array());
     $this->setPluginInstance($instance);
     $parameters = $instance->validateDrushParams($args, $commandData->input()->getOptions());

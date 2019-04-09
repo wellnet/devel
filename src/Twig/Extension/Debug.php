@@ -181,10 +181,10 @@ class Debug extends \Twig_Extension {
    * Filters the Twig context variable.
    *
    * @param array $context
-   *  The Twig context.
+   *   The Twig context.
    *
    * @return array
-   *  An array Twig context variables.
+   *   An array Twig context variables.
    */
   protected function getContextVariables(array $context) {
     $context_variables = [];
