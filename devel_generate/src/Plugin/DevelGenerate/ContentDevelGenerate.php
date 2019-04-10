@@ -395,7 +395,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       $this->develGenerateContentAddNode($vars);
     }
     else {
-      $this->develGenerateContentAddNode($context['results']);
+      $this->develGenerateContentAddNode($vars);
       $context['results']['num']++;
     }
   }
@@ -494,7 +494,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     }
     $users = $results['users'];
 
-    $node_type = array_rand(array_filter($results['node_types']));
+    $node_type = array_rand($results['node_types']);
     $uid = $users[array_rand($users)];
 
     $node = $this->nodeStorage->create(array(

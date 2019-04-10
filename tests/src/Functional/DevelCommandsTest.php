@@ -22,14 +22,12 @@ class DevelCommandsTest extends BrowserTestBase
    */
   public static $modules = ['devel'];
 
-  public function testToken() {
+  public function testCommands() {
     $this->drush('devel:token', [], ['format' => 'json']);
     $output = $this->getOutputFromJSON();
     $tokens = array_column($output, 'token');
     $this->assertContains('account-name', $tokens);
-  }
 
-  public function testServices() {
     $this->drush('devel:services', [], ['format' => 'json']);
     $output = $this->getOutputFromJSON();
     $this->assertContains('current_user', $output);
