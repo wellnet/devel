@@ -24,7 +24,7 @@ trait DevelDumperTestTrait {
    */
   public function assertDumpExportEquals($dump, $data, $name = NULL, $message = '') {
     $output = $this->getDumperExportDump($data, $name);
-    $this->assertEqual(rtrim($dump), $output, $message);
+    $this->assertEquals(rtrim($dump), $output, $message);
   }
 
   /**
@@ -63,7 +63,7 @@ trait DevelDumperTestTrait {
    */
   public function assertDumpEquals($dump, $data, $name = NULL, $message = '') {
     $output = $this->getDumperDump($data, $name);
-    $this->assertEqual(rtrim($dump), $output, $message);
+    $this->assertEquals(rtrim($dump), $output, $message);
   }
 
   /**
