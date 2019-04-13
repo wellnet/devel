@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\devel\Functional;
 
-use Drupal\Core\Url;
 use Drupal\Tests\BrowserTestBase;
 
 /**

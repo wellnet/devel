@@ -31,7 +31,6 @@ class DevelTwigExtensionTest extends KernelTestBase {
    */
   public static $modules = ['devel', 'user', 'system'];
 
-
   /**
    * {@inheritdoc}
    */
@@ -106,7 +105,7 @@ class DevelTwigExtensionTest extends KernelTestBase {
   /**
    * Tests that the Twig function for XDebug integration is registered properly.
    */
-  public function testXDebugIntegrationFunctionsRegistered() {
+  public function testXdebugIntegrationFunctionsRegistered() {
     /* @var \Twig_SimpleFunction $function */
     $function = \Drupal::service('twig')->getFunction('devel_breakpoint');
     $this->assertTrue($function instanceof \Twig_SimpleFunction);
@@ -147,7 +146,7 @@ class DevelTwigExtensionTest extends KernelTestBase {
     // Ensures that if no argument is passed to the function the twig context is
     // dumped.
     $output = (string) $environment->renderInline($template, $context);
-    $this->assertContains($expected_template_output,  $output);
+    $this->assertContains($expected_template_output, $output);
     $this->assertContainsDump($output, $context, 'Twig context');
 
     // Ensures that if an argument is passed to the function it is dumped.

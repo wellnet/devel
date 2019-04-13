@@ -54,7 +54,7 @@ class DevelEnforcedDependenciesTest extends KernelTestBase {
       'id' => $block_id,
       'theme' => $this->config('system.theme')->get('default'),
       'label' => $this->randomMachineName(8),
-      'visibility' => array(),
+      'visibility' => [],
       'weight' => 0,
     ]);
     $block->save();
