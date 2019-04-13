@@ -12,7 +12,7 @@ use Drupal\devel\DevelDumperBase;
  * @DevelDumper(
  *   id = "default",
  *   label = @Translation("Default"),
- *   description = @Translation("Wrapper for <a href='http://www.doctrine-project.org/api/common/2.3/class-Doctrine.Common.Util.Debug.html'>Doctrine</a> debugging tool.")
+ *   description = @Translation("Wrapper for <a href='https://www.doctrine-project.org/api/common/latest/Doctrine/Common/Util/Debug.html'>Doctrine</a> debugging tool.")
  * )
  */
 class DoctrineDebug extends DevelDumperBase {
