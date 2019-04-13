@@ -2,6 +2,7 @@
 
 namespace Drupal\devel\Controller;
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DrupalKernelInterface;
 use Drupal\Core\Url;
@@ -94,6 +95,14 @@ class ContainerInfoController extends ControllerBase implements ContainerAwareIn
             'devel' => [
               'title' => $this->t('Devel'),
               'url' => Url::fromRoute('devel.container_info.service.detail', ['service_id' => $service_id]),
+              'attributes' => [
+                'class' => ['use-ajax'],
+                'data-dialog-type' => 'modal',
+                'data-dialog-options' => Json::encode([
+                  'width' => 700,
+                  'minHeight' => 500,
+                ]),
+              ],
             ],
           ],
         ];
@@ -204,6 +213,14 @@ class ContainerInfoController extends ControllerBase implements ContainerAwareIn
             'devel' => [
               'title' => $this->t('Devel'),
               'url' => Url::fromRoute('devel.container_info.parameter.detail', ['parameter_name' => $parameter_name]),
+              'attributes' => [
+                'class' => ['use-ajax'],
+                'data-dialog-type' => 'modal',
+                'data-dialog-options' => Json::encode([
+                  'width' => 700,
+                  'minHeight' => 500,
+                ]),
+              ],
             ],
           ],
         ];

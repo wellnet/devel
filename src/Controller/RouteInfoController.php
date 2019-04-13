@@ -2,6 +2,7 @@
 
 namespace Drupal\devel\Controller;
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Routing\RouteProviderInterface;
@@ -112,6 +113,14 @@ class RouteInfoController extends ControllerBase {
           'devel' => [
             'title' => $this->t('Devel'),
             'url' => Url::fromRoute('devel.route_info.item', [], $parameters),
+            'attributes' => [
+              'class' => ['use-ajax'],
+              'data-dialog-type' => 'modal',
+              'data-dialog-options' => Json::encode([
+                'width' => 700,
+                'minHeight' => 500,
+              ]),
+            ],
           ],
         ],
       ];
