@@ -283,6 +283,86 @@ function devel_page_attachments_alter(&$page) {
 }
 
 /**
+ * Dumps information about a variable.
+ *
+ * Wrapper for DevelDumperManager::dump().
+ *
+ * @param mixed $input
+ *   The variable to dump.
+ * @param string $name
+ *   (optional) The label to output before variable, defaults to NULL.
+ * @param string $plugin_id
+ *   (optional) The plugin ID, defaults to NULL.
+ *
+ * @see \Drupal\devel\DevelDumperManager::dump()
+ */
+function devel_dump($input, $name = NULL, $plugin_id = NULL) {
+  \Drupal::service('devel.dumper')->dump($input, $name, $plugin_id);
+}
+
+/**
+ * Returns a string representation of a variable.
+ *
+ * Wrapper for DevelDumperManager::export().
+ *
+ * @param mixed $input
+ *   The variable to dump.
+ * @param string $name
+ *   (optional) The label to output before variable, defaults to NULL.
+ * @param string $plugin_id
+ *   (optional) The plugin ID, defaults to NULL.
+ *
+ * @return string
+ *   String representation of a variable.
+ *
+ * @see \Drupal\devel\DevelDumperManager::export()
+ */
+function devel_export($input, $name = NULL, $plugin_id = NULL) {
+  return \Drupal::service('devel.dumper')->export($input, $name, $plugin_id);
+}
+
+/**
+ * Sets a message with a string representation of a variable.
+ *
+ * Wrapper for DevelDumperManager::message().
+ *
+ * @param mixed $input
+ *   The variable to dump.
+ * @param string $name
+ *   (optional) The label to output before variable, defaults to NULL.
+ * @param string $type
+ *   (optional) The message's type. Defaults to 'status'.
+ * @param string $plugin_id
+ *   (optional) The plugin ID, defaults to NULL.
+ *
+ * @see \Drupal\devel\DevelDumperManager::message()
+ */
+function devel_message($input, $name = NULL, $type = 'status', $plugin_id = NULL) {
+  \Drupal::service('devel.dumper')->message($input, $name, $type, $plugin_id);
+}
+
+/**
+ * Logs a variable to a drupal_debug.txt in the site's temp directory.
+ *
+ * Wrapper for DevelDumperManager::debug().
+ *
+ * @param mixed $input
+ *   The variable to log to the drupal_debug.txt log file.
+ * @param string $name
+ *   (optional) If set, a label to output before $data in the log file.
+ * @param string $plugin_id
+ *   (optional) The plugin ID, defaults to NULL.
+ *
+ * @return null|false
+ *   Empty if successful, FALSE if the log file could not be written.
+ *
+ * @see \Drupal\devel\DevelDumperManager::debug()
+ */
+function devel_debug($input, $name = NULL, $plugin_id = NULL) {
+  return \Drupal::service('devel.dumper')->debug($input, $name, $plugin_id);
+}
+
+/**
  * Wrapper for DevelDumperManager::dump().
  *
  * Calls the http://www.firephp.org/ fb() function if it is found.
