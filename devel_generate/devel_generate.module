@@ -2,6 +2,7 @@
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
 use Drupal\Component\Utility\Random;
 use Drupal\devel_generate\DevelGenerateBase;
@@ -15,7 +16,7 @@ function devel_generate_menu_links_discovered_alter(&$links) {
   foreach ($devel_generate_plugins as $id => $plugin) {
     $label = $plugin['label'];
     $links["devel_generate.$id"] = array(
-      'title' => "Generate $label",
+      'title' => new TranslatableMarkup("Generate @label", ['@label' => $label]),
       'parent' => 'system.admin_config_development',
       'description' => $plugin['description'],
       'route_name' => "devel_generate.$id",
