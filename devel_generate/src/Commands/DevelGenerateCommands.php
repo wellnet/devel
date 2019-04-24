@@ -164,7 +164,6 @@ class DevelGenerateCommands extends DrushCommands {
    */
   public function content($num = 50, $max_comments = 0, $options = ['kill' => FALSE, 'types' => 'page,article', 'feedback' => 1000]) {
     $this->generate();
-    drush_backend_batch_process();
   }
 
 
