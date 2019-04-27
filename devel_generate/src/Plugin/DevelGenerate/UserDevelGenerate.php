@@ -2,6 +2,7 @@
 
 namespace Drupal\devel_generate\Plugin\DevelGenerate;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -9,7 +10,6 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\devel_generate\DevelGenerateBase;
 use Drush\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Component\Datetime\Time;
 
 /**
  * Provides a UserDevelGenerate plugin.
@@ -46,7 +46,7 @@ class UserDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
   /**
    * Provides system time.
    *
-   * @var \Drupal\Core\Datetime\Time
+   * @var \Drupal\Core\Datetime\TimeInterface
    */
   protected $time;
 
@@ -63,10 +63,10 @@ class UserDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
    *   The user storage.
    * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
    *   The date formatter service.
-   * @param \Drupal\Core\Datetime\Time $time
+   * @param \Drupal\Core\Datetime\TimeInterface $time
    *   Provides system time.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityStorageInterface $entity_storage, DateFormatterInterface $date_formatter, Time $time) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityStorageInterface $entity_storage, DateFormatterInterface $date_formatter, TimeInterface $time) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->userStorage = $entity_storage;
