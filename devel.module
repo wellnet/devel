@@ -3,6 +3,7 @@
 /**
  * @file
  * This module holds functions useful for Drupal development.
+ *
  * Please contribute!
  */
 
@@ -17,6 +18,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Core\Menu\LocalTaskDefault;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -145,7 +147,7 @@ function devel_set_message($msg, $type = NULL) {
     drush_log($msg, $type);
   }
   else {
-    drupal_set_message($msg, $type, TRUE);
+    \Drupal::messenger()->addMessage($msg, $type, TRUE);
   }
 }
 
@@ -259,7 +261,7 @@ function backtrace_error_handler($error_level, $message, $filename = NULL, $line
     if (\Drupal::config('system.logging')->get('error_level') != 'hide') {
       $error_handlers = devel_get_handlers();
       if (!empty($error_handlers[DEVEL_ERROR_HANDLER_STANDARD])) {
-        drupal_set_message($msg, ($severity_level <= RfcLogLevel::NOTICE ? 'error' : 'warning'), TRUE);
+        \Drupal::messenger()->addMessage($msg, ($severity_level <= RfcLogLevel::NOTICE ? MessengerInterface::TYPE_ERROR : MessengerInterface::TYPE_WARNING), TRUE);
       }
       if (!empty($error_handlers[DEVEL_ERROR_HANDLER_BACKTRACE_KINT])) {
         print kpr(ddebug_backtrace(TRUE, 1), TRUE, $msg);
@@ -398,17 +400,19 @@ function dcp() {
 }
 
 if (!function_exists('dd')) {
+
   /**
    * Wrapper for DevelDumperManager::debug().
    *
    * @deprecated since Drupal 8.6.0 because symfony now has dd() as a function.
    *   Use the ddm() function instead.
-   * 
+   *
    * @see \Drupal\devel\DevelDumperManager::debug()
    */
   function dd($data, $label = NULL) {
     return \Drupal::service('devel.dumper')->debug($data, $label, 'default');
   }
+
 }
 
 if (!function_exists('ddm')) {
@@ -427,21 +431,21 @@ if (!function_exists('ddm')) {
  *
  * Prints a variable to the 'message' area of the page.
  *
- * Uses drupal_set_message().
+ * Uses Drupal\Core\Messenger\MessengerInterface::addMessage()
  *
- * @param $input
+ * @param mixed $input
  *   An arbitrary value to output.
  * @param string $name
  *   Optional name for identifying the output.
  * @param string $type
- *   Optional message type for drupal_set_message(), defaults to 'status'.
+ *   Optional message type see MessengerInterface, defaults to TYPE_STATUS.
  *
  * @return input
  *   The unaltered input value.
  *
  * @see \Drupal\devel\DevelDumperManager::message()
  */
-function dpm($input, $name = NULL, $type = 'status') {
+function dpm($input, $name = NULL, $type = MessengerInterface::TYPE_STATUS) {
   \Drupal::service('devel.dumper')->message($input, $name, $type);
   return $input;
 }
@@ -451,7 +455,7 @@ function dpm($input, $name = NULL, $type = 'status') {
  *
  * Displays a Variable::export() variable to the 'message' area of the page.
  *
- * Uses drupal_set_message().
+ * Uses Drupal\Core\Messenger\MessengerInterface::addMessage()
  *
  * @param $input
  *   An arbitrary value to output.
@@ -464,7 +468,7 @@ function dpm($input, $name = NULL, $type = 'status') {
  * @see \Drupal\devel\DevelDumperManager::message()
  */
 function dvm($input, $name = NULL) {
-  \Drupal::service('devel.dumper')->message($input, $name, 'status', 'drupal_variable');
+  \Drupal::service('devel.dumper')->message($input, $name, MessengerInterface::TYPE_STATUS, 'drupal_variable');
   return $input;
 }
 
