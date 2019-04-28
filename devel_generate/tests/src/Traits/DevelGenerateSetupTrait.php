@@ -30,13 +30,13 @@ trait DevelGenerateSetupTrait
     }
 
     // Creating a vocabulary to associate taxonomy terms generated.
-    $this->vocabulary = Vocabulary::create(array(
+    $this->vocabulary = Vocabulary::create([
       'name' => $this->randomMachineName(),
       'description' => $this->randomMachineName(),
       'vid' => mb_strtolower($this->randomMachineName()),
       'langcode' => Language::LANGCODE_NOT_SPECIFIED,
       'weight' => mt_rand(0, 10),
-    ));
+    ]);
     $this->vocabulary->save();
 
     // Creates a field of an entity reference field storage on article.
