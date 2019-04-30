@@ -7,6 +7,7 @@ use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\devel_generate\DevelGenerateBase;
 use Drush\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -90,48 +91,48 @@ class UserDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
    * {@inheritdoc}
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
-    $form['num'] = array(
+    $form['num'] = [
       '#type' => 'number',
       '#title' => $this->t('How many users would you like to generate?'),
       '#default_value' => $this->getSetting('num'),
       '#required' => TRUE,
       '#min' => 0,
-    );
+    ];
 
-    $form['kill'] = array(
+    $form['kill'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Delete all users (except user id 1) before generating new users.'),
       '#default_value' => $this->getSetting('kill'),
-    );
+    ];
 
     $options = user_role_names(TRUE);
-    unset($options[DRUPAL_AUTHENTICATED_RID]);
-    $form['roles'] = array(
+    unset($options[AccountInterface::AUTHENTICATED_ROLE]);
+    $form['roles'] = [
       '#type' => 'checkboxes',
       '#title' => $this->t('Which roles should the users receive?'),
       '#description' => $this->t('Users always receive the <em>authenticated user</em> role.'),
       '#options' => $options,
-    );
+    ];
 
-    $form['pass'] = array(
+    $form['pass'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Password to be set'),
       '#default_value' => $this->getSetting('pass'),
       '#size' => 32,
       '#description' => $this->t('Leave this field empty if you do not need to set a password'),
-    );
+    ];
 
-    $options = array(1 => $this->t('Now'));
-    foreach (array(3600, 86400, 604800, 2592000, 31536000) as $interval) {
+    $options = [1 => $this->t('Now')];
+    foreach ([3600, 86400, 604800, 2592000, 31536000] as $interval) {
       $options[$interval] = $this->dateFormatter->formatInterval($interval, 1) . ' ' . $this->t('ago');
     }
-    $form['time_range'] = array(
+    $form['time_range'] = [
       '#type' => 'select',
       '#title' => $this->t('How old should user accounts be?'),
       '#description' => $this->t('User ages will be distributed randomly from the current time, back to the selected time.'),
       '#options' => $options,
       '#default_value' => 604800,
-    );
+    ];
 
     return $form;
   }
@@ -157,17 +158,17 @@ class UserDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
     }
 
     if ($num > 0) {
-      $names = array();
+      $names = [];
       while (count($names) < $num) {
         $name = $this->getRandom()->word(mt_rand(6, 12));
         $names[$name] = '';
       }
 
       if (empty($roles)) {
-        $roles = array(DRUPAL_AUTHENTICATED_RID);
+        $roles = [AccountInterface::AUTHENTICATED_ROLE];
       }
       foreach ($names as $name => $value) {
-        $account = $this->userStorage->create(array(
+        $account = $this->userStorage->create([
           'uid' => NULL,
           'name' => $name,
           'pass' => $pass,
@@ -177,24 +178,25 @@ class UserDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
           'roles' => array_values($roles),
           // A flag to let hook_user_* know that this is a generated user.
           'devel_generate' => TRUE,
-        ));
+        ]);
 
         // Populate all fields with sample values.
         $this->populateFields($account);
         $account->save();
       }
     }
-    $this->setMessage($this->t('@num_users created.', array('@num_users' => $this->formatPlural($num, '1 user', '@count users'))));
+    $this->setMessage($this->t('@num_users created.',
+      ['@num_users' => $this->formatPlural($num, '1 user', '@count users')]));
   }
 
   /**
    * {@inheritdoc}
    */
-  public function validateDrushParams($args, $options = []) {
-    $values = array(
+  public function validateDrushParams($args, array $options = []) {
+    $values = [
       'num' => array_shift($args),
       'time_range' => 0,
-    );
+    ];
 
     if ($this->isDrush8()) {
       $values += [
