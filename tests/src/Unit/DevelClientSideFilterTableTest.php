@@ -122,7 +122,13 @@ class DevelClientSideFilterTableTest extends UnitTestCase {
           ['data' => 'test2', 'filter' => TRUE, 'class' => ['test2']],
           ['data' => 'test3', 'class' => ['test3']],
           ['test4'],
-          ['data' => 'test5', 'filter' => TRUE, 'class' => ['devel-event-name-header'], 'colspan' => '3', 'header' => TRUE],
+          [
+            'data' => 'test5',
+            'filter' => TRUE,
+            'class' => ['devel-event-name-header'],
+            'colspan' => '3',
+            'header' => TRUE,
+          ],
         ],
       ],
       '#empty' => $t->translate('Empty 2'),
@@ -157,11 +163,25 @@ class DevelClientSideFilterTableTest extends UnitTestCase {
       '#header' => $headers,
       '#rows' => [
         [
-          ['data' => 'test1', 'filter' => TRUE, 'class' => ['table-filter-text-source']],
-          ['data' => 'test2', 'filter' => TRUE, 'class' => ['test2', 'table-filter-text-source']],
+          [
+            'data' => 'test1',
+            'filter' => TRUE,
+            'class' => ['table-filter-text-source'],
+          ],
+          [
+            'data' => 'test2',
+            'filter' => TRUE,
+            'class' => ['test2', 'table-filter-text-source'],
+          ],
           ['data' => 'test3', 'class' => ['test3']],
           ['test4'],
-          ['data' => 'test5', 'filter' => TRUE, 'class' => ['devel-event-name-header', 'table-filter-text-source'], 'colspan' => '3', 'header' => TRUE],
+          [
+            'data' => 'test5',
+            'filter' => TRUE,
+            'class' => ['devel-event-name-header', 'table-filter-text-source'],
+            'colspan' => '3',
+            'header' => TRUE,
+          ],
         ],
       ],
       '#empty' => $t->translate('Empty 2'),

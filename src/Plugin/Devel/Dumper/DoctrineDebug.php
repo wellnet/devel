@@ -44,9 +44,9 @@ class DoctrineDebug extends DevelDumperBase {
   public function exportAsRenderable($input, $name = NULL) {
     $output['container'] = [
       '#type' => 'details',
-      '#title' => $name ? : $this->t('Variable'),
+      '#title' => $name ?: $this->t('Variable'),
       '#attached' => [
-        'library' => ['devel/devel']
+        'library' => ['devel/devel'],
       ],
       '#attributes' => [
         'class' => ['container-inline', 'devel-dumper', 'devel-selectable'],
