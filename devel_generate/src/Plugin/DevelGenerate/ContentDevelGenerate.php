@@ -314,11 +314,11 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
    * {@inheritdoc}
    */
   protected function generateElements(array $values) {
-    if ($values['num'] <= 50 && $values['max_comments'] <= 10) {
-      $this->generateContent($values);
+    if ($this->isBatch($values['num'], $values['max_comments'])) {
+      $this->generateBatchContent($values);
     }
     else {
-      $this->generateBatchContent($values);
+      $this->generateContent($values);
     }
   }
 
@@ -449,12 +449,16 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     if (array_diff($node_types, $all_types)) {
       throw new \Exception(dt('One or more content types have been entered that don\'t exist on this site'));
     }
-    if ($values['num'] > 50) {
+    if ($this->isBatch($values['num'], $values['max_comments'])) {
       $this->drushBatch = TRUE;
       $this->develGenerateContentPreNode($values);
     }
 
     return $values;
+  }
+
+  protected function isBatch($content_count, $comment_count) {
+    return $content_count >= 50 || $comment_count >= 10;
   }
 
   /**
@@ -516,7 +520,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     // Populate all fields with sample values.
     $this->populateFields($node);
 
-    // See devel_generate_node_insert() for actions that happen before and after
+    // See devel_generate_entity_insert() for actions that happen before and after
     // this save.
     $node->save();
   }
