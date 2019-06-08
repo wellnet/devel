@@ -66,7 +66,7 @@ class ExampleDevelGenerate extends DevelGenerateBase {
 
     $account = user_load_by_name('example_devel_generate');
     if (!$account) {
-      $account = entity_create('user', $edit);
+      $account = $this->getEntityTypeManager()->getStorage('user')->create($edit);
     }
 
     // Populate all fields with sample values.
