@@ -82,29 +82,6 @@ class DevelDumperTest extends BrowserTestBase {
 
     $config = \Drupal::config('devel.settings')->get('devel_dumper');
     $this->assertEquals('drupal_variable', $config, 'The configuration options have been properly saved');
-
-    // Ensure that if the chosen dumper is not available (e.g. the module that
-    // provide it is uninstalled) the 'default' dumper appears selected in the
-    // config page.
-    \Drupal::service('module_installer')->install(['kint']);
-
-    $this->drupalGet('admin/config/development/devel');
-    $this->assertFieldByXPath('//input[@name="dumper"]', 'kint');
-
-    $edit = [
-      'dumper' => 'kint',
-    ];
-    $this->drupalPostForm('admin/config/development/devel', $edit, t('Save configuration'));
-    $this->assertSession()->pageTextContains(t('The configuration options have been saved.'));
-
-    $config = \Drupal::config('devel.settings')->get('devel_dumper');
-    $this->assertEquals('kint', $config, 'The configuration options have been properly saved');
-
-    \Drupal::service('module_installer')->uninstall(['kint']);
-
-    $this->drupalGet('admin/config/development/devel');
-    $this->assertNoFieldByXPath('//input[@name="dumper"]', 'kint');
-    $this->assertSession()->checkboxChecked('edit-dumper-default');
   }
 
   /**

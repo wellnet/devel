@@ -1,8 +1,11 @@
 <?php
 
-namespace Drupal\kint\Plugin\Devel\Dumper;
+namespace Drupal\devel\Plugin\Devel\Dumper;
 
 use Drupal\devel\DevelDumperBase;
+use Kint\Parser\BlacklistPlugin;
+use Kint\Renderer\RichRenderer;
+use Psr\Container\ContainerInterface;
 
 /**
  * Provides a Kint dumper plugin.
@@ -10,7 +13,7 @@ use Drupal\devel\DevelDumperBase;
  * @DevelDumper(
  *   id = "kint",
  *   label = @Translation("Kint"),
- *   description = @Translation("Wrapper for <a href='https://github.com/raveren/kint'>Kint</a> debugging tool."),
+ *   description = @Translation("Wrapper for <a href='https://github.com/kint-php/kint'>Kint</a> debugging tool."),
  * )
  */
 class Kint extends DevelDumperBase {
@@ -20,8 +23,22 @@ class Kint extends DevelDumperBase {
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    // @TODO find another solution for kint class inclusion!
-    kint_require();
+    $this->configure();
+  }
+
+  /**
+   * Configures kint with more sane values.
+   */
+  protected function configure() {
+    // Remove resource-hungry plugins.
+    \Kint::$plugins = array_diff(\Kint::$plugins, [
+      'Kint\\Parser\\ClassMethodsPlugin',
+      'Kint\\Parser\\ClassStaticsPlugin',
+      'Kint\\Parser\\IteratorPlugin',
+    ]);
+
+    RichRenderer::$folder = FALSE;
+    BlacklistPlugin::$shallow_blacklist[] = ContainerInterface::class;
   }
 
   /**
@@ -45,7 +62,7 @@ class Kint extends DevelDumperBase {
    * {@inheritdoc}
    */
   public static function checkRequirements() {
-    return kint_require();
+    return class_exists('Kint', TRUE);
   }
 
 }
