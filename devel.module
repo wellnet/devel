@@ -387,18 +387,6 @@ function dfbt($label) {
   \Drupal::service('devel.dumper')->dump(FirePHP::TRACE, $label, 'firephp');
 }
 
-/**
- * Wrapper for DevelDumperManager::dump().
- *
- * Wrapper for ChromePHP Class log method.
- *
- * @see \Drupal\devel\DevelDumperManager::dump()
- */
-function dcp() {
-  $args = func_get_args();
-  \Drupal::service('devel.dumper')->dump($args, NULL, 'chromephp');
-}
-
 if (!function_exists('dd')) {
 
   /**

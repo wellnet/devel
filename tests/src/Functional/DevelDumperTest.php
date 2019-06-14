@@ -44,12 +44,9 @@ class DevelDumperTest extends BrowserTestBase {
     // and that only the available dumpers are selectable.
     $dumpers = [
       'default',
-      'drupal_variable',
-      'firephp',
-      'chromephp',
       'var_dumper',
     ];
-    $available_dumpers = ['default', 'drupal_variable', 'var_dumper'];
+    $available_dumpers = ['default', 'var_dumper'];
 
     foreach ($dumpers as $dumper) {
       $this->assertFieldByXPath('//input[@type="radio" and @name="dumper"]', $dumper);
@@ -75,13 +72,13 @@ class DevelDumperTest extends BrowserTestBase {
 
     // Ensures that saving of the dumpers configuration works as expected.
     $edit = [
-      'dumper' => 'drupal_variable',
+      'dumper' => 'var_dumper',
     ];
     $this->drupalPostForm('admin/config/development/devel', $edit, t('Save configuration'));
     $this->assertSession()->pageTextContains(t('The configuration options have been saved.'));
 
     $config = \Drupal::config('devel.settings')->get('devel_dumper');
-    $this->assertEquals('drupal_variable', $config, 'The configuration options have been properly saved');
+    $this->assertEquals('var_dumper', $config, 'The configuration options have been properly saved');
   }
 
   /**
