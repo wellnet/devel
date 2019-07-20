@@ -390,6 +390,9 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     $this->develGenerateContentPreNode($context['results']);
   }
 
+  /**
+   * Add node to existings batch operation.
+   */
   public function batchContentAddNode($vars, &$context) {
     if ($this->drushBatch) {
       $this->develGenerateContentAddNode($vars);
@@ -480,7 +483,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
   }
 
   /**
-   * Return the same array passed as parameter
+   * Return the same array passed as parameter,
    * but with an array of uids for the key 'users'.
    */
   protected function develGenerateContentPreNode(&$results) {
@@ -504,7 +507,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     $node = $this->nodeStorage->create(array(
       'nid' => NULL,
       'type' => $node_type,
-      'title' => $this->getRandom()->sentences(mt_rand(1, $results['title_length']), TRUE),
+      'title' => $node_type . '_' . $this->getRandom()->sentences(mt_rand(1, $results['title_length']), TRUE),
       'uid' => $uid,
       'revision' => mt_rand(0, 1),
       'status' => TRUE,
