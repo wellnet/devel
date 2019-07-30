@@ -77,10 +77,10 @@ class ExampleDevelGenerate extends DevelGenerateBase {
     $this->setMessage($this->t('@num_examples created.', array('@num_examples' => $this->formatPlural($num, '1 example', '@count examples'))));
   }
 
-  public function validateDrushParams($args) {
+  public function validateDrushParams($args, $options = []) {
     $values = array(
-      'num' => array_shift($args),
-      'kill' => drush_get_option('kill'),
+      'num' => $options['num'],
+      'kill' => $options['kill'],
     );
     return $values;
   }
