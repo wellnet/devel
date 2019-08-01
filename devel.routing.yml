@@ -56,6 +56,16 @@ devel.config_edit:
   requirements:
     _permission: 'administer site configuration'
 
+devel.config_delete:
+  path: '/devel/config/delete/{config_name}'
+  defaults:
+    _form: '\Drupal\devel\Form\ConfigDeleteForm'
+    _title: 'Delete configuration object: @config_name'
+  options:
+    _admin_route: TRUE
+  requirements:
+    _permission: 'administer site configuration'
+
 devel.state_system_page:
   path: '/devel/state'
   defaults:
