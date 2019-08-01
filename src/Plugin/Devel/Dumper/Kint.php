@@ -36,6 +36,7 @@ class Kint extends DevelDumperBase {
       'Kint\\Parser\\ClassStaticsPlugin',
       'Kint\\Parser\\IteratorPlugin',
     ]);
+    \Kint::$aliases = $this->getInternalFunctions();
 
     RichRenderer::$folder = FALSE;
     BlacklistPlugin::$shallow_blacklist[] = ContainerInterface::class;
