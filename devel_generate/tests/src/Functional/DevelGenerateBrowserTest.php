@@ -140,5 +140,24 @@ class DevelGenerateBrowserTest extends BrowserTestBase {
     // Tests that the expected number of nodes have been created.
     $count = count(Node::loadMultiple());
     $this->assertEquals(55, $count, sprintf('The expected total number of nodes is %s, found %s', 55, $count));
+
+    // Generate only articles.
+    $edit = array(
+      'num' => 60,
+      'kill' => TRUE,
+      'node_types[article]' => TRUE,
+      'node_types[page]' => FALSE,
+    );
+    $this->drupalPostForm('admin/config/development/generate/content', $edit, t('Generate'));
+
+    // Tests that all the created nodes were of the node type selected.
+    $nodeStorage = $this->container->get('entity_type.manager')->getStorage('node');
+    $type = 'article';
+    $count = $nodeStorage->getQuery()
+      ->condition('type', $type)
+      ->count()
+      ->execute();
+    $this->assertEquals(60, $count, sprintf('The expected number of %s is %s, found %s', $type, 60, $count));
+
   }
 }

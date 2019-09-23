@@ -353,6 +353,8 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
    * the number of elements is greater than 50.
    */
   private function generateBatchContent($values) {
+    // Remove unselected node types.
+    $values['node_types'] = array_filter($values['node_types']);
     // If it is drushBatch then this operation is already run in the
     // self::validateDrushParams().
     if (!$this->drushBatch) {
