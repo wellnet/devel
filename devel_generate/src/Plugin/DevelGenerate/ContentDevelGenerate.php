@@ -431,10 +431,10 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     $all_types = array_keys(node_type_get_names());
     $default_types = array_intersect(array('page', 'article'), $all_types);
     if ($this->isDrush8()) {
-      $selected_types = _convert_csv_to_array(drush_get_option('types', $default_types));
+      $selected_types = _convert_csv_to_array(drush_get_option('bundles', $default_types));
     }
     else {
-      $selected_types = StringUtils::csvToArray($options['types'] ?: $default_types);
+      $selected_types = StringUtils::csvToArray($options['bundles'] ?: $default_types);
     }
 
     if (empty($selected_types)) {
@@ -445,7 +445,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     $node_types = array_filter($values['node_types']);
 
     if (!empty($values['kill']) && empty($node_types)) {
-      throw new \Exception(dt('Please provide content type (--types) in which you want to delete the content.'));
+      throw new \Exception(dt('To delete content, please provide the content types (--bundles)'));
     }
 
     // Checks for any missing content types before generating nodes.

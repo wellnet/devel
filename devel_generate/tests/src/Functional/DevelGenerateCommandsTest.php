@@ -48,9 +48,13 @@ class DevelGenerateCommandsTest extends BrowserTestBase
     $this->assertTrue($user->hasRole('administrator'));
 
     // Make sure terms get created, and with correct vocab.
-    $this->drush('devel-generate-terms', [$this->vocabulary->id(), 55], ['kill' => null]);
+    $this->drush('devel-generate-terms', [55], ['kill' => null, 'bundles' => $this->vocabulary->id()]);
     $term = Term::load(55);
     $this->assertEquals($this->vocabulary->id(), $term->bundle());
+
+    // Check that invalid vocabulary machine name throws the correct exception.
+    $this->setExpectedException('\exception', 'Invalid vocabulary machine name');
+    $this->drush('devel-generate-terms', [1], ['bundles' => $this->randomMachineName(20)]);
 
     // Make sure vocabs get created.
     $this->drush('devel-generate-vocabs', [5], ['kill' => null]);
