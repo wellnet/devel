@@ -52,10 +52,6 @@ class DevelGenerateCommandsTest extends BrowserTestBase
     $term = Term::load(55);
     $this->assertEquals($this->vocabulary->id(), $term->bundle());
 
-    // Check that invalid vocabulary machine name throws the correct exception.
-    $this->setExpectedException('\exception', 'Invalid vocabulary machine name');
-    $this->drush('devel-generate-terms', [1], ['bundles' => $this->randomMachineName(20)]);
-
     // Make sure vocabs get created.
     $this->drush('devel-generate-vocabs', [5], ['kill' => null]);
     $vocabs = Vocabulary::loadMultiple();
@@ -86,5 +82,7 @@ class DevelGenerateCommandsTest extends BrowserTestBase
     $this->drush('devel-generate-content', [55], ['kill' => null]);
     $node = Node::load(55);
     $this->assertNotEmpty($node);
+    $messages = $this->getErrorOutput();
+    $this->assertContains('Finished 55 elements created successfully.', $messages, 'devel-generate-content batch ending message not found', TRUE);
   }
 }

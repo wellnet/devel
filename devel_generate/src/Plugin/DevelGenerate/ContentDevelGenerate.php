@@ -401,8 +401,8 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     }
     else {
       $this->develGenerateContentAddNode($context['results']);
-      $context['results']['num']++;
     }
+    $context['results']['num']++;
   }
 
   public function batchContentKill($vars, &$context) {
