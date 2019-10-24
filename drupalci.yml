@@ -2,19 +2,11 @@
 # The container_command below is the only non-default item in this file. It was
 # added for testing of Drush commands.
 build:
-  codebase:
-    assemble_codebase:
-      checkout_core:
-      composer.core_install:
-      composer_contrib:
-      fetch:
-      patch:
-      update_build:
-      update_dependencies:
-      yarn_install:
-      start_phantomjs:
   assessment:
     validate_codebase:
+      container_command:
+        commands:
+          - "cd ${SOURCE_DIR} && sudo -u www-data composer require drupal/coder:^8.3.6"
       phplint:
       container_composer:
       csslint:
@@ -29,4 +21,3 @@ build:
       run_tests.js:
         concurrency: 1
         types: 'PHPUnit-FunctionalJavascript'
-      nightwatchjs:
