@@ -47,7 +47,13 @@ class Kint extends DevelDumperBase {
    */
   public function export($input, $name = NULL) {
     ob_start();
-    \Kint::dump($input);
+    if ($name == '__ARGS__') {
+      call_user_func_array(['Kint', 'dump'], $input);
+      $name = NULL;
+    }
+    else {
+      \Kint::dump($input);
+    }
     $dump = ob_get_clean();
 
     // Kint does't allow to assign a title to the dump. Workaround to use the

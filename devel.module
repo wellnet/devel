@@ -424,7 +424,18 @@ if (!function_exists('kint')) {
    */
   function kint() {
     $args = func_get_args();
-    return \Drupal::service('devel.dumper')->dump($args, NULL, 'kint');
+    if (count($args) == 1) {
+      // Pass a single argument directly, which works for any plug-in.
+      $args = $args[0];
+      $name = NULL;
+    }
+    else {
+      // Pass an array marked with a special name. The kint plug-in expands the
+      // arguments and prints each separately.
+      $name = '__ARGS__';
+    }
+
+    return \Drupal::service('devel.dumper')->dump($args, $name, 'kint');
   }
 }
 
@@ -438,7 +449,18 @@ if (!function_exists('ksm')) {
    */
   function ksm() {
     $args = func_get_args();
-    return \Drupal::service('devel.dumper')->message($args, NULL, 'kint');
+    if (count($args) == 1) {
+      // Pass a single argument directly, which works for any plug-in.
+      $args = $args[0];
+      $name = NULL;
+    }
+    else {
+      // Pass an array marked with a special name. The kint plug-in expands the
+      // arguments and prints each separately.
+      $name = '__ARGS__';
+    }
+
+    return \Drupal::service('devel.dumper')->message($args, $name, 'kint');
   }
 }
 
