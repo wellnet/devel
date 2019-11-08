@@ -142,7 +142,7 @@ class ConfigEditor extends FormBase {
 
     if ($query->has('destination')) {
       $options = UrlHelper::parse($query->get('destination'));
-      $url = Url::fromUri('internal:/' . $options['path'], $options);
+      $url = Url::fromUserInput('/' . ltrim($options['path'], '/'), $options);
     }
     else {
       $url = Url::fromRoute('devel.configs_list');
