@@ -99,7 +99,7 @@ class DevelToolbarTest extends BrowserTestBase {
       'toolbar_items[devel.event_info]' => 'devel.event_info',
       'toolbar_items[devel.theme_registry]' => 'devel.theme_registry',
     ];
-    $this->drupalPostForm('admin/config/development/devel/toolbar', $edit, t('Save configuration'));
+    $this->drupalPostForm('admin/config/development/devel/toolbar', $edit, 'Save configuration');
     $this->assertSession()->pageTextContains('The configuration options have been saved.');
 
     $expected_items = array_merge($this->defaultToolbarItems, ['devel.event_info', 'devel.theme_registry']);

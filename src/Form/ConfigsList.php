@@ -25,7 +25,7 @@ class ConfigsList extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state, $filter = '') {
     $form['filter'] = array(
       '#type' => 'details',
-      '#title' => t('Filter variables'),
+      '#title' => $this->t('Filter variables'),
       '#attributes' => array('class' => array('container-inline')),
       '#open' => isset($filter) && trim($filter) != '',
     );

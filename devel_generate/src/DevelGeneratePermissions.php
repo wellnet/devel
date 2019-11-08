@@ -3,12 +3,15 @@
 namespace Drupal\devel_generate;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides dynamic permissions of the filter module.
  */
 class DevelGeneratePermissions implements ContainerInjectionInterface {
+
+  use StringTranslationTrait;
 
   /**
    * The plugin manager.
@@ -47,13 +50,13 @@ class DevelGeneratePermissions implements ContainerInjectionInterface {
 
       $permission = $plugin['permission'];
       $permissions[$permission] = array(
-        'title' => t($permission),
+        'title' => $this->t('@permission', ['@permission' => $permission]),
       );
     }
 
 //    $permissions = array(
 //      'administer devel_generate' => array(
-//        'title' => t('Administer devel generate'),
+//        'title' => $this->t('Administer devel generate'),
 //      ),
 //    );
     return $permissions;

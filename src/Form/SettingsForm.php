@@ -65,15 +65,15 @@ class SettingsForm extends ConfigFormBase {
 
     $form['page_alter'] = [
       '#type' => 'checkbox',
-      '#title' => t('Display $page array'),
+      '#title' => $this->t('Display $page array'),
       '#default_value' => $devel_config->get('page_alter'),
-      '#description' => t('Display $page array from <a href="https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Render%21theme.api.php/function/hook_page_attachments_alter/8">hook_page_attachments_alter()</a> in the messages area of each page.'),
+      '#description' => $this->t('Display $page array from <a href="https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Render%21theme.api.php/function/hook_page_attachments_alter/8">hook_page_attachments_alter()</a> in the messages area of each page.'),
     ];
     $form['raw_names'] = [
       '#type' => 'checkbox',
-      '#title' => t('Display machine names of permissions and modules'),
+      '#title' => $this->t('Display machine names of permissions and modules'),
       '#default_value' => $devel_config->get('raw_names'),
-      '#description' => t('Display the language-independent machine names of the permissions in mouse-over hints on the <a href=":permissions_url">Permissions</a> page and the module base file names on the Permissions and <a href=":modules_url">Modules</a> pages.', [
+      '#description' => $this->t('Display the language-independent machine names of the permissions in mouse-over hints on the <a href=":permissions_url">Permissions</a> page and the module base file names on the Permissions and <a href=":modules_url">Modules</a> pages.', [
         ':permissions_url' => Url::fromRoute('user.admin_permissions')->toString(),
         ':modules_url' => Url::fromRoute('system.modules_list')->toString(),
       ]),
@@ -88,12 +88,12 @@ class SettingsForm extends ConfigFormBase {
     $error_handlers = devel_get_handlers();
     $form['error_handlers'] = [
       '#type' => 'select',
-      '#title' => t('Error handlers'),
+      '#title' => $this->t('Error handlers'),
       '#options' => [
-        DEVEL_ERROR_HANDLER_NONE => t('None'),
-        DEVEL_ERROR_HANDLER_STANDARD => t('Standard Drupal'),
-        DEVEL_ERROR_HANDLER_BACKTRACE_DPM => t('Backtrace in the message area'),
-        DEVEL_ERROR_HANDLER_BACKTRACE_KINT => t('Backtrace above the rendered page'),
+        DEVEL_ERROR_HANDLER_NONE => $this->t('None'),
+        DEVEL_ERROR_HANDLER_STANDARD => $this->t('Standard Drupal'),
+        DEVEL_ERROR_HANDLER_BACKTRACE_DPM => $this->t('Backtrace in the message area'),
+        DEVEL_ERROR_HANDLER_BACKTRACE_KINT => $this->t('Backtrace above the rendered page'),
       ],
       '#multiple' => TRUE,
       '#default_value' => empty($error_handlers) ? DEVEL_ERROR_HANDLER_NONE : $error_handlers,
@@ -106,7 +106,7 @@ class SettingsForm extends ConfigFormBase {
           '#items' => [
             $this->t('<em>None</em> is a good option when stepping through the site in your debugger.'),
             $this->t('<em>Standard Drupal</em> does not display all the information that is often needed to resolve an issue.'),
-            $this->t('<em>Backtrace</em> displays nice debug information when any type of error is noticed, but only to users with the %perm permission.', ['%perm' => t('Access developer information')]),
+            $this->t('<em>Backtrace</em> displays nice debug information when any type of error is noticed, but only to users with the %perm permission.', ['%perm' => $this->t('Access developer information')]),
           ],
         ],
         [

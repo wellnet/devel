@@ -74,8 +74,8 @@ class DevelDumperTest extends BrowserTestBase {
     $edit = [
       'dumper' => 'var_dumper',
     ];
-    $this->drupalPostForm('admin/config/development/devel', $edit, t('Save configuration'));
-    $this->assertSession()->pageTextContains(t('The configuration options have been saved.'));
+    $this->drupalPostForm('admin/config/development/devel', $edit, 'Save configuration');
+    $this->assertSession()->pageTextContains('The configuration options have been saved.');
 
     $config = \Drupal::config('devel.settings')->get('devel_dumper');
     $this->assertEquals('var_dumper', $config, 'The configuration options have been properly saved');
@@ -88,8 +88,8 @@ class DevelDumperTest extends BrowserTestBase {
     $edit = [
       'dumper' => 'available_test_dumper',
     ];
-    $this->drupalPostForm('admin/config/development/devel', $edit, t('Save configuration'));
-    $this->assertSession()->pageTextContains(t('The configuration options have been saved.'));
+    $this->drupalPostForm('admin/config/development/devel', $edit, 'Save configuration');
+    $this->assertSession()->pageTextContains('The configuration options have been saved.');
 
     $this->drupalGet('devel_dumper_test/dump');
     $elements = $this->xpath('//body/pre[contains(text(), :message)]', [':message' => 'AvailableTestDumper::dump() Test output']);

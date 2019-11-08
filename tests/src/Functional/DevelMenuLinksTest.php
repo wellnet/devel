@@ -84,25 +84,25 @@ class DevelMenuLinksTest extends BrowserTestBase {
     $destination = Url::fromRoute('devel.simple_page', [], ['absolute' => FALSE]);
 
     $this->drupalGet($url);
-    $this->assertLink(t('Reinstall Modules'));
-    $this->clickLink(t('Reinstall Modules'));
+    $this->assertLink('Reinstall Modules');
+    $this->clickLink('Reinstall Modules');
     $this->assertUrl('devel/reinstall', ['query' => ['destination' => $destination->toString()]]);
 
     $this->drupalGet($url);
-    $this->assertLink(t('Rebuild Menu'));
-    $this->clickLink(t('Rebuild Menu'));
+    $this->assertLink('Rebuild Menu');
+    $this->clickLink('Rebuild Menu');
     $this->assertUrl('devel/menu/reset', ['query' => ['destination' => $destination->toString()]]);
 
     $this->drupalGet($url);
-    $this->assertLink(t('Cache clear'));
-    $this->clickLink(t('Cache clear'));
+    $this->assertLink('Cache clear');
+    $this->clickLink('Cache clear');
     $this->assertText('Cache cleared.');
     $this->assertUrl($url);
 
     $this->drupalGet($url);
-    $this->assertLink(t('Run cron'));
-    $this->clickLink(t('Run cron'));
-    $this->assertText(t('Cron ran successfully.'));
+    $this->assertLink('Run cron');
+    $this->clickLink('Run cron');
+    $this->assertText('Cron ran successfully.');
     $this->assertUrl($url);
   }
 

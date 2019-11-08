@@ -53,8 +53,8 @@ class DevelModulesReinstallTest extends BrowserTestBase {
       $edit["reinstall[$module]"] = TRUE;
     }
 
-    $this->drupalPostForm('devel/reinstall', $edit, t('Reinstall'));
-    $this->assertText(t('Uninstalled and installed: @names.', ['@names' => implode(', ', $modules)]));
+    $this->drupalPostForm('devel/reinstall', $edit, 'Reinstall');
+    $this->assertText(sprintf('Uninstalled and installed: %s.', implode(', ', $modules)));
   }
 
 }

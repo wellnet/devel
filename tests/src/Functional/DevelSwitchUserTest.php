@@ -99,7 +99,7 @@ class DevelSwitchUserTest extends BrowserTestBase {
 
     // Use the search form to switch to another account.
     $edit = ['userid' => $this->switchUser->getDisplayName()];
-    $this->drupalPostForm(NULL, $edit, t('Switch'));
+    $this->drupalPostForm(NULL, $edit, 'Switch');
     $this->assertSessionByUid($this->switchUser->id());
     $this->assertNoSessionByUid($this->develUser->id());
   }

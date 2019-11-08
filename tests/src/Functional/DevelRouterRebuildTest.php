@@ -37,7 +37,7 @@ class DevelRouterRebuildTest extends BrowserTestBase {
     $route_rebuild_state = \Drupal::state()->get('devel_test_route_rebuild');
     $this->assertEmpty($route_rebuild_state);
 
-    $this->drupalPostForm('devel/menu/reset', [], t('Rebuild'));
+    $this->drupalPostForm('devel/menu/reset', [], 'Rebuild');
     $this->assertSession()->pageTextContains('The router has been rebuilt.');
     $route_rebuild_state = \Drupal::state()->get('devel_test_route_rebuild');
     $this->assertEquals('Router rebuild fired', $route_rebuild_state);
