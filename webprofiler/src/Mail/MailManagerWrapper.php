@@ -48,7 +48,7 @@ class MailManagerWrapper extends DefaultPluginManager implements MailManagerInte
    *
    * @var array
    */
-  protected $instances = array();
+  protected $instances = [];
 
   /**
    * Constructs the MailManager object.
@@ -83,7 +83,7 @@ class MailManagerWrapper extends DefaultPluginManager implements MailManagerInte
   /**
    * {@inheritdoc}
    */
-  public function mail($module, $key, $to, $langcode, $params = array(), $reply = NULL, $send = TRUE) {
+  public function mail($module, $key, $to, $langcode, $params = [], $reply = NULL, $send = TRUE) {
     $message = $this->mailManager->mail($module, $key, $to, $langcode, $params, $reply, $send);
 
     $instance = $this->mailManager->getInstance(['module' => $module, 'key' => $key]);

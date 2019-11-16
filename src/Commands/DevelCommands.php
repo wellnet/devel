@@ -155,7 +155,7 @@ class DevelCommands extends DrushCommands implements SiteAliasManagerAwareInterf
     $dispatcher = $this->getEventDispatcher();
     if (!$input->getArgument('event')) {
       // @todo Expand this list.
-      $events = array('kernel.controller', 'kernel.exception', 'kernel.request', 'kernel.response', 'kernel.terminate', 'kernel.view');
+      $events = ['kernel.controller', 'kernel.exception', 'kernel.request', 'kernel.response', 'kernel.terminate', 'kernel.view'];
       $events = array_combine($events, $events);
       if (!$event = $this->io()->choice('Enter the event you wish to explore.', $events)) {
         throw new UserAbortException();
@@ -241,7 +241,7 @@ class DevelCommands extends DrushCommands implements SiteAliasManagerAwareInterf
       }
       $reflect = new \ReflectionMethod($class, $method);
     }
-    return array('file' => $reflect->getFileName(), 'startline' => $reflect->getStartLine(), 'endline' => $reflect->getEndLine());
+    return ['file' => $reflect->getFileName(), 'startline' => $reflect->getStartLine(), 'endline' => $reflect->getEndLine()];
 
   }
 

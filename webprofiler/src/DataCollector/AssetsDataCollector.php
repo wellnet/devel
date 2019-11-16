@@ -49,7 +49,7 @@ class AssetsDataCollector extends DataCollector implements DrupalDataCollectorIn
   public function addJsAsset($jsAsset) {
     $this->data['js'] = NestedArray::mergeDeepArray([
       $jsAsset,
-      $this->data['js']
+      $this->data['js'],
     ]);
   }
 
@@ -59,7 +59,7 @@ class AssetsDataCollector extends DataCollector implements DrupalDataCollectorIn
   public function addCssAsset($cssAsset) {
     $this->data['css'] = NestedArray::mergeDeepArray([
       $cssAsset,
-      $this->data['css']
+      $this->data['css'],
     ]);
   }
 

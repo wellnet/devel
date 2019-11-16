@@ -25,8 +25,8 @@ trait DevelGenerateSetupTrait
     $entity_type_manager = $this->container->get('entity_type.manager');
     // Create Basic page and Article node types.
     if ($this->profile != 'standard') {
-      $this->drupalCreateContentType(array('type' => 'page', 'name' => 'Basic Page'));
-      $this->drupalCreateContentType(array('type' => 'article', 'name' => 'Article'));
+      $this->drupalCreateContentType(['type' => 'page', 'name' => 'Basic Page']);
+      $this->drupalCreateContentType(['type' => 'article', 'name' => 'Article']);
       $this->addDefaultCommentField('node', 'article');
     }
 
@@ -43,26 +43,26 @@ trait DevelGenerateSetupTrait
     // Creates a field of an entity reference field storage on article.
     $field_name = 'taxonomy_' . $this->vocabulary->id();
 
-    $handler_settings = array(
-      'target_bundles' => array(
+    $handler_settings = [
+      'target_bundles' => [
         $this->vocabulary->id() => $this->vocabulary->id(),
-      ),
+      ],
       'auto_create' => TRUE,
-    );
+    ];
     $this->createEntityReferenceField('node', 'article', $field_name, NULL, 'taxonomy_term', 'default', $handler_settings, FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED);
 
     $entity_type_manager->getStorage('entity_form_display')
       ->load('node.article.default')
-      ->setComponent($field_name, array(
+      ->setComponent($field_name, [
         'type' => 'options_select',
-      ))
+      ])
       ->save();
     
     $entity_type_manager->getStorage('entity_view_display')
       ->load('node.article.default')
-      ->setComponent($field_name, array(
+      ->setComponent($field_name, [
         'type' => 'entity_reference_label',
-      ))
+      ])
       ->save();
   }
 }

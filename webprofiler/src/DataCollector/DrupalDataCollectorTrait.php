@@ -11,7 +11,7 @@ trait DrupalDataCollectorTrait {
    * {@inheritdoc}
    */
   public function reset() {
-    $this->data = array();
+    $this->data = [];
   }
 
   /**

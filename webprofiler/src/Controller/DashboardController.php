@@ -134,8 +134,8 @@ class DashboardController extends ControllerBase {
       '#profile' => $profile,
       '#panels' => $panels,
       '#spinner_path' => '/' . $this->moduleHandler()
-          ->getModule('webprofiler')
-          ->getPath() . '/images/searching.gif',
+        ->getModule('webprofiler')
+        ->getPath() . '/images/searching.gif',
       '#attached' => [
         'drupalSettings' => $drupalSettings,
         'library' => $libraries,

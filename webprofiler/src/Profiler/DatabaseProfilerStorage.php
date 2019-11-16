@@ -69,7 +69,7 @@ class DatabaseProfilerStorage implements ProfilerStorageInterface {
       'url',
       'time',
       'parent',
-      'status_code'
+      'status_code',
     ]);
     $select->orderBy('time', 'DESC');
     $select->range(0, $limit);

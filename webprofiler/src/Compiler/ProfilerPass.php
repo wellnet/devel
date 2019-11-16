@@ -42,7 +42,7 @@ class ProfilerPass implements CompilerPassInterface {
         $template = [
           $attributes[0]['id'],
           $attributes[0]['template'],
-          $attributes[0]['title']
+          $attributes[0]['title'],
         ];
       }
 

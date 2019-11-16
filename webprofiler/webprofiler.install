@@ -177,12 +177,12 @@ function webprofiler_update_8001() {
   $database = \Drupal::database();
   $schema = $database->schema();
 
-  $spec = array(
+  $spec = [
     'description' => 'Profile status code.',
     'type' => 'int',
     'size' => 'small',
     'unsigned' => TRUE,
     'not null' => TRUE,
-  );
+  ];
   $schema->addField('webprofiler', 'status_code', $spec);
 }

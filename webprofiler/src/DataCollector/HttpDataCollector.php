@@ -160,9 +160,9 @@ class HttpDataCollector extends DataCollector implements DrupalDataCollectorInte
   public function getPanelSummary() {
     return $this->t(
       'Completed @completed, error @error', [
-      '@completed' => $this->getCompletedRequestsCount(),
-      '@error' => $this->getFailedRequestsCount(),
-    ]
+        '@completed' => $this->getCompletedRequestsCount(),
+        '@error' => $this->getFailedRequestsCount(),
+      ]
     );
   }
 

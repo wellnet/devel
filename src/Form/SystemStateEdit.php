@@ -118,7 +118,7 @@ class SystemStateEdit extends FormBase {
     $form['actions']['cancel'] = [
       '#type' => 'link',
       '#title' => $this->t('Cancel'),
-      '#url' => Url::fromRoute('devel.state_system_page')
+      '#url' => Url::fromRoute('devel.state_system_page'),
     ];
 
     return $form;

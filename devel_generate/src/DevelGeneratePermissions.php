@@ -49,9 +49,9 @@ class DevelGeneratePermissions implements ContainerInjectionInterface {
     foreach ($devel_generate_plugins as $plugin) {
 
       $permission = $plugin['permission'];
-      $permissions[$permission] = array(
+      $permissions[$permission] = [
         'title' => $this->t('@permission', ['@permission' => $permission]),
-      );
+      ];
     }
 
 //    $permissions = array(

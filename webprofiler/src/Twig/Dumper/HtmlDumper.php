@@ -7,12 +7,12 @@ namespace Drupal\webprofiler\Twig\Dumper;
  */
 class HtmlDumper extends \Twig_Profiler_Dumper_Text {
 
-  private static $colors = array(
+  private static $colors = [
     'block' => '#dfd',
     'macro' => '#ddf',
     'template' => '#ffd',
     'big' => '#d44',
-  );
+  ];
 
   /**
    * {@inheritdoc}

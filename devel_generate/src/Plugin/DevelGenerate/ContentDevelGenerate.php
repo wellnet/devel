@@ -165,41 +165,41 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
 
     if (empty($types)) {
       $create_url = $this->urlGenerator->generateFromRoute('node.type_add');
-      $this->setMessage($this->t('You do not have any content types that can be generated. <a href=":create-type">Go create a new content type</a>', array(':create-type' => $create_url)), 'error', FALSE);
+      $this->setMessage($this->t('You do not have any content types that can be generated. <a href=":create-type">Go create a new content type</a>', [':create-type' => $create_url]), 'error', FALSE);
       return;
     }
 
-    $options = array();
+    $options = [];
 
     foreach ($types as $type) {
-      $options[$type->id()] = array(
-        'type' => array('#markup' => $type->label()),
-      );
+      $options[$type->id()] = [
+        'type' => ['#markup' => $type->label()],
+      ];
       if ($this->commentManager) {
         $comment_fields = $this->commentManager->getFields('node');
-        $map = array($this->t('Hidden'), $this->t('Closed'), $this->t('Open'));
+        $map = [$this->t('Hidden'), $this->t('Closed'), $this->t('Open')];
 
-        $fields = array();
+        $fields = [];
         foreach ($comment_fields as $field_name => $info) {
           // Find all comment fields for the bundle.
           if (in_array($type->id(), $info['bundles'])) {
             $instance = FieldConfig::loadByName('node', $type->id(), $field_name);
             $default_value = $instance->getDefaultValueLiteral();
             $default_mode = reset($default_value);
-            $fields[] = new FormattableMarkup('@field: @state', array(
+            $fields[] = new FormattableMarkup('@field: @state', [
               '@field' => $instance->label(),
               '@state' => $map[$default_mode['status']],
-            ));
+            ]);
           }
         }
         // @todo Refactor display of comment fields.
         if (!empty($fields)) {
-          $options[$type->id()]['comments'] = array(
-            'data' => array(
+          $options[$type->id()]['comments'] = [
+            'data' => [
               '#theme' => 'item_list',
               '#items' => $fields,
-            ),
-          );
+            ],
+          ];
         }
         else {
           $options[$type->id()]['comments'] = $this->t('No comment fields');
@@ -207,94 +207,94 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       }
     }
 
-    $header = array(
+    $header = [
       'type' => $this->t('Content type'),
-    );
+    ];
     if ($this->commentManager) {
-      $header['comments'] = array(
+      $header['comments'] = [
         'data' => $this->t('Comments'),
-        'class' => array(RESPONSIVE_PRIORITY_MEDIUM),
-      );
+        'class' => [RESPONSIVE_PRIORITY_MEDIUM],
+      ];
     }
 
-    $form['node_types'] = array(
+    $form['node_types'] = [
       '#type' => 'tableselect',
       '#header' => $header,
       '#options' => $options,
-    );
+    ];
 
-    $form['kill'] = array(
+    $form['kill'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('<strong>Delete all content</strong> in these content types before generating new content.'),
       '#default_value' => $this->getSetting('kill'),
-    );
-    $form['num'] = array(
+    ];
+    $form['num'] = [
       '#type' => 'number',
       '#title' => $this->t('How many nodes would you like to generate?'),
       '#default_value' => $this->getSetting('num'),
       '#required' => TRUE,
       '#min' => 0,
-    );
+    ];
 
-    $options = array(1 => $this->t('Now'));
-    foreach (array(3600, 86400, 604800, 2592000, 31536000) as $interval) {
+    $options = [1 => $this->t('Now')];
+    foreach ([3600, 86400, 604800, 2592000, 31536000] as $interval) {
       $options[$interval] = $this->dateFormatter->formatInterval($interval, 1) . ' ' . $this->t('ago');
     }
-    $form['time_range'] = array(
+    $form['time_range'] = [
       '#type' => 'select',
       '#title' => $this->t('How far back in time should the nodes be dated?'),
       '#description' => $this->t('Node creation dates will be distributed randomly from the current time, back to the selected time.'),
       '#options' => $options,
       '#default_value' => 604800,
-    );
+    ];
 
-    $form['max_comments'] = array(
+    $form['max_comments'] = [
       '#type' => $this->moduleHandler->moduleExists('comment') ? 'number' : 'value',
       '#title' => $this->t('Maximum number of comments per node.'),
       '#description' => $this->t('You must also enable comments for the content types you are generating. Note that some nodes will randomly receive zero comments. Some will receive the max.'),
       '#default_value' => $this->getSetting('max_comments'),
       '#min' => 0,
       '#access' => $this->moduleHandler->moduleExists('comment'),
-    );
-    $form['title_length'] = array(
+    ];
+    $form['title_length'] = [
       '#type' => 'number',
       '#title' => $this->t('Maximum number of words in titles'),
       '#default_value' => $this->getSetting('title_length'),
       '#required' => TRUE,
       '#min' => 1,
       '#max' => 255,
-    );
-    $form['add_alias'] = array(
+    ];
+    $form['add_alias'] = [
       '#type' => 'checkbox',
       '#disabled' => !$this->moduleHandler->moduleExists('path'),
       '#description' => $this->t('Requires path.module'),
       '#title' => $this->t('Add an url alias for each node.'),
       '#default_value' => FALSE,
-    );
-    $form['add_statistics'] = array(
+    ];
+    $form['add_statistics'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Add statistics for each node (node_counter table).'),
       '#default_value' => TRUE,
       '#access' => $this->moduleHandler->moduleExists('statistics'),
-    );
+    ];
 
-    $options = array();
+    $options = [];
     // We always need a language.
     $languages = $this->languageManager->getLanguages(LanguageInterface::STATE_ALL);
     foreach ($languages as $langcode => $language) {
       $options[$langcode] = $language->getName();
     }
 
-    $form['add_language'] = array(
+    $form['add_language'] = [
       '#type' => 'select',
       '#title' => $this->t('Set language on nodes'),
       '#multiple' => TRUE,
       '#description' => $this->t('Requires locale.module'),
       '#options' => $options,
-      '#default_value' => array(
+      '#default_value' => [
         $this->languageManager->getDefaultLanguage()->getId(),
-      ),
-    );
+      ],
+    ];
 
     $form['#redirect'] = FALSE;
 
@@ -340,7 +340,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
         $this->develGenerateContentAddNode($values);
         if ($this->isDrush8() && function_exists('drush_log') && $i % drush_get_option('feedback', 1000) == 0) {
           $now = time();
-          drush_log(dt('Completed @feedback nodes (@rate nodes/min)', array('@feedback' => drush_get_option('feedback', 1000), '@rate' => (drush_get_option('feedback', 1000) * 60) / ($now - $start))), 'ok');
+          drush_log(dt('Completed @feedback nodes (@rate nodes/min)', ['@feedback' => drush_get_option('feedback', 1000), '@rate' => (drush_get_option('feedback', 1000) * 60) / ($now - $start)]), 'ok');
           $start = $now;
         }
       }
@@ -359,26 +359,26 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     // self::validateDrushParams().
     if (!$this->drushBatch) {
       // Setup the batch operations and save the variables.
-      $operations[] = array('devel_generate_operation', array($this, 'batchContentPreNode', $values));
+      $operations[] = ['devel_generate_operation', [$this, 'batchContentPreNode', $values]];
     }
 
     // Add the kill operation.
     if ($values['kill']) {
-      $operations[] = array('devel_generate_operation', array($this, 'batchContentKill', $values));
+      $operations[] = ['devel_generate_operation', [$this, 'batchContentKill', $values]];
     }
 
     // Add the operations to create the nodes.
     for ($num = 0; $num < $values['num']; $num ++) {
-      $operations[] = array('devel_generate_operation', array($this, 'batchContentAddNode', $values));
+      $operations[] = ['devel_generate_operation', [$this, 'batchContentAddNode', $values]];
     }
 
     // Set the batch.
-    $batch = array(
+    $batch = [
       'title' => $this->t('Generating Content'),
       'operations' => $operations,
       'finished' => 'devel_generate_batch_finished',
       'file' => drupal_get_path('module', 'devel_generate') . '/devel_generate.batch.inc',
-    );
+    ];
 
     batch_set($batch);
     if ($this->drushBatch) {
@@ -431,7 +431,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     $values['num'] = array_shift($args);
     $values['max_comments'] = array_shift($args);
     $all_types = array_keys(node_type_get_names());
-    $default_types = array_intersect(array('page', 'article'), $all_types);
+    $default_types = array_intersect(['page', 'article'], $all_types);
     if ($this->isDrush8()) {
       $selected_types = _convert_csv_to_array(drush_get_option('bundles', $default_types));
     }
@@ -480,7 +480,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     if (!empty($nids)) {
       $nodes = $this->nodeStorage->loadMultiple($nids);
       $this->nodeStorage->delete($nodes);
-      $this->setMessage($this->t('Deleted %count nodes.', array('%count' => count($nids))));
+      $this->setMessage($this->t('Deleted %count nodes.', ['%count' => count($nids)]));
     }
   }
 
@@ -506,7 +506,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     $node_type = array_rand($results['node_types']);
     $uid = $users[array_rand($users)];
 
-    $node = $this->nodeStorage->create(array(
+    $node = $this->nodeStorage->create([
       'nid' => NULL,
       'type' => $node_type,
       'title' => $node_type . '_' . $this->getRandom()->sentences(mt_rand(1, $results['title_length']), TRUE),
@@ -516,7 +516,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       'promote' => mt_rand(0, 1),
       'created' => $this->time->getRequestTime() - mt_rand(0, $results['time_range']),
       'langcode' => $this->getLangcode($results),
-    ));
+    ]);
 
     // A flag to let hook_node_insert() implementations know that this is a
     // generated node.
@@ -548,7 +548,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
    * Retrieve 50 uids from the database.
    */
   protected function getUsers() {
-    $users = array();
+    $users = [];
     $result = db_query_range("SELECT uid FROM {users}", 0, 50);
     foreach ($result as $record) {
       $users[] = $record->uid;

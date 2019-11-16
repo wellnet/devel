@@ -34,13 +34,13 @@ class DevelGenerateManagerTest extends UnitTestCase {
    *
    * @var array
    */
-  protected $definitions = array(
-    'devel_generate_example' => array(
+  protected $definitions = [
+    'devel_generate_example' => [
       'id' => 'devel_generate_example',
       'class' => 'Drupal\devel_generate_example\Plugin\DevelGenerate\ExampleDevelGenerate',
       'url' => 'devel_generate_example',
-    ),
-  );
+    ],
+  ];
 
   /**
    * {@inheritdoc}
@@ -59,7 +59,7 @@ class DevelGenerateManagerTest extends UnitTestCase {
    * Test creating an instance of the DevelGenerateManager.
    */
   public function testCreateInstance() {
-    $namespaces = new \ArrayObject(array('Drupal\devel_generate_example' => realpath(dirname(__FILE__) . '/../../../modules/devel_generate_example/lib')));
+    $namespaces = new \ArrayObject(['Drupal\devel_generate_example' => realpath(dirname(__FILE__) . '/../../../modules/devel_generate_example/lib')]);
     $cache_backend = $this->getMock('Drupal\Core\Cache\CacheBackendInterface');
 
     $module_handler = $this->getMock('Drupal\Core\Extension\ModuleHandlerInterface');

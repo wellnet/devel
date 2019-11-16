@@ -34,7 +34,7 @@ class TranslationManagerWrapper extends TranslationManager {
   /**
    * {@inheritdoc}
    */
-  protected function doTranslate($string, array $options = array()) {
+  protected function doTranslate($string, array $options = []) {
     // Merge in defaults.
     if (empty($options['langcode'])) {
       $options['langcode'] = $this->defaultLangcode;

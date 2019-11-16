@@ -20,7 +20,7 @@ class DevelGenerateBrowserTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = array('menu_ui', 'node', 'comment', 'taxonomy', 'path', 'devel_generate');
+  public static $modules = ['menu_ui', 'node', 'comment', 'taxonomy', 'path', 'devel_generate'];
 
   /**
    * Prepares the testing environment
@@ -30,7 +30,7 @@ class DevelGenerateBrowserTest extends BrowserTestBase {
 
     $this->setUpData();
 
-    $admin_user = $this->drupalCreateUser(array('administer devel_generate'));
+    $admin_user = $this->drupalCreateUser(['administer devel_generate']);
     $this->drupalLogin($admin_user);
   }
 
@@ -39,26 +39,26 @@ class DevelGenerateBrowserTest extends BrowserTestBase {
    */
   public function testDevelGenerate() {
     // Creating users.
-    $edit = array(
+    $edit = [
       'num' => 4,
-    );
+    ];
     $this->drupalPostForm('admin/config/development/generate/user', $edit, 'Generate');
     $this->assertText('4 users created.');
     $this->assertText('Generate process complete.');
 
     // Tests that if no content types are selected an error message is shown.
-    $edit = array(
+    $edit = [
       'num' => 4,
       'title_length' => 4,
-    );
+    ];
     $this->drupalPostForm('admin/config/development/generate/content', $edit, 'Generate');
     $this->assertText('Please select at least one content type');
 
     // Creating content.
     // First we create a node in order to test the Delete content checkbox.
-    $this->drupalCreateNode(array('type' => 'article'));
+    $this->drupalCreateNode(['type' => 'article']);
 
-    $edit = array(
+    $edit = [
       'num' => 4,
       'kill' => TRUE,
       'node_types[article]' => TRUE,
@@ -66,7 +66,7 @@ class DevelGenerateBrowserTest extends BrowserTestBase {
       'max_comments' => 3,
       'title_length' => 4,
       'add_alias' => 1,
-    );
+    ];
     $this->drupalPostForm('admin/config/development/generate/content', $edit, 'Generate');
     $this->assertSession()->pageTextContains('Deleted 1 nodes.');
     $this->assertSession()->pageTextContains('Finished creating 4 nodes');
@@ -85,27 +85,27 @@ class DevelGenerateBrowserTest extends BrowserTestBase {
     }
 
     // Creating terms.
-    $edit = array(
+    $edit = [
       'vids[]' => $this->vocabulary->id(),
       'num' => 5,
       'title_length' => 12,
-    );
+    ];
     $this->drupalPostForm('admin/config/development/generate/term', $edit, 'Generate');
     $this->assertSession()->pageTextContains('Created the following new terms: ');
     $this->assertSession()->pageTextContains('Generate process complete.');
 
     // Creating vocabularies.
-    $edit = array(
+    $edit = [
       'num' => 5,
       'title_length' => 12,
       'kill' => TRUE,
-    );
+    ];
     $this->drupalPostForm('admin/config/development/generate/vocabs', $edit, 'Generate');
     $this->assertSession()->pageTextContains('Created the following new vocabularies: ');
     $this->assertSession()->pageTextContains('Generate process complete.');
 
     // Creating menus.
-    $edit = array(
+    $edit = [
       'num_menus' => 5,
       'num_links' => 7,
       'title_length' => 12,
@@ -115,7 +115,7 @@ class DevelGenerateBrowserTest extends BrowserTestBase {
       'max_depth' => 4,
       'max_width' => 6,
       'kill' => 1,
-    );
+    ];
     $this->drupalPostForm('admin/config/development/generate/menu', $edit, 'Generate');
     $this->assertSession()->pageTextContains('Created the following new menus: ');
     $this->assertSession()->pageTextContains('Created 7 new menu links');
@@ -127,12 +127,12 @@ class DevelGenerateBrowserTest extends BrowserTestBase {
    */
   public function testDevelGenerateBatch() {
     // For 50 or more nodes, the processing will be done via batch.
-    $edit = array(
+    $edit = [
       'num' => 55,
       'kill' => TRUE,
       'node_types[article]' => TRUE,
       'node_types[page]' => TRUE,
-    );
+    ];
     $this->drupalPostForm('admin/config/development/generate/content', $edit, 'Generate');
     $this->assertSession()->pageTextContains('Finished 55 elements created successfully.');
     $this->assertSession()->pageTextContains('Generate process complete.');
@@ -142,12 +142,12 @@ class DevelGenerateBrowserTest extends BrowserTestBase {
     $this->assertEquals(55, $count, sprintf('The expected total number of nodes is %s, found %s', 55, $count));
 
     // Generate only articles.
-    $edit = array(
+    $edit = [
       'num' => 60,
       'kill' => TRUE,
       'node_types[article]' => TRUE,
       'node_types[page]' => FALSE,
-    );
+    ];
     $this->drupalPostForm('admin/config/development/generate/content', $edit, 'Generate');
 
     // Tests that all the created nodes were of the node type selected.

@@ -24,18 +24,18 @@ class ExampleDevelGenerate extends DevelGenerateBase {
 
   public function settingsForm(array $form, FormStateInterface $form_state) {
 
-    $form['num'] = array(
+    $form['num'] = [
       '#type' => 'textfield',
       '#title' => $this->t('How many examples would you like to generate?'),
       '#default_value' => $this->getSetting('num'),
       '#size' => 10,
-    );
+    ];
 
-    $form['kill'] = array(
+    $form['kill'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Delete all examples before generating new examples.'),
       '#default_value' => $this->getSetting('kill'),
-    );
+    ];
 
     return $form;
   }
@@ -53,7 +53,7 @@ class ExampleDevelGenerate extends DevelGenerateBase {
 
     //Creating user in order to demonstrate
     // how to override default business login generation.
-    $edit = array(
+    $edit = [
       'uid'     => NULL,
       'name'    => 'example_devel_generate',
       'pass'    => '',
@@ -61,8 +61,8 @@ class ExampleDevelGenerate extends DevelGenerateBase {
       'status'  => 1,
       'created' => \Drupal::time()->getRequestTime(),
       'roles' => '',
-      'devel_generate' => TRUE // A flag to let hook_user_* know that this is a generated user.
-    );
+      'devel_generate' => TRUE, // A flag to let hook_user_* know that this is a generated user.
+    ];
 
     $account = user_load_by_name('example_devel_generate');
     if (!$account) {
@@ -74,14 +74,14 @@ class ExampleDevelGenerate extends DevelGenerateBase {
 
     $account->save();
 
-    $this->setMessage($this->t('@num_examples created.', array('@num_examples' => $this->formatPlural($num, '1 example', '@count examples'))));
+    $this->setMessage($this->t('@num_examples created.', ['@num_examples' => $this->formatPlural($num, '1 example', '@count examples')]));
   }
 
   public function validateDrushParams($args, $options = []) {
-    $values = array(
+    $values = [
       'num' => $options['num'],
       'kill' => $options['kill'],
-    );
+    ];
     return $values;
   }
 

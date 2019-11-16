@@ -32,7 +32,7 @@ class AccessManagerWrapper extends AccessManager {
       $account = $this->currentUser;
     }
     $route = $route_match->getRouteObject();
-    $checks = $route->getOption('_access_checks') ?: array();
+    $checks = $route->getOption('_access_checks') ?: [];
 
     // Filter out checks which require the incoming request.
     if (!isset($request)) {

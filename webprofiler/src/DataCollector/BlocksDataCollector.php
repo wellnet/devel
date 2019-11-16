@@ -101,7 +101,7 @@ class BlocksDataCollector extends DataCollector implements DrupalDataCollectorIn
   public function getPanelSummary() {
     return $this->t('Loaded: @loaded, rendered: @rendered', [
       '@loaded' => $this->getLoadedBlocksCount(),
-      '@rendered' => $this->getRenderedBlocksCount()
+      '@rendered' => $this->getRenderedBlocksCount(),
     ]);
   }
 

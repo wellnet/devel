@@ -79,11 +79,11 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
    * {@inheritdoc}
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
-    $options = array();
+    $options = [];
     foreach ($this->vocabularyStorage->loadMultiple() as $vocabulary) {
       $options[$vocabulary->id()] = $vocabulary->label();
     }
-    $form['vids'] = array(
+    $form['vids'] = [
       '#type' => 'select',
       '#multiple' => TRUE,
       '#title' => $this->t('Vocabularies'),
@@ -91,27 +91,27 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
       '#default_value' => 'tags',
       '#options' => $options,
       '#description' => $this->t('Restrict terms to these vocabularies.'),
-    );
-    $form['num'] = array(
+    ];
+    $form['num'] = [
       '#type' => 'number',
       '#title' => $this->t('Number of terms?'),
       '#default_value' => $this->getSetting('num'),
       '#required' => TRUE,
       '#min' => 0,
-    );
-    $form['title_length'] = array(
+    ];
+    $form['title_length'] = [
       '#type' => 'number',
       '#title' => $this->t('Maximum number of characters in term names'),
       '#default_value' => $this->getSetting('title_length'),
       '#required' => TRUE,
       '#min' => 2,
       '#max' => 255,
-    );
-    $form['kill'] = array(
+    ];
+    $form['kill'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Delete existing terms in specified vocabularies before generating new terms.'),
       '#default_value' => $this->getSetting('kill'),
-    );
+    ];
 
     return $form;
   }
@@ -128,7 +128,7 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
     $vocabs = $this->vocabularyStorage->loadMultiple($values['vids']);
     $new_terms = $this->generateTerms($values['num'], $vocabs, $values['title_length']);
     if (!empty($new_terms)) {
-      $this->setMessage($this->t('Created the following new terms: @terms', array('@terms' => implode(', ', $new_terms))));
+      $this->setMessage($this->t('Created the following new terms: @terms', ['@terms' => implode(', ', $new_terms)]));
     }
   }
 
@@ -158,7 +158,7 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
    *   The list of names of the created terms.
    */
   protected function generateTerms($records, $vocabs, $maxlength = 12) {
-    $terms = array();
+    $terms = [];
 
     // Insert new data:
     $max = db_query('SELECT MAX(tid) FROM {taxonomy_term_data}')->fetchField();
@@ -166,19 +166,19 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
     for ($i = 1; $i <= $records; $i++) {
       $name = $this->getRandom()->word(mt_rand(2, $maxlength));
 
-      $values = array(
+      $values = [
         'name' => $name,
         'description' => 'description of ' . $name,
         'format' => filter_fallback_format(),
         'weight' => mt_rand(0, 10),
         'langcode' => Language::LANGCODE_NOT_SPECIFIED,
-      );
+      ];
 
       switch ($i % 2) {
         case 1:
           $vocab = $vocabs[array_rand($vocabs)];
           $values['vid'] = $vocab->id();
-          $values['parent'] = array(0);
+          $values['parent'] = [0];
           break;
 
         default:
@@ -187,7 +187,7 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
             $candidate = mt_rand(1, $max);
             $query = db_select('taxonomy_term_data', 't');
             $parent = $query
-              ->fields('t', array('tid', 'vid'))
+              ->fields('t', ['tid', 'vid'])
               ->condition('t.vid', array_keys($vocabs), 'IN')
               ->condition('t.tid', $candidate, '>=')
               ->range(0, 1)
@@ -197,7 +197,7 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
               break;
             }
           }
-          $values['parent'] = array($parent['tid']);
+          $values['parent'] = [$parent['tid']];
           // Slight speedup due to this property being set.
           $values['vid'] = $parent['vid'];
           break;
@@ -241,7 +241,7 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
     foreach ($bundles As $bundle) {
       // Verify that each bundle is a valid vocabulary id.
       if (!$this->vocabularyStorage->load($bundle)) {
-        throw new \Exception(dt('Invalid vocabulary machine name: @name', array('@name' => $bundle)));
+        throw new \Exception(dt('Invalid vocabulary machine name: @name', ['@name' => $bundle]));
       }
     }
 
@@ -252,7 +252,7 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
     }
 
     if (!$this->isNumber($number)) {
-      throw new \Exception(dt('Invalid number of terms: @num', array('@num' => $number)));
+      throw new \Exception(dt('Invalid number of terms: @num', ['@num' => $number]));
     }
 
     $values = [

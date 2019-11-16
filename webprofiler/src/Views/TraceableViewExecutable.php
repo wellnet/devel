@@ -138,7 +138,7 @@ class TraceableViewExecutable extends ViewExecutable {
     $module_handler->invokeAll('views_post_render', [
       $this,
       &$this->display_handler->output,
-      $cache
+      $cache,
     ]);
 
     // Let the themes play too, because post render is a very themey thing.

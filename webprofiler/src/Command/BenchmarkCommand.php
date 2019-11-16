@@ -99,7 +99,7 @@ class BenchmarkCommand extends Command {
           'form_build_id' => $form_build_id,
           'form_id' => 'user_login_form',
           'op' => $op,
-        ]
+        ],
       ]);
       $progress->advance();
 

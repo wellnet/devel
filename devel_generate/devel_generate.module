@@ -15,12 +15,12 @@ function devel_generate_menu_links_discovered_alter(&$links) {
   $devel_generate_plugins = $devel_generate_manager = \Drupal::service('plugin.manager.develgenerate')->getDefinitions();
   foreach ($devel_generate_plugins as $id => $plugin) {
     $label = $plugin['label'];
-    $links["devel_generate.$id"] = array(
+    $links["devel_generate.$id"] = [
       'title' => new TranslatableMarkup("Generate @label", ['@label' => $label]),
       'parent' => 'system.admin_config_development',
       'description' => $plugin['description'],
       'route_name' => "devel_generate.$id",
-    );
+    ];
   }
 }
 
@@ -50,10 +50,10 @@ function devel_generate_entity_insert(EntityInterface $entity) {
 
   // Add an url alias. Cannot happen before save because we don't know the nid.
   if (!empty($results['add_alias'])) {
-    $path = array(
+    $path = [
       'source' => '/node/' . $entity->id(),
       'alias' => '/node-' . $entity->id() . '-' . $entity->bundle(),
-    );
+    ];
     \Drupal::service('path.alias_storage')->save($path['source'], $path['alias'], $entity->language()->getId());
   }
 
@@ -78,7 +78,7 @@ function devel_generate_entity_insert(EntityInterface $entity) {
  *   Max length of the title of the comments.
  */
 function devel_generate_add_comments(NodeInterface $node, FieldDefinitionInterface $field_definition, $users, $max_comments, $title_length = 8) {
-  $parents = array();
+  $parents = [];
   $field_name = $field_definition->getName();
   $num_comments = mt_rand(1, $max_comments);
   for ($i = 1; $i <= $num_comments; $i++) {
@@ -107,7 +107,7 @@ function devel_generate_add_comments(NodeInterface $node, FieldDefinitionInterfa
         break;
     }
     $random = new Random();
-    $stub = array(
+    $stub = [
       'entity_type' => $node->getEntityTypeId(),
       'entity_id' => $node->id(),
       'field_name' => $field_name,
@@ -117,7 +117,7 @@ function devel_generate_add_comments(NodeInterface $node, FieldDefinitionInterfa
       'subject' => substr($random->sentences(mt_rand(2, $title_length), TRUE), 0, 63),
       'uid' => $users[array_rand($users)],
       'langcode' => $node->language()->getId(),
-    );
+    ];
     if ($parents) {
       $stub['pid'] = current($parents);
     }
@@ -136,11 +136,11 @@ function devel_generate_add_comments(NodeInterface $node, FieldDefinitionInterfa
  *   A node object.
  */
 function devel_generate_add_statistics(NodeInterface $node) {
-  $statistic = array(
+  $statistic = [
     'nid' => $node->id(),
     'totalcount' => mt_rand(0, 500),
     'timestamp' => \Drupal::time()->getRequestTime() - mt_rand(0, $node->getCreatedTime()),
-  );
+  ];
   $statistic['daycount'] = mt_rand(0, $statistic['totalcount']);
   db_insert('node_counter')->fields($statistic)->execute();
 }

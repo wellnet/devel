@@ -31,7 +31,7 @@ class DevelGenerateCommandsTest extends BrowserTestBase
    *
    * @var array
    */
-  public static $modules = array('menu_ui', 'node', 'comment', 'taxonomy', 'path', 'devel_generate');
+  public static $modules = ['menu_ui', 'node', 'comment', 'taxonomy', 'path', 'devel_generate'];
 
   /**
    * Prepares the testing environment

@@ -28,14 +28,14 @@ class ConfigEditor extends FormBase {
     $config = $this->config($config_name);
 
     if ($config === FALSE || $config->isNew()) {
-      $this->messenger()->addError($this->t('Config @name does not exist in the system.', array('@name' => $config_name)));
+      $this->messenger()->addError($this->t('Config @name does not exist in the system.', ['@name' => $config_name]));
       return;
     }
 
     $data = $config->getOriginal();
 
     if (empty($data)) {
-      $this->messenger()->addWarning($this->t('Config @name exists but has no data.', array('@name' => $config_name)));
+      $this->messenger()->addWarning($this->t('Config @name exists but has no data.', ['@name' => $config_name]));
       return;
     }
 
@@ -43,50 +43,50 @@ class ConfigEditor extends FormBase {
       $output = Yaml::encode($data);
     }
     catch (InvalidDataTypeException $e) {
-      $this->messenger()->addError($this->t('Invalid data detected for @name : %error', array('@name' => $config_name, '%error' => $e->getMessage())));
+      $this->messenger()->addError($this->t('Invalid data detected for @name : %error', ['@name' => $config_name, '%error' => $e->getMessage()]));
       return;
     }
 
-    $form['current'] = array(
+    $form['current'] = [
       '#type' => 'details',
-      '#title' => $this->t('Current value for %variable', array('%variable' => $config_name)),
-      '#attributes' => array('class' => array('container-inline')),
-    );
-    $form['current']['value'] = array(
+      '#title' => $this->t('Current value for %variable', ['%variable' => $config_name]),
+      '#attributes' => ['class' => ['container-inline']],
+    ];
+    $form['current']['value'] = [
       '#type' => 'item',
       '#markup' => dpr($output, TRUE),
-    );
+    ];
 
-    $form['name'] = array(
+    $form['name'] = [
       '#type' => 'value',
       '#value' => $config_name,
-    );
-    $form['new'] = array(
+    ];
+    $form['new'] = [
       '#type' => 'textarea',
       '#title' => $this->t('New value'),
       '#default_value' => $output,
       '#rows' => 24,
       '#required' => TRUE,
-    );
+    ];
 
     $form['actions'] = ['#type' => 'actions'];
     $form['actions']['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Save'),
     ];
-    $form['actions']['cancel'] = array(
+    $form['actions']['cancel'] = [
       '#type' => 'link',
       '#title' => $this->t('Cancel'),
       '#url' => $this->buildCancelLinkUrl(),
-    );
-    $form['actions']['delete'] = array(
+    ];
+    $form['actions']['delete'] = [
       '#type' => 'link',
       '#title' => $this->t('Delete'),
       '#url' => Url::fromRoute('devel.config_delete', ['config_name' => $config_name]),
-      '#attributes' => array(
-        'class' => array('button', 'button--danger'),
-      ),
-    );
+      '#attributes' => [
+        'class' => ['button', 'button--danger'],
+      ],
+    ];
 
     return $form;
   }
@@ -109,7 +109,7 @@ class ConfigEditor extends FormBase {
       }
     }
     catch (InvalidDataTypeException $e) {
-      $form_state->setErrorByName('new', $this->t('Invalid input: %error', array('%error' => $e->getMessage())));
+      $form_state->setErrorByName('new', $this->t('Invalid input: %error', ['%error' => $e->getMessage()]));
     }
   }
 
@@ -120,14 +120,14 @@ class ConfigEditor extends FormBase {
     $values = $form_state->getValues();
     try {
       $this->configFactory()->getEditable($values['name'])->setData($values['parsed_value'])->save();
-      $this->messenger()->addMessage($this->t('Configuration variable %variable was successfully saved.', array('%variable' => $values['name'])));
-      $this->logger('devel')->info('Configuration variable %variable was successfully saved.', array('%variable' => $values['name']));
+      $this->messenger()->addMessage($this->t('Configuration variable %variable was successfully saved.', ['%variable' => $values['name']]));
+      $this->logger('devel')->info('Configuration variable %variable was successfully saved.', ['%variable' => $values['name']]);
 
       $form_state->setRedirectUrl(Url::fromRoute('devel.configs_list'));
     }
     catch (\Exception $e) {
       $this->messenger()->addError($e->getMessage());
-      $this->logger('devel')->error('Error saving configuration variable %variable : %error.', array('%variable' => $values['name'], '%error' => $e->getMessage()));
+      $this->logger('devel')->error('Error saving configuration variable %variable : %error.', ['%variable' => $values['name'], '%error' => $e->getMessage()]);
     }
   }
 

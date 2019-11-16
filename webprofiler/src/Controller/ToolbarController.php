@@ -76,7 +76,7 @@ class ToolbarController extends ControllerBase {
       $rendered .= $template->renderBlock('toolbar', [
         'collector' => $profile->getcollector($name),
         'token' => $profile->getToken(),
-        'name' => $name
+        'name' => $name,
       ]);
     }
 

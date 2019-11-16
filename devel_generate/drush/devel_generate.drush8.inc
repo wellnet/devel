@@ -11,94 +11,94 @@ use Drupal\devel_generate\DevelGeneratePluginManager;
  * Implementation of hook_drush_command().
  */
 function devel_generate_drush_command() {
-  $items['generate-users'] = array(
+  $items['generate-users'] = [
     'callback' => 'drush_devel_generate',
-    'callback arguments' => array(
+    'callback arguments' => [
       'plugin_id' => 'user',
-    ),
+    ],
     'description' => 'Create users.',
-    'arguments' => array(
+    'arguments' => [
       'num' => 'Number of users to generate.',
-    ),
-    'options' => array(
+    ],
+    'options' => [
       'kill' => 'Delete all users before generating new ones.',
       'roles' => 'A comma delimited list of role IDs which should be granted to the new users. No need to specify authenticated user role.',
       'pass' => 'Specify a password to be set for all generated users.',
-    ),
-    'aliases' => array('genu'),
-  );
-  $items['generate-terms'] = array(
+    ],
+    'aliases' => ['genu'],
+  ];
+  $items['generate-terms'] = [
     'callback' => 'drush_devel_generate',
-    'callback arguments' => array(
+    'callback arguments' => [
       'plugin_id' => 'term',
-    ),
+    ],
     'description' => 'Create terms in specified vocabulary.',
-    'arguments' => array(
+    'arguments' => [
       'num' => 'Number of terms to insert. Defaults to 10.',
-    ),
-    'options' => array(
+    ],
+    'options' => [
       'kill' => 'Delete all terms in specified vocabulary before generating.',
       'bundles' => 'A comma-delimited list of machine names for the vocabularies where terms will be created.',
       'feedback' => 'An integer representing interval for insertion rate logging. Defaults to 1000',
       'pipe' => 'Returns the list of generated terms, one per line.',
-    ),
-    'aliases' => array('gent'),
+    ],
+    'aliases' => ['gent'],
 
-  );
-  $items['generate-vocabs'] = array(
+  ];
+  $items['generate-vocabs'] = [
     'callback' => 'drush_devel_generate',
-    'callback arguments' => array(
+    'callback arguments' => [
       'plugin_id' => 'vocabulary',
-    ),
+    ],
     'description' => 'Create vocabularies.',
-    'arguments' => array(
+    'arguments' => [
       'num' => 'Number of vocabularies to create. Defaults to 1.',
-    ),
-    'options' => array(
+    ],
+    'options' => [
       'kill' => 'Delete all vocabularies before generating.',
       'pipe' => 'Returns the list of generated vocabularies, one per line.',
-    ),
-    'aliases' => array('genv'),
-  );
-  $items['generate-content'] = array(
+    ],
+    'aliases' => ['genv'],
+  ];
+  $items['generate-content'] = [
     'callback' => 'drush_devel_generate',
-    'callback arguments' => array(
+    'callback arguments' => [
       'plugin_id' => 'content',
-    ),
+    ],
     'description' => 'Create content.',
-    'drupal dependencies' => array('devel_generate'),
-    'arguments' => array(
+    'drupal dependencies' => ['devel_generate'],
+    'arguments' => [
       'num' => 'Number of nodes to generate.',
       'max_comments' => 'Maximum number of comments to generate.',
-    ),
-    'options' => array(
+    ],
+    'options' => [
       'kill' => 'Delete all content before generating new content.',
       'bundles' => 'A comma delimited list of content types to create. Defaults to page,article.',
       'feedback' => 'An integer representing interval for insertion rate logging. Defaults to 1000',
       'skip-fields' => 'A comma delimited list of fields to omit when generating random values',
       'languages' => 'A comma-separated list of language codes',
-    ),
-    'aliases' => array('genc'),
-  );
-  $items['generate-menus'] = array(
+    ],
+    'aliases' => ['genc'],
+  ];
+  $items['generate-menus'] = [
     'callback' => 'drush_devel_generate',
-    'callback arguments' => array(
+    'callback arguments' => [
       'plugin_id' => 'menu',
-    ),
+    ],
     'description' => 'Create menus and menu items.',
-    'drupal dependencies' => array('devel_generate'), // Remove these once devel.module is moved down a directory. http://drupal.org/node/925246
-    'arguments' => array(
+    'drupal dependencies' => ['devel_generate'], // Remove these once devel.module is moved down a directory. http://drupal.org/node/925246
+    'arguments' => [
       'number_menus' => 'Number of menus to generate. Defaults to 2.',
       'number_links' => 'Number of links to generate. Defaults to 50.',
       'max_depth' => 'Max link depth. Defaults to 3',
       'max_width' => 'Max width of first level of links. Defaults to 8.',
-    ),
-    'options' => array(
+    ],
+    'options' => [
       'kill' => 'Delete all previously generated menus and links before generating new menus and links.',
       'pipe' => 'Returns the list of generated menus, one per line.',
-    ),
-    'aliases' => array('genm'),
-  );
+    ],
+    'aliases' => ['genm'],
+  ];
   return $items;
 }
 
@@ -168,7 +168,7 @@ function _drush_plugin_validate($params) {
     $manager = \Drupal::service('plugin.manager.develgenerate');
 
     /* @var DevelGenerateBaseInterface $instance */
-    $instance = $manager->createInstance($plugin_id, array());
+    $instance = $manager->createInstance($plugin_id, []);
 
     //Plugin instance suit params in order to fit for generateElements
     $values = $instance->validateDrushParams($params);

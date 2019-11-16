@@ -65,7 +65,7 @@ class DevelGenerate extends Plugin {
    *
    * @var array
    */
-  public $settings = array();
+  public $settings = [];
 
   /**
    * An array whose keys are the settings available to the
@@ -73,6 +73,6 @@ class DevelGenerate extends Plugin {
    *
    * @var array
    */
-  public $drushSettings = array();
+  public $drushSettings = [];
 
 }

@@ -80,13 +80,13 @@ class DevelDataCollector extends DataCollector implements DrupalDataCollectorInt
     $parameters->setMaxDepth(1)->onlyEnabledLinks();
     $tree = $menuLinkTreeService->load('devel', $parameters);
 
-    $manipulators = array(
-      array('callable' => 'menu.default_tree_manipulators:checkAccess'),
-      array('callable' => 'menu.default_tree_manipulators:generateIndexAndSort'),
-    );
+    $manipulators = [
+      ['callable' => 'menu.default_tree_manipulators:checkAccess'],
+      ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
+    ];
     $tree = $menuLinkTreeService->transform($tree, $manipulators);
 
-    $links = array();
+    $links = [];
 
     foreach ($tree as $item) {
       /** @var DestinationMenuLink $link */

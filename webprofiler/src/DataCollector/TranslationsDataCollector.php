@@ -86,7 +86,7 @@ class TranslationsDataCollector extends DataCollector implements DrupalDataColle
   public function getPanelSummary() {
     return $this->t('Translated: @translated, untranslated: @untranslated', [
       '@translated' => $this->getTranslatedCount(),
-      '@untranslated' => $this->getUntranslatedCount()
+      '@untranslated' => $this->getUntranslatedCount(),
     ]);
   }
 

@@ -107,39 +107,39 @@ class MenuDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
   public function settingsForm(array $form, FormStateInterface $form_state) {
     $menu_enabled = $this->moduleHandler->moduleExists('menu_ui');
     if ($menu_enabled) {
-      $menus = array('__new-menu__' => $this->t('Create new menu(s)')) + menu_ui_get_menus();
+      $menus = ['__new-menu__' => $this->t('Create new menu(s)')] + menu_ui_get_menus();
     }
     else {
       $menus = menu_list_system_menus();
     }
-    $form['existing_menus'] = array(
+    $form['existing_menus'] = [
       '#type' => 'checkboxes',
       '#title' => $this->t('Generate links for these menus'),
       '#options' => $menus,
-      '#default_value' => array('__new-menu__'),
+      '#default_value' => ['__new-menu__'],
       '#required' => TRUE,
-    );
+    ];
     if ($menu_enabled) {
-      $form['num_menus'] = array(
+      $form['num_menus'] = [
         '#type' => 'number',
         '#title' => $this->t('Number of new menus to create'),
         '#default_value' => $this->getSetting('num_menus'),
         '#min' => 0,
-        '#states' => array(
-          'visible' => array(
-            ':input[name="existing_menus[__new-menu__]"]' => array('checked' => TRUE),
-          ),
-        ),
-      );
+        '#states' => [
+          'visible' => [
+            ':input[name="existing_menus[__new-menu__]"]' => ['checked' => TRUE],
+          ],
+        ],
+      ];
     }
-    $form['num_links'] = array(
+    $form['num_links'] = [
       '#type' => 'number',
       '#title' => $this->t('Number of links to generate'),
       '#default_value' => $this->getSetting('num_links'),
       '#required' => TRUE,
       '#min' => 0,
-    );
-    $form['title_length'] = array(
+    ];
+    $form['title_length'] = [
       '#type' => 'number',
       '#title' => $this->t('Maximum number of characters in menu and menu link names'),
       '#description' => $this->t('The minimum length is 2.'),
@@ -147,39 +147,39 @@ class MenuDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
       '#required' => TRUE,
       '#min' => 2,
       '#max' => 128,
-    );
-    $form['link_types'] = array(
+    ];
+    $form['link_types'] = [
       '#type' => 'checkboxes',
       '#title' => $this->t('Types of links to generate'),
-      '#options' => array(
+      '#options' => [
         'node' => $this->t('Nodes'),
         'front' => $this->t('Front page'),
         'external' => $this->t('External'),
-      ),
-      '#default_value' => array('node', 'front', 'external'),
+      ],
+      '#default_value' => ['node', 'front', 'external'],
       '#required' => TRUE,
-    );
-    $form['max_depth'] = array(
+    ];
+    $form['max_depth'] = [
       '#type' => 'select',
       '#title' => $this->t('Maximum link depth'),
       '#options' => range(0, $this->menuLinkTree->maxDepth()),
       '#default_value' => floor($this->menuLinkTree->maxDepth() / 2),
       '#required' => TRUE,
-    );
+    ];
     unset($form['max_depth']['#options'][0]);
-    $form['max_width'] = array(
+    $form['max_width'] = [
       '#type' => 'number',
       '#title' => $this->t('Maximum menu width'),
       '#default_value' => $this->getSetting('max_width'),
       '#description' => $this->t('Limit the width of the generated menu\'s first level of links to a certain number of items.'),
       '#required' => TRUE,
       '#min' => 0,
-    );
-    $form['kill'] = array(
+    ];
+    $form['kill'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Delete existing custom generated menus and menu links before generating new ones.'),
       '#default_value' => $this->getSetting('kill'),
-    );
+    ];
 
     return $form;
   }
@@ -206,7 +206,7 @@ class MenuDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
     // Generate new menus.
     $new_menus = $this->generateMenus($values['num_menus'], $values['title_length']);
     if (!empty($new_menus)) {
-      $this->setMessage($this->t('Created the following new menus: @menus', array('@menus' => implode(', ', $new_menus))));
+      $this->setMessage($this->t('Created the following new menus: @menus', ['@menus' => implode(', ', $new_menus)]));
     }
 
     // Generate new menu links.
@@ -215,7 +215,7 @@ class MenuDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
       $menus = $menus + $values['existing_menus'];
     }
     $new_links = $this->generateLinks($values['num_links'], $menus, $values['title_length'], $values['link_types'], $values['max_depth'], $values['max_width']);
-    $this->setMessage($this->t('Created @count new menu links.', array('@count' => count($new_links))));
+    $this->setMessage($this->t('Created @count new menu links.', ['@count' => count($new_links)]));
   }
 
   /**
@@ -223,14 +223,14 @@ class MenuDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
    */
   public function validateDrushParams($args, $options = []) {
 
-    $link_types = array('node', 'front', 'external');
-    $values = array(
+    $link_types = ['node', 'front', 'external'];
+    $values = [
       'num_menus' => array_shift($args),
       'num_links' => array_shift($args),
       'kill' => $this->isDrush8() ? drush_get_option('kill') : $options['kill'],
       'pipe' => $this->isDrush8() ? drush_get_option('pipe') : $options['pipe'],
       'link_types' => array_combine($link_types, $link_types),
-    );
+    ];
 
     $max_depth = array_shift($args);
     $max_width = array_shift($args);
@@ -260,7 +260,7 @@ class MenuDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
    */
   protected function deleteMenus() {
     if ($this->moduleHandler->moduleExists('menu_ui')) {
-      $menu_ids = array();
+      $menu_ids = [];
       foreach (menu_ui_get_menus(FALSE) as $menu => $menu_title) {
         if (strpos($menu, 'devel-') === 0) {
           $menu_ids[] = $menu;
@@ -298,16 +298,16 @@ class MenuDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
    *   Array containing the generated vocabularies id.
    */
   protected function generateMenus($num_menus, $title_length = 12) {
-    $menus = array();
+    $menus = [];
 
     for ($i = 1; $i <= $num_menus; $i++) {
       $name = $this->getRandom()->word(mt_rand(2, max(2, $title_length)));
 
-      $menu = $this->menuStorage->create(array(
+      $menu = $this->menuStorage->create([
         'label' => $name,
         'id' => 'devel-' . mb_strtolower($name),
-        'description' => $this->t('Description of @name', array('@name' => $name)),
-      ));
+        'description' => $this->t('Description of @name', ['@name' => $name]),
+      ]);
 
       $menu->save();
       $menus[$menu->id()] = $menu->label();
@@ -320,24 +320,24 @@ class MenuDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
    * Generates menu links in a tree structure.
    */
   protected function generateLinks($num_links, $menus, $title_length, $link_types, $max_depth, $max_width) {
-    $links = array();
+    $links = [];
     $menus = array_keys(array_filter($menus));
     $link_types = array_keys(array_filter($link_types));
 
-    $nids = array();
+    $nids = [];
     for ($i = 1; $i <= $num_links; $i++) {
       // Pick a random menu.
       $menu_name = $menus[array_rand($menus)];
       // Build up our link.
       $link_title = $this->getRandom()->word(mt_rand(2, max(2, $title_length)));
-      $link = $this->menuLinkContentStorage->create(array(
+      $link = $this->menuLinkContentStorage->create([
         'menu_name' => $menu_name,
         'weight' => mt_rand(-50, 50),
         'title' => $link_title,
         'bundle' => 'menu_link_content',
-        'description' => $this->t('Description of @title.', array('@title' => $link_title)),
-      ));
-      $link->link->options = array('devel' => TRUE);
+        'description' => $this->t('Description of @title.', ['@title' => $link_title]),
+      ]);
+      $link->link->options = ['devel' => TRUE];
 
       // For the first $max_width items, make first level links.
       if ($i <= $max_width) {
@@ -365,7 +365,7 @@ class MenuDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
         case 'node':
           // Grab a random node ID.
           $select = db_select('node_field_data', 'n')
-            ->fields('n', array('nid', 'title'))
+            ->fields('n', ['nid', 'title'])
             ->condition('n.status', 1)
             ->range(0, 1)
             ->orderRandom();

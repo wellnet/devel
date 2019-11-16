@@ -78,7 +78,7 @@ class ProfilesFilterForm extends FormBase {
         'url' => $url,
         'method' => $method,
         'limit' => $limit,
-      ]
+      ],
     ]);
 
     $form_state->setRedirectUrl($url);

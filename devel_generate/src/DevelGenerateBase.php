@@ -105,7 +105,7 @@ abstract class DevelGenerateBase extends PluginBase implements DevelGenerateBase
   public static function populateFields(EntityInterface $entity) {
     $properties = [
       'entity_type' => $entity->getEntityType()->id(),
-      'bundle' => $entity->bundle()
+      'bundle' => $entity->bundle(),
     ];
     $field_config_storage = \Drupal::entityTypeManager()->getStorage('field_config');
     /* @var \Drupal\field\FieldConfigInterface[] $instances */

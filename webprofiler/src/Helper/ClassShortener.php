@@ -28,7 +28,7 @@ class ClassShortener implements ClassShortenerInterface {
 
     return new FormattableMarkup("<abbr title=\"@class\">@short</abbr>", [
       '@class' => $class,
-      '@short' => implode('\\', $result)
+      '@short' => implode('\\', $result),
     ]);
   }
 }
