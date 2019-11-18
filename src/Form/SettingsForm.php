@@ -7,6 +7,7 @@ use Drupal\devel\DevelDumperPluginManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
 use Drupal\Core\Url;
 
 /**
@@ -112,9 +113,9 @@ class SettingsForm extends ConfigFormBase {
         [
           '#markup' => $this->t('Depending on the situation, the theme, the size of the call stack and the arguments, etc., some handlers may not display their messages, or display them on the subsequent page. Select <em>Standard Drupal</em> <strong>and</strong> <em>Backtrace above the rendered page</em> to maximize your chances of not missing any messages.') . '<br />' .
           $this->t('Demonstrate the current error handler(s):') . ' ' .
-          $this->l('notice', $current_url->setOption('query', ['demo' => 'notice'])) . ', ' .
-          $this->l('notice+warning', $current_url->setOption('query', ['demo' => 'warning'])) . ', ' .
-          $this->l('notice+warning+error', $current_url->setOption('query', ['demo' => 'error'])) . ' (' .
+          Link::fromTextAndUrl('notice', $current_url->setOption('query', ['demo' => 'notice']))->toString() . ', ' .
+          Link::fromTextAndUrl('notice+warning', $current_url->setOption('query', ['demo' => 'warning']))->toString() . ', ' .
+          Link::fromTextAndUrl('notice+warning+error', $current_url->setOption('query', ['demo' => 'error']))->toString() . ' (' .
           $this->t('The presentation of the @error is determined by PHP.', ['@error' => 'error']) . ')',
         ],
       ],

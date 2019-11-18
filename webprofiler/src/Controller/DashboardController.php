@@ -4,6 +4,7 @@ namespace Drupal\webprofiler\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\DateFormatter;
+use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Drupal\webprofiler\Profiler\ProfilerStorageManager;
@@ -166,7 +167,7 @@ class DashboardController extends ControllerBase {
     if (count($profiles)) {
       foreach ($profiles as $profile) {
         $row = [];
-        $row[] = $this->l($profile['token'], new Url('webprofiler.dashboard', ['profile' => $profile['token']]));
+        $row[] = Link::fromTextAndUrl($profile['token'], new Url('webprofiler.dashboard', ['profile' => $profile['token']]))->toString();
         $row[] = $profile['ip'];
         $row[] = $profile['method'];
         $row[] = $profile['url'];
