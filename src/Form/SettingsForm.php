@@ -100,7 +100,7 @@ class SettingsForm extends ConfigFormBase {
       '#default_value' => empty($error_handlers) ? DEVEL_ERROR_HANDLER_NONE : $error_handlers,
       '#description' => [
         [
-          '#markup' => $this->t('Select the error handler(s) to use, in case you <a href=":choose">choose to show errors on screen</a>.', [':choose' => $this->url('system.logging_settings')]),
+          '#markup' => $this->t('Select the error handler(s) to use, in case you <a href=":choose">choose to show errors on screen</a>.', [':choose' => Url::fromRoute('system.logging_settings')->toString()]),
         ],
         [
           '#theme' => 'item_list',
