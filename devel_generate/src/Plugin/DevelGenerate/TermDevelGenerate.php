@@ -67,11 +67,11 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $entity_manager = $container->get('entity.manager');
+    $entity_type_manager = $container->get('entity_type.manager');
     return new static(
       $configuration, $plugin_id, $plugin_definition,
-      $entity_manager->getStorage('taxonomy_vocabulary'),
-      $entity_manager->getStorage('taxonomy_term')
+      $entity_type_manager->getStorage('taxonomy_vocabulary'),
+      $entity_type_manager->getStorage('taxonomy_term')
     );
   }
 

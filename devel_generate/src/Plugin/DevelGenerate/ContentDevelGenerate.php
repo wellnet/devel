@@ -143,11 +143,11 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $entity_manager = $container->get('entity.manager');
+    $entity_type_manager = $container->get('entity_type.manager');
     return new static(
       $configuration, $plugin_id, $plugin_definition,
-      $entity_manager->getStorage('node'),
-      $entity_manager->getStorage('node_type'),
+      $entity_type_manager->getStorage('node'),
+      $entity_type_manager->getStorage('node_type'),
       $container->get('module_handler'),
       $container->has('comment.manager') ? $container->get('comment.manager') : NULL,
       $container->get('language_manager'),

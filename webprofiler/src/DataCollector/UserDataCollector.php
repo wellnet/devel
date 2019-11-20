@@ -3,10 +3,10 @@
 namespace Drupal\webprofiler\DataCollector;
 
 use Drupal\Core\Authentication\AuthenticationCollectorInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Entity\EntityManagerInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,9 +25,9 @@ class UserDataCollector extends DataCollector implements DrupalDataCollectorInte
   private $currentUser;
 
   /**
-   * @var \Drupal\Core\Entity\EntityManagerInterface
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  private $entityManager;
+  private $entityTypeManager;
 
   /**
    * @var \Drupal\Core\Config\ConfigFactoryInterface
@@ -40,16 +40,16 @@ class UserDataCollector extends DataCollector implements DrupalDataCollectorInte
   private $providerCollector;
 
   /**
-   * @param \Drupal\Core\Session\AccountInterface $currentUser
-   * @param \Drupal\Core\Entity\EntityManagerInterface $entityManager
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
-   * @param \Drupal\Core\Authentication\AuthenticationCollectorInterface $providerCollector
+   * @param \Drupal\Core\Session\AccountInterface $current_user
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   * @param \Drupal\Core\Authentication\AuthenticationCollectorInterface $provider_collector
    */
-  public function __construct(AccountInterface $currentUser, EntityManagerInterface $entityManager, ConfigFactoryInterface $configFactory, AuthenticationCollectorInterface $providerCollector) {
-    $this->currentUser = $currentUser;
-    $this->entityManager = $entityManager;
-    $this->configFactory = $configFactory;
-    $this->providerCollector = $providerCollector;
+  public function __construct(AccountInterface $current_user, EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, AuthenticationCollectorInterface $provider_collector) {
+    $this->currentUser = $current_user;
+    $this->entityTypeManager = $entity_type_manager;
+    $this->configFactory = $config_factory;
+    $this->providerCollector = $provider_collector;
   }
 
   /**
@@ -60,7 +60,7 @@ class UserDataCollector extends DataCollector implements DrupalDataCollectorInte
     $this->data['authenticated'] = $this->currentUser->isAuthenticated();
 
     $this->data['roles'] = [];
-    $storage = $this->entityManager->getStorage('user_role');
+    $storage = $this->entityTypeManager->getStorage('user_role');
     foreach ($this->currentUser->getRoles() as $role) {
       $entity = $storage->load($role);
       if ($entity) {

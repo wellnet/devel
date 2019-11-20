@@ -36,7 +36,7 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
     if (isset($modules['views'])) {
       $container->register('webprofiler.views', 'Drupal\webprofiler\DataCollector\ViewsDataCollector')
         ->addArgument(new Reference(('views.executable')))
-        ->addArgument(new Reference(('entity.manager')))
+        ->addArgument(new Reference(('entity_type.manager')))
         ->addTag('data_collector', [
           'template' => '@webprofiler/Collector/views.html.twig',
           'id' => 'views',

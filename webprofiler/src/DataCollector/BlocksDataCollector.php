@@ -20,15 +20,15 @@ class BlocksDataCollector extends DataCollector implements DrupalDataCollectorIn
   use StringTranslationTrait, DrupalDataCollectorTrait;
 
   /**
-   * @var \Drupal\Core\Entity\EntityManagerInterface
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  private $entityManager;
+  private $entityTypeManager;
 
   /**
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityManager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    */
-  public function __construct(EntityTypeManagerInterface $entityManager) {
-    $this->entityManager = $entityManager;
+  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
+    $this->entityTypeManager = $entity_type_manager;
 
     $this->data['blocks']['loaded'] = [];
     $this->data['blocks']['rendered'] = [];
@@ -40,8 +40,8 @@ class BlocksDataCollector extends DataCollector implements DrupalDataCollectorIn
   public function collect(Request $request, Response $response, \Exception $exception = NULL) {
     $storage = $this->entityManager->getStorage('block');
 
-    $loaded = $this->entityManager->getLoaded('config', 'block');
-    $rendered = $this->entityManager->getRendered('block');
+    $loaded = $this->entityTypeManager->getLoaded('config', 'block');
+    $rendered = $this->entityTypeManager->getRendered('block');
 
     if ($loaded) {
       $this->data['blocks']['loaded'] = $this->getBlocksData($loaded, $storage);

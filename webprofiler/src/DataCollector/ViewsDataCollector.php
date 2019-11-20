@@ -2,7 +2,7 @@
 
 namespace Drupal\webprofiler\DataCollector;
 
-use Drupal\Core\Entity\EntityManagerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Drupal\webprofiler\Views\TraceableViewExecutable;
@@ -24,16 +24,16 @@ class ViewsDataCollector extends DataCollector implements DrupalDataCollectorInt
   private $view_executable_factory;
 
   /**
-   * @var \Drupal\Core\Entity\EntityManagerInterface
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  private $entityManager;
+  private $entityTypeManager;
 
   /**
    * @param ViewExecutableFactoryWrapper $view_executable_factory
-   * @param \Drupal\Core\Entity\EntityManagerInterface $entityManager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    */
-  public function __construct(ViewExecutableFactoryWrapper $view_executable_factory, EntityManagerInterface $entityManager) {
-    $this->entityManager = $entityManager;
+  public function __construct(ViewExecutableFactoryWrapper $view_executable_factory, EntityTypeManagerInterface $entity_type_manager) {
+    $this->entityTypeManager = $entity_type_manager;
     $this->view_executable_factory = $view_executable_factory;
 
     $this->data['views'] = [];
@@ -44,7 +44,7 @@ class ViewsDataCollector extends DataCollector implements DrupalDataCollectorInt
    */
   public function collect(Request $request, Response $response, \Exception $exception = NULL) {
     $views = $this->view_executable_factory->getViews();
-    $storage = $this->entityManager->getStorage('view');
+    $storage = $this->entityTypeManager->getStorage('view');
 
     /** @var TraceableViewExecutable $view */
     foreach ($views as $view) {
@@ -69,7 +69,7 @@ class ViewsDataCollector extends DataCollector implements DrupalDataCollectorInt
     }
 
 //    TODO: also use those data.
-//    $loaded = $this->entityManager->getLoaded('view');
+//    $loaded = $this->entityTypeManager->getLoaded('view');
 //
 //    if ($loaded) {
 //      /** @var \Drupal\webprofiler\Entity\EntityStorageDecorator $views */

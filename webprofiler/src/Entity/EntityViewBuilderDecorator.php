@@ -85,7 +85,7 @@ class EntityViewBuilderDecorator extends EntityDecorator implements EntityHandle
   public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type) {
     return new static(
       $entity_type,
-      $container->get('entity.manager'),
+      $container->get('entity_type.manager'),
       $container->get('language_manager')
     );
   }
