@@ -62,7 +62,7 @@ class ThemeDataCollector extends DataCollector implements DrupalDataCollectorInt
       'path' => $activeTheme->getPath(),
       'engine' => $activeTheme->getEngine(),
       'owner' => $activeTheme->getOwner(),
-      'baseThemes' => $activeTheme->getBaseThemes(),
+      'baseThemes' => $activeTheme->getBaseThemeExtensions(),
       'extension' => $activeTheme->getExtension(),
       'styleSheetsRemove' => $activeTheme->getStyleSheetsRemove(),
       'libraries' => $activeTheme->getLibraries(),
