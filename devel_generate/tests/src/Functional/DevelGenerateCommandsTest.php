@@ -71,14 +71,20 @@ class DevelGenerateCommandsTest extends BrowserTestBase
     $link = MenuLinkContent::load(5);
     $this->assertEquals($menu->id(), $link->getMenuName());
 
-    // Make sure content gets created, with comments.
-    $this->drush('devel-generate-content', [21, 9], ['kill' => null]);
-    $node = Node::load(3);
+    // Make sure content gets created.
+    $this->drush('devel-generate-content', [21], ['kill' => NULL]);
+    $node = Node::load(21);
     $this->assertNotEmpty($node);
+
+    // Make sure articles get comments. Only one third of articles will have
+    // comment status 'open' and therefore the ability to receive a comment.
+    // However generating 30 articles will give the likelyhood of test failure
+    // (i.e. no article gets a comment) as 2/3 ^ 30 = 0.00052% or 1 in 191751.
+    $this->drush('devel-generate-content', [30, 9], ['kill' => NULL, 'bundles' => 'article']);
     $comment = Comment::load(1);
     $this->assertNotEmpty($comment);
 
-    // Do same, but with a higher number that triggers batch running.
+    // Generate content with a higher number that triggers batch running.
     $this->drush('devel-generate-content', [55], ['kill' => null]);
     $node = Node::load(55);
     $this->assertNotEmpty($node);
