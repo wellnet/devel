@@ -3,19 +3,13 @@
 namespace Drupal\Tests\devel\Functional;
 
 use Drupal\Component\Render\FormattableMarkup;
-use Drupal\Tests\BrowserTestBase;
 
 /**
  * Tests devel error handler.
  *
  * @group devel
  */
-class DevelErrorHandlerTest extends BrowserTestBase {
-
-  /**
-   * {@inheritdoc}
-   */
-  public static $modules = ['devel'];
+class DevelErrorHandlerTest extends DevelBrowserTestBase {
 
   /**
    * Tests devel error handler.
@@ -38,8 +32,7 @@ class DevelErrorHandlerTest extends BrowserTestBase {
     $config = $this->config('system.logging');
     $config->set('error_level', ERROR_REPORTING_DISPLAY_VERBOSE)->save();
 
-    $admin_user = $this->drupalCreateUser(['administer site configuration', 'access devel information']);
-    $this->drupalLogin($admin_user);
+    $this->drupalLogin($this->adminUser);
 
     // Ensures that the error handler config is present on the config page and
     // by default the standard error handler is selected.

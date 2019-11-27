@@ -2,14 +2,12 @@
 
 namespace Drupal\Tests\devel\Functional;
 
-use Drupal\Tests\BrowserTestBase;
-
 /**
  * Tests pluggable dumper feature.
  *
  * @group devel
  */
-class DevelDumperTest extends BrowserTestBase {
+class DevelDumperTest extends DevelBrowserTestBase {
 
   /**
    * Modules to enable.
@@ -23,9 +21,7 @@ class DevelDumperTest extends BrowserTestBase {
    */
   protected function setUp() {
     parent::setUp();
-
-    $admin_user = $this->drupalCreateUser(['administer site configuration', 'access devel information']);
-    $this->drupalLogin($admin_user);
+    $this->drupalLogin($this->adminUser);
   }
 
   /**

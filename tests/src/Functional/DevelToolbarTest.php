@@ -3,14 +3,13 @@
 namespace Drupal\Tests\devel\Functional;
 
 use Drupal\Core\Menu\MenuTreeParameters;
-use Drupal\Tests\BrowserTestBase;
 
 /**
  * Tests devel toolbar module functionality.
  *
  * @group devel
  */
-class DevelToolbarTest extends BrowserTestBase {
+class DevelToolbarTest extends DevelBrowserTestBase {
 
   /**
    * {@inheritdoc}

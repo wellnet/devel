@@ -2,36 +2,19 @@
 
 namespace Drupal\Tests\devel\Functional;
 
-use Drupal\Tests\BrowserTestBase;
-
 /**
  * Tests event info pages and links.
  *
  * @group devel
  */
-class DevelEventInfoTest extends BrowserTestBase {
-
-  /**
-   * {@inheritdoc}
-   */
-  public static $modules = ['devel', 'block'];
-
-  /**
-   * The user for the test.
-   *
-   * @var \Drupal\user\UserInterface
-   */
-  protected $develUser;
+class DevelEventInfoTest extends DevelBrowserTestBase {
 
   /**
    * {@inheritdoc}
    */
   protected function setUp() {
     parent::setUp();
-
     $this->drupalPlaceBlock('page_title_block');
-
-    $this->develUser = $this->drupalCreateUser(['access devel information']);
     $this->drupalLogin($this->develUser);
   }
 

@@ -3,36 +3,13 @@
 namespace Drupal\Tests\devel_generate\Functional;
 
 use Drupal\node\Entity\Node;
-use Drupal\Tests\BrowserTestBase;
-use Drupal\Tests\devel_generate\Traits\DevelGenerateSetupTrait;
 
 /**
  * Tests the logic to generate data.
  *
  * @group devel_generate
  */
-class DevelGenerateBrowserTest extends BrowserTestBase {
-
-  use DevelGenerateSetupTrait;
-
-  /**
-   * Modules to enable.
-   *
-   * @var array
-   */
-  public static $modules = ['menu_ui', 'node', 'comment', 'taxonomy', 'path', 'devel_generate'];
-
-  /**
-   * Prepares the testing environment
-   */
-  public function setUp() {
-    parent::setUp();
-
-    $this->setUpData();
-
-    $admin_user = $this->drupalCreateUser(['administer devel_generate']);
-    $this->drupalLogin($admin_user);
-  }
+class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
 
   /**
    * Tests generate commands

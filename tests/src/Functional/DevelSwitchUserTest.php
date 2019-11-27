@@ -3,21 +3,13 @@
 namespace Drupal\Tests\devel\Functional;
 
 use Drupal\Component\Render\FormattableMarkup;
-use Drupal\Tests\BrowserTestBase;
 
 /**
  * Tests switch user.
  *
  * @group devel
  */
-class DevelSwitchUserTest extends BrowserTestBase {
-
-  /**
-   * Modules to enable.
-   *
-   * @var array
-   */
-  public static $modules = ['devel', 'block'];
+class DevelSwitchUserTest extends DevelBrowserTestBase {
 
   /**
    * The block used by this test.

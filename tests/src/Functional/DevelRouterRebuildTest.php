@@ -2,21 +2,12 @@
 
 namespace Drupal\Tests\devel\Functional;
 
-use Drupal\Tests\BrowserTestBase;
-
 /**
  * Tests routes rebuild.
  *
  * @group devel
  */
-class DevelRouterRebuildTest extends BrowserTestBase {
-
-  /**
-   * Modules to enable.
-   *
-   * @var array
-   */
-  public static $modules = ['devel', 'devel_test'];
+class DevelRouterRebuildTest extends DevelBrowserTestBase {
 
   /**
    * Test routes rebuild.
@@ -28,8 +19,7 @@ class DevelRouterRebuildTest extends BrowserTestBase {
     $this->drupalGet('devel/menu/reset');
     $this->assertSession()->statusCodeEquals(403);
 
-    $web_user = $this->drupalCreateUser(['administer site configuration']);
-    $this->drupalLogin($web_user);
+    $this->drupalLogin($this->adminUser);
 
     $this->drupalGet('devel/menu/reset');
     $this->assertSession()->statusCodeEquals(200);

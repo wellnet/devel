@@ -3,28 +3,13 @@
 namespace Drupal\Tests\devel\Functional;
 
 use Drupal\Core\Url;
-use Drupal\Tests\BrowserTestBase;
 
 /**
  * Tests devel menu links.
  *
  * @group devel
  */
-class DevelMenuLinksTest extends BrowserTestBase {
-
-  /**
-   * Modules to enable.
-   *
-   * @var array
-   */
-  public static $modules = ['devel', 'block', 'devel_test'];
-
-  /**
-   * The user for tests.
-   *
-   * @var \Drupal\user\UserInterface
-   */
-  protected $develUser;
+class DevelMenuLinksTest extends DevelBrowserTestBase {
 
   /**
    * {@inheritdoc}
@@ -36,9 +21,7 @@ class DevelMenuLinksTest extends BrowserTestBase {
     // properly.
     $this->drupalPlaceBlock('system_menu_block:devel');
     $this->drupalPlaceBlock('page_title_block');
-
-    $this->develUser = $this->drupalCreateUser(['access devel information', 'administer site configuration']);
-    $this->drupalLogin($this->develUser);
+    $this->drupalLogin($this->adminUser);
   }
 
   /**
@@ -63,7 +46,7 @@ class DevelMenuLinksTest extends BrowserTestBase {
 
     // Ensure CSRF protected links work properly after change session.
     $this->drupalLogout();
-    $this->drupalLogin($this->develUser);
+    $this->drupalLogin($this->adminUser);
 
     $this->assertLink('Cache clear');
     $this->clickLink('Cache clear');

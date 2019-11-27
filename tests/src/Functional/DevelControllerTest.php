@@ -2,14 +2,12 @@
 
 namespace Drupal\Tests\devel\Functional;
 
-use Drupal\Tests\BrowserTestBase;
-
 /**
  * Tests Devel controller.
  *
  * @group devel
  */
-class DevelControllerTest extends BrowserTestBase {
+class DevelControllerTest extends DevelBrowserTestBase {
 
   /**
    * Modules to enable.
