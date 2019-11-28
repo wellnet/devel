@@ -26,6 +26,11 @@ class DevelCommandsTest extends BrowserTestBase {
   public static $modules = ['devel'];
 
   /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
+
+  /**
    * Tests drush commands.
    */
   public function testCommands() {

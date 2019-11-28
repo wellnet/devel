@@ -92,7 +92,7 @@ class DevelDumperTest extends DevelBrowserTestBase {
     $this->assertTrue(!empty($elements), 'Dumped message is present.');
 
     $this->drupalGet('devel_dumper_test/message');
-    $elements = $this->xpath('//div[contains(@class, "messages")]/pre[contains(text(), :message)]', [':message' => 'AvailableTestDumper::export() Test output']);
+    $elements = $this->xpath('//div[@aria-label="Status message"]/pre[contains(text(), :message)]', [':message' => 'AvailableTestDumper::export() Test output']);
     $this->assertTrue(!empty($elements), 'Dumped message is present.');
 
     $this->drupalGet('devel_dumper_test/export');

@@ -13,6 +13,11 @@ use PHPUnit_Framework_AssertionFailedError;
 abstract class WebprofilerTestBase extends JavascriptTestBase {
 
   /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
+
+  /**
    * Wait until the toolbar is present on page.
    */
   protected function waitForToolbar() {

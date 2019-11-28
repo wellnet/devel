@@ -15,7 +15,7 @@ class DevelErrorHandlerTest extends DevelBrowserTestBase {
    * Tests devel error handler.
    */
   public function testErrorHandler() {
-    $messages_selector = 'div.messages';
+    $messages_selector = '[data-drupal-messages]';
 
     $expected_notice = new FormattableMarkup('%type: @message in %function (line ', [
       '%type' => 'Notice',

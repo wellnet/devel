@@ -68,17 +68,19 @@ class DevelToolbarTest extends DevelBrowserTestBase {
    * Tests configuration form.
    */
   public function testConfigurationForm() {
-    // Ensures that the page is accessible ony to users with the adequate
+    // Ensures that the page is accessible only to users with the adequate
     // permissions.
     $this->drupalGet('admin/config/development/devel/toolbar');
     $this->assertSession()->statusCodeEquals(403);
 
     // Ensures that the config page is accessible for users with the adequate
-    // permissions and exists the Devel toolbar local task.
+    // permissions and the Devel toolbar local task and content are shown.
     $this->drupalLogin($this->develUser);
     $this->drupalGet('admin/config/development/devel/toolbar');
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertSession()->elementExists('css', '.tabs .primary a:contains("Toolbar Settings")');
+    $this->assertSession()
+      ->elementExists('xpath', '//h2[text()="Primary tabs"]/following-sibling::ul//a[contains(text(), "Toolbar Settings")]');
+    $this->assertSession()->elementExists('xpath', '//fieldset[@id="edit-toolbar-items--wrapper"]');
     $this->assertSession()->pageTextContains('Devel Toolbar Settings');
 
     // Ensures and that all devel menu links are listed in the configuration
@@ -229,10 +231,10 @@ class DevelToolbarTest extends DevelBrowserTestBase {
     $this->drupalGet('admin/config/development/devel/toolbar');
     $this->assertSession()->statusCodeEquals(404);
 
-    // Primary local task should not contains toolbar tab.
+    // Primary local task should not contain toolbar tab.
     $this->drupalGet('admin/config/development/devel');
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertSession()->elementNotExists('css', '.tabs .primary a:contains("Toolbar Settings")');
+    $this->assertSession()->elementNotExists('xpath', '//a[contains(text(), "Toolbar Settings")]');
 
     // Toolbar setting config and devel menu cache tags sholud not present.
     $this->drupalGet('');

@@ -117,7 +117,7 @@ class DevelRouteInfoTest extends DevelBrowserTestBase {
    */
   public function testRouteDetail() {
     $expected_title = 'Route detail';
-    $xpath_warning_messages = '//div[contains(@class, "messages--warning")]';
+    $xpath_warning_messages = '//div[@aria-label="Warning message"]';
 
     // Ensures that devel route detail link in the menu works properly.
     $url = $this->develUser->toUrl();

@@ -31,6 +31,11 @@ abstract class DevelGenerateBrowserTestBase extends BrowserTestBase {
   ];
 
   /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
+
+  /**
    * Prepares the testing environment.
    */
   public function setUp() {

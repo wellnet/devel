@@ -21,8 +21,8 @@ trait DevelWebAssertHelper {
    *   secondary. Defaults to 0.
    */
   protected function assertLocalTasks(array $routes, $level = 0) {
-    $type_class = $level == 0 ? 'tabs primary' : 'tabs secondary';
-    $elements = $this->xpath('//*[contains(@class, :class)]//a', [':class' => $type_class]);
+    $tab_label = $level == 0 ? 'Primary tabs' : 'Secondary tabs';
+    $elements = $this->xpath('//h2[text()="' . $tab_label . '"]/following-sibling::ul//a');
     $this->assertTrue(count($elements), 'Local tasks found.');
     foreach ($routes as $index => $route_info) {
       list($route_name, $route_parameters) = $route_info;

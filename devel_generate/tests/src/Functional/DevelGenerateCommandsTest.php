@@ -34,6 +34,11 @@ class DevelGenerateCommandsTest extends BrowserTestBase
   public static $modules = ['menu_ui', 'node', 'comment', 'taxonomy', 'path', 'devel_generate'];
 
   /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
+
+  /**
    * Prepares the testing environment
    */
   public function setUp() {
