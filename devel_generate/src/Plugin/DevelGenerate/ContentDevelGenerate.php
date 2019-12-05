@@ -5,6 +5,7 @@ namespace Drupal\devel_generate\Plugin\DevelGenerate;
 use Drupal\comment\CommentManagerInterface;
 use Drupal\Component\Datetime\Time;
 use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -101,6 +102,13 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
   protected $time;
 
   /**
+   * Database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
+
+  /**
    * The construct.
    *
    * @param array $configuration
@@ -125,8 +133,10 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
    *   The date formatter service.
    * @param \Drupal\Core\Datetime\Time $time
    *   Provides system time.
+   * @param \Drupal\Core\Database\Connection $database
+   *   Database connection.
    */
-  public function __construct(array $configuration, $plugin_id, array $plugin_definition, EntityStorageInterface $node_storage, EntityStorageInterface $node_type_storage, ModuleHandlerInterface $module_handler, CommentManagerInterface $comment_manager = NULL, LanguageManagerInterface $language_manager, UrlGeneratorInterface $url_generator, DateFormatterInterface $date_formatter, Time $time) {
+  public function __construct(array $configuration, $plugin_id, array $plugin_definition, EntityStorageInterface $node_storage, EntityStorageInterface $node_type_storage, ModuleHandlerInterface $module_handler, CommentManagerInterface $comment_manager = NULL, LanguageManagerInterface $language_manager, UrlGeneratorInterface $url_generator, DateFormatterInterface $date_formatter, Time $time, Connection $database) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->moduleHandler = $module_handler;
@@ -137,6 +147,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     $this->urlGenerator = $url_generator;
     $this->dateFormatter = $date_formatter;
     $this->time = $time;
+    $this->database = $database;
   }
 
   /**
@@ -153,7 +164,8 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       $container->get('language_manager'),
       $container->get('url_generator'),
       $container->get('date.formatter'),
-      $container->get('datetime.time')
+      $container->get('datetime.time'),
+      $container->get('database')
     );
   }
 
@@ -549,7 +561,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
    */
   protected function getUsers() {
     $users = [];
-    $result = db_query_range("SELECT uid FROM {users}", 0, 50);
+    $result = $this->database->queryRange("SELECT uid FROM {users}", 0, 50);
     foreach ($result as $record) {
       $users[] = $record->uid;
     }

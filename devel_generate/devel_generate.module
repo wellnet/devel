@@ -142,5 +142,6 @@ function devel_generate_add_statistics(NodeInterface $node) {
     'timestamp' => \Drupal::time()->getRequestTime() - mt_rand(0, $node->getCreatedTime()),
   ];
   $statistic['daycount'] = mt_rand(0, $statistic['totalcount']);
-  db_insert('node_counter')->fields($statistic)->execute();
+  $database = \Drupal::database();
+  $database->insert('node_counter')->fields($statistic)->execute();
 }

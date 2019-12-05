@@ -2,6 +2,7 @@
 
 namespace Drupal\devel_generate\Plugin\DevelGenerate;
 
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\Language;
@@ -43,6 +44,13 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
   protected $termStorage;
 
   /**
+   * Database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
+
+  /**
    * Constructs a new TermDevelGenerate object.
    *
    * @param array $configuration
@@ -55,12 +63,15 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
    *   The vocabulary storage.
    * @param \Drupal\Core\Entity\EntityStorageInterface $term_storage
    *   The term storage.
+   * @param \Drupal\Core\Database\Connection $database
+   *   Database connection.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityStorageInterface $vocabulary_storage, EntityStorageInterface $term_storage) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityStorageInterface $vocabulary_storage, EntityStorageInterface $term_storage, Connection $database) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->vocabularyStorage = $vocabulary_storage;
     $this->termStorage = $term_storage;
+    $this->database = $database;
   }
 
   /**
@@ -71,7 +82,8 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
     return new static(
       $configuration, $plugin_id, $plugin_definition,
       $entity_type_manager->getStorage('taxonomy_vocabulary'),
-      $entity_type_manager->getStorage('taxonomy_term')
+      $entity_type_manager->getStorage('taxonomy_term'),
+      $container->get('database')
     );
   }
 
@@ -161,7 +173,7 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
     $terms = [];
 
     // Insert new data:
-    $max = db_query('SELECT MAX(tid) FROM {taxonomy_term_data}')->fetchField();
+    $max = $this->database->query('SELECT MAX(tid) FROM {taxonomy_term_data}')->fetchField();
     $start = time();
     for ($i = 1; $i <= $records; $i++) {
       $name = $this->getRandom()->word(mt_rand(2, $maxlength));
@@ -185,7 +197,7 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
           while (TRUE) {
             // Keep trying to find a random parent.
             $candidate = mt_rand(1, $max);
-            $query = db_select('taxonomy_term_data', 't');
+            $query = $this->database->select('taxonomy_term_data', 't');
             $parent = $query
               ->fields('t', ['tid', 'vid'])
               ->condition('t.vid', array_keys($vocabs), 'IN')
