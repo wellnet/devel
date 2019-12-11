@@ -43,7 +43,8 @@ class DevelModulesReinstallTest extends DevelBrowserTestBase {
     }
 
     $this->drupalPostForm('devel/reinstall', $edit, 'Reinstall');
-    $this->assertText(sprintf('Uninstalled and installed: %s.', implode(', ', $modules)));
+    $this->assertSession()->pageTextContains('Uninstalled and installed: ' . implode(', ', $modules) . '.');
+
   }
 
 }
