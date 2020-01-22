@@ -158,6 +158,24 @@ class SettingsForm extends ConfigFormBase {
       ];
     }
 
+    // Allow custom debug filename for use in DevelDumperManager::debug()
+    $default_file = $devel_config->get('debug_logfile') ?: 'temporary://drupal_debug.txt';
+    $form['debug_logfile'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Debug Log File'),
+      '#description' => $this->t('This is the log file that Devel functions such as ddm() write to. Save with a blank filename to revert to the default.'),
+      '#default_value' => $default_file,
+    ];
+
+    // Specify whether debug file should have <pre> tags around each $dump,
+    // for use in Plugin\Devel\Dumper\DoctrineDebug::export()
+    $form['debug_pre'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Wrap debug in &lt;pre&gt; tags'),
+      '#default_value' => $devel_config->get('debug_pre'),
+      '#description' => $this->t('You may want the debug output wrapped in &lt;pre&gt; tags, depending on your debug file format and how it is displayed.'),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -172,6 +190,8 @@ class SettingsForm extends ConfigFormBase {
       ->set('error_handlers', $values['error_handlers'])
       ->set('rebuild_theme', $values['rebuild_theme'])
       ->set('devel_dumper', $values['dumper'])
+      ->set('debug_logfile', $values['debug_logfile'])
+      ->set('debug_pre', $values['debug_pre'])
       ->save();
 
     parent::submitForm($form, $form_state);
