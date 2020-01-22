@@ -163,7 +163,7 @@ class SettingsForm extends ConfigFormBase {
     $form['debug_logfile'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Debug Log File'),
-      '#description' => $this->t('This is the log file that Devel functions such as ddm() write to. Save with a blank filename to revert to the default.'),
+      '#description' => $this->t('This is the log file that Devel functions such as ddm() write to. Use temporary:// to represent your systems temporary directory. Save with a blank filename to revert to the default.'),
       '#default_value' => $default_file,
     ];
 
@@ -190,7 +190,7 @@ class SettingsForm extends ConfigFormBase {
       ->set('error_handlers', $values['error_handlers'])
       ->set('rebuild_theme', $values['rebuild_theme'])
       ->set('devel_dumper', $values['dumper'])
-      ->set('debug_logfile', $values['debug_logfile'])
+      ->set('debug_logfile', $values['debug_logfile'] ?: 'temporary://drupal_debug.txt')
       ->set('debug_pre', $values['debug_pre'])
       ->save();
 
