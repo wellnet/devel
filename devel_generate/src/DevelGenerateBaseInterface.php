@@ -70,8 +70,14 @@ interface DevelGenerateBaseInterface extends PluginInspectionInterface {
   /**
    * Responsible for validating Drush params.
    *
-   * @Return an array of values ready to be used for generateElements()
+   * @param array $args
+   *   The command arguments.
+   * @param array $options
+   *   The commend options.
+   *
+   * @return array
+   *   An array of values ready to be used for generateElements().
    */
-  function validateDrushParams($args);
+  function validateDrushParams(array $args, array $options = []);
 
 }

@@ -99,6 +99,25 @@ function devel_generate_drush_command() {
     ],
     'aliases' => ['genm'],
   ];
+  $items['generate-media'] = [
+    'callback' => 'drush_devel_generate',
+    'callback arguments' => [
+      'plugin_id' => 'media',
+    ],
+    'description' => 'Create media items.',
+    'drupal dependencies' => ['devel_generate', 'media'],
+    'arguments' => [
+      'num' => 'Number of media items to generate.',
+    ],
+    'options' => [
+      'kill' => 'Delete all media items before generating new media.',
+      'media-types' => 'A comma-delimited list of media types to create.',
+      'feedback' => 'An integer representing interval for insertion rate logging. Defaults to 1000',
+      'skip-fields' => 'A comma delimited list of fields to omit when generating random values.',
+      'languages' => 'A comma-separated list of language codes',
+    ],
+    'aliases' => ['genmd'],
+  ];
   return $items;
 }
 
@@ -148,6 +167,15 @@ function drush_devel_generate_generate_content_validate() {
 function drush_devel_generate_generate_menus_validate() {
 
   //Array of "Callback arguments" and "command line args".
+  $params = func_get_args();
+  _drush_plugin_validate($params);
+}
+
+/**
+ * Implements drush_hook_COMMAND_validate().
+ */
+function drush_devel_generate_generate_media_validate() {
+  // Array of "Callback arguments" and "command line args".
   $params = func_get_args();
   _drush_plugin_validate($params);
 }

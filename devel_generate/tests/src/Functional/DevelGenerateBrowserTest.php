@@ -3,6 +3,7 @@
 namespace Drupal\Tests\devel_generate\Functional;
 
 use Drupal\node\Entity\Node;
+use Drupal\Tests\media\Traits\MediaTypeCreationTrait;
 
 /**
  * Tests the logic to generate data.
@@ -10,6 +11,8 @@ use Drupal\node\Entity\Node;
  * @group devel_generate
  */
 class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
+
+  use MediaTypeCreationTrait;
 
   /**
    * Tests generate commands
@@ -97,6 +100,46 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
     $this->assertSession()->pageTextContains('Created the following new menus: ');
     $this->assertSession()->pageTextContains('Created 7 new menu links');
     $this->assertSession()->pageTextContains('Generate process complete.');
+
+    // As the 'media' plugin has a dependency on 'media' module, the plugin is
+    // not generating a route to the plugin form
+    $this->drupalGet('admin/config/development/generate/media');
+    $this->assertSession()->statusCodeEquals(404);
+    // Enable the module and retry.
+    \Drupal::service('module_installer')->install(['media']);
+    $this->getSession()->reload();
+    $this->assertSession()->statusCodeEquals(200);
+    $this->assertSession()->pageTextContains('Generate media');
+
+    // Create two media types.
+    $media_type1 = $this->createMediaType('image');
+    $media_type2 = $this->createMediaType('audio_file');
+
+    // Creating media items (non-batch mode).
+    $edit = [
+      'num' => 5,
+      'name_length' => 12,
+      "media_types[{$media_type1->id()}]" => 1,
+      "media_types[{$media_type2->id()}]" => 1,
+      'kill' => 1,
+    ];
+    $this->drupalPostForm('admin/config/development/generate/media', $edit, 'Generate');
+    $this->assertSession()->pageTextContains('Finished creating 5 media items.');
+    $this->assertSession()->pageTextContains('Generate process complete.');
+    $this->assertCount(5, \Drupal::entityQuery('media')->execute());
+
+    // Creating media items (batch mode).
+    $edit = [
+      'num' => 56,
+      'name_length' => 6,
+      "media_types[{$media_type1->id()}]" => 1,
+      "media_types[{$media_type2->id()}]" => 1,
+      'kill' => 1,
+    ];
+    $this->drupalPostForm('admin/config/development/generate/media', $edit, 'Generate');
+    $this->assertSession()->pageTextContains('Finished 56 elements created successfully.');
+    $this->assertSession()->pageTextContains('Generate process complete.');
+    $this->assertCount(56, \Drupal::entityQuery('media')->execute());
   }
 
   /**

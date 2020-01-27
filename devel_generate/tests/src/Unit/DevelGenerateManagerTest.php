@@ -29,6 +29,7 @@ class DevelGenerateManagerTest extends UnitTestCase {
       'id' => 'devel_generate_example',
       'class' => 'Drupal\devel_generate_example\Plugin\DevelGenerate\ExampleDevelGenerate',
       'url' => 'devel_generate_example',
+      'dependencies' => [],
     ],
   ];
 

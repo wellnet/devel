@@ -9,6 +9,7 @@ use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\devel_generate\Traits\DevelGenerateSetupTrait;
+use Drupal\Tests\media\Traits\MediaTypeCreationTrait;
 use Drupal\user\Entity\User;
 use Drush\TestTraits\DrushTestTrait;
 
@@ -25,13 +26,20 @@ class DevelGenerateCommandsTest extends BrowserTestBase
 {
   use DrushTestTrait;
   use DevelGenerateSetupTrait;
+  use MediaTypeCreationTrait;
 
   /**
-   * Modules to enable.
-   *
-   * @var array
+   * {@inheritdoc}
    */
-  public static $modules = ['menu_ui', 'node', 'comment', 'taxonomy', 'path', 'devel_generate'];
+  protected static $modules = [
+    'comment',
+    'devel_generate',
+    'media',
+    'menu_ui',
+    'node',
+    'path',
+    'taxonomy',
+  ];
 
   /**
    * {@inheritdoc}
@@ -95,5 +103,22 @@ class DevelGenerateCommandsTest extends BrowserTestBase
     $this->assertNotEmpty($node);
     $messages = $this->getErrorOutput();
     $this->assertContains('Finished 55 elements created successfully.', $messages, 'devel-generate-content batch ending message not found', TRUE);
+
+    // Create two media types.
+    $media_type1 = $this->createMediaType('image');
+    $media_type2 = $this->createMediaType('audio_file');
+    // Make sure media items gets created with batch process.
+    $this->drush('devel-generate-media', [53], ['kill' => NULL]);
+    $this->assertCount(53, \Drupal::entityQuery('media')->execute());
+    $messages = $this->getErrorOutput();
+    $this->assertContains('Finished 53 elements created successfully.', $messages, 'devel-generate-media batch ending message not found', TRUE);
+
+    // Test also with a non-batch process. We're testing also --kill here.
+    $this->drush('devel-generate-media', [7], [
+      'media-types' => $media_type1->id() . ',' . $media_type2->id(),
+      'kill' => NULL,
+    ]);
+    $this->assertCount(7, \Drupal::entityQuery('media')->execute());
   }
+
 }

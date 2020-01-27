@@ -75,4 +75,11 @@ class DevelGenerate extends Plugin {
    */
   public $drushSettings = [];
 
+  /**
+   * Modules that should be enabled in order to make the plugin discoverable.
+   *
+   * @var array
+   */
+  public $dependencies = [];
+
 }

@@ -111,7 +111,7 @@ class DevelGenerateCommands extends DrushCommands {
    * @option feedback An integer representing interval for insertion rate logging.
    * @aliases gent
    */
-  public function terms($num = 50, $options = ['kill' => FALSE, 'feedback' => 1000]) {
+  public function terms($num = 50, $options = ['kill' => FALSE, 'bundles' => NULL, 'feedback' => 1000]) {
     $this->generate();
   }
 
@@ -165,6 +165,23 @@ class DevelGenerateCommands extends DrushCommands {
     $this->generate();
   }
 
+  /**
+   * Create media items.
+   *
+   * @command devel-generate-media
+   * @pluginId media
+   * @param int $num Number of media items to generate.
+   * @option kill Delete all media items before generating new media.
+   * @option media-types A comma-delimited list of media types to create.
+   * @option feedback An integer representing interval for insertion rate logging.
+   * @option skip-fields A comma delimited list of fields to omit when generating random values.
+   * @option languages A comma-separated list of language codes
+   * @aliases genmd
+   * @validate-module-enabled media
+   */
+  public function media($num = 50, $options = ['kill' => FALSE, 'media-types' => NULL, 'feedback' => 1000]) {
+    $this->generate();
+  }
 
   /**
    * @hook validate
