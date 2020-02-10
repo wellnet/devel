@@ -233,7 +233,7 @@ class MenuDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
   /**
    * {@inheritdoc}
    */
-  public function validateDrushParams($args, $options = []) {
+  public function validateDrushParams(array $args, array $options = []) {
 
     $link_types = ['node', 'front', 'external'];
     $values = [

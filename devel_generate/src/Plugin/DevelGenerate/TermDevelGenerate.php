@@ -240,7 +240,7 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
   /**
    * {@inheritdoc}
    */
-  public function validateDrushParams($args, $options = []) {
+  public function validateDrushParams(array $args, array $options = []) {
     if ($this->isDrush8()) {
       $bundles = _convert_csv_to_array(drush_get_option('bundles'));
     }

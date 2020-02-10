@@ -192,7 +192,7 @@ class UserDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
   /**
    * {@inheritdoc}
    */
-  public function validateDrushParams($args, array $options = []) {
+  public function validateDrushParams(array $args, array $options = []) {
     $values = [
       'num' => array_shift($args),
       'time_range' => 0,

@@ -429,7 +429,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
   /**
    * {@inheritdoc}
    */
-  public function validateDrushParams($args, $options = []) {
+  public function validateDrushParams(array $args, array $options = []) {
     $add_language = $this->isDrush8() ? drush_get_option('languages') : $options['languages'];
     if (!empty($add_language)) {
       $add_language = explode(',', str_replace(' ', '', $add_language));

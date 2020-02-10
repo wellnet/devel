@@ -77,7 +77,7 @@ class ExampleDevelGenerate extends DevelGenerateBase {
     $this->setMessage($this->t('@num_examples created.', ['@num_examples' => $this->formatPlural($num, '1 example', '@count examples')]));
   }
 
-  public function validateDrushParams($args, $options = []) {
+  public function validateDrushParams(array $args, array $options = []) {
     $values = [
       'num' => $options['num'],
       'kill' => $options['kill'],

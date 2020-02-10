@@ -158,7 +158,7 @@ class VocabularyDevelGenerate extends DevelGenerateBase implements ContainerFact
   /**
    * {@inheritdoc}
    */
-  public function validateDrushParams($args, $options = []) {
+  public function validateDrushParams(array $args, array $options = []) {
     $values = [
       'num' => array_shift($args),
       'kill' => $this->isDrush8() ? drush_get_option('kill') : $options['kill'],
