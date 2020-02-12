@@ -87,13 +87,13 @@ class DevelGenerateCommands extends DrushCommands {
   /**
    * Create users.
    *
-   * @command devel-generate-users
+   * @command devel-generate:users
    * @pluginId user
    * @param $num Number of users to generate.
    * @option kill Delete all users before generating new ones.
    * @option roles A comma delimited list of role IDs for new users. Don't specify 'authenticated'.
    * @option pass Specify a password to be set for all generated users.
-   * @aliases genu
+   * @aliases genu, devel-generate-users
    */
   public function users($num = 50, $options = ['kill' => FALSE, 'roles' => '']) {
     // @todo pass $options to the plugins.
@@ -103,13 +103,13 @@ class DevelGenerateCommands extends DrushCommands {
   /**
    * Create terms in specified vocabulary.
    *
-   * @command devel-generate-terms
+   * @command devel-generate:terms
    * @pluginId term
    * @param $num Number of terms to generate.
    * @option kill Delete all terms before generating new ones.
    * @option bundles A comma-delimited list of machine names for the vocabularies where terms will be created.
    * @option feedback An integer representing interval for insertion rate logging.
-   * @aliases gent
+   * @aliases gent, devel-generate-terms
    */
   public function terms($num = 50, $options = ['kill' => FALSE, 'bundles' => NULL, 'feedback' => 1000]) {
     $this->generate();
@@ -118,11 +118,11 @@ class DevelGenerateCommands extends DrushCommands {
   /**
    * Create vocabularies.
    *
-   * @command devel-generate-vocabs
+   * @command devel-generate:vocabs
    * @pluginId vocabulary
    * @param $num Number of vocabularies to generate.
    * @option kill Delete all vocabs before generating new ones.
-   * @aliases genv
+   * @aliases genv, devel-generate-vocabs
    * @validate-module-enabled taxonomy
    */
   public function vocabs($num = 1, $options = ['kill' => FALSE]) {
@@ -132,14 +132,14 @@ class DevelGenerateCommands extends DrushCommands {
   /**
    * Create menus.
    *
-   * @command devel-generate-menus
+   * @command devel-generate:menus
    * @pluginId menu
    * @param $number_menus Number of menus to generate.
    * @param $number_links Number of links to generate.
    * @param $max_depth Max link depth.
    * @param $max_width Max width of first level of links.
    * @option kill Delete any menus and menu links previously created by devel_generate before generating new ones.
-   * @aliases genm
+   * @aliases genm, devel-generate-menus
    * @validate-module-enabled menu_link_content
    */
   public function menus($number_menus = 2, $number_links = 50, $max_depth = 3, $max_width = 8, $options = ['kill' => FALSE]) {
@@ -149,7 +149,7 @@ class DevelGenerateCommands extends DrushCommands {
   /**
    * Create content.
    *
-   * @command devel-generate-content
+   * @command devel-generate:content
    * @pluginId content
    * @param int $num Number of nodes to generate.
    * @param int $max_comments Maximum number of comments to generate.
@@ -158,7 +158,7 @@ class DevelGenerateCommands extends DrushCommands {
    * @option feedback An integer representing interval for insertion rate logging.
    * @option skip-fields A comma delimited list of fields to omit when generating random values
    * @option languages A comma-separated list of language codes
-   * @aliases genc
+   * @aliases genc, devel-generate-content
    * @validate-module-enabled node
    */
   public function content($num = 50, $max_comments = 0, $options = ['kill' => FALSE, 'bundles' => 'page,article', 'feedback' => 1000]) {
@@ -168,7 +168,7 @@ class DevelGenerateCommands extends DrushCommands {
   /**
    * Create media items.
    *
-   * @command devel-generate-media
+   * @command devel-generate:media
    * @pluginId media
    * @param int $num Number of media items to generate.
    * @option kill Delete all media items before generating new media.
@@ -176,7 +176,7 @@ class DevelGenerateCommands extends DrushCommands {
    * @option feedback An integer representing interval for insertion rate logging.
    * @option skip-fields A comma delimited list of fields to omit when generating random values.
    * @option languages A comma-separated list of language codes
-   * @aliases genmd
+   * @aliases genmd, devel-generate-media
    * @validate-module-enabled media
    */
   public function media($num = 50, $options = ['kill' => FALSE, 'media-types' => NULL, 'feedback' => 1000]) {
