@@ -10,7 +10,7 @@ use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Defines a form that allows privileged users to generate entities.
+ * Define a form to allow the user to switch and become another user.
  */
 class SwitchUserForm extends FormBase {
 
