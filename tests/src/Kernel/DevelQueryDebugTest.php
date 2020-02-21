@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\devel\Kernel;
 
+use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
@@ -12,6 +13,8 @@ use Drupal\user\Entity\User;
  * @group devel
  */
 class DevelQueryDebugTest extends KernelTestBase {
+
+  use MessengerTrait;
 
   /**
    * {@inheritdoc}
@@ -115,13 +118,13 @@ class DevelQueryDebugTest extends KernelTestBase {
   }
 
   /**
-   * Retrieves the drupal messages.
+   * Retrieves and removes the drupal messages.
    *
    * @return array
    *   The messages
    */
   protected function getDrupalMessages() {
-    return drupal_get_messages();
+    return $this->messenger()->deleteAll();
   }
 
 }

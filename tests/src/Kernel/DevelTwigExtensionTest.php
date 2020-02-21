@@ -3,8 +3,9 @@
 namespace Drupal\Tests\devel\Kernel;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
-use Drupal\KernelTests\KernelTestBase;
+use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\devel\Twig\Extension\Debug;
+use Drupal\KernelTests\KernelTestBase;
 use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
 
@@ -16,6 +17,7 @@ use Drupal\user\Entity\User;
 class DevelTwigExtensionTest extends KernelTestBase {
 
   use DevelDumperTestTrait;
+  use MessengerTrait;
 
   /**
    * The user used in test.
@@ -166,7 +168,7 @@ class DevelTwigExtensionTest extends KernelTestBase {
     $this->assertContainsDump($output, $context['twig_object']);
 
     // Clear messages.
-    drupal_get_messages();
+    $this->messenger()->deleteAll();
 
     $retrieve_message = function ($messages, $index) {
       return isset($messages['status'][$index]) ? (string) $messages['status'][$index] : NULL;
@@ -177,14 +179,14 @@ class DevelTwigExtensionTest extends KernelTestBase {
     $template = 'test-with-context {{ twig_string }} {{ twig_array.first }} {{ twig_array.second }}{{ devel_message() }}';
     $output = (string) $environment->renderInline($template, $context);
     $this->assertContains($expected_template_output, $output);
-    $messages = drupal_get_messages();
+    $messages = \Drupal::messenger()->deleteAll();
     $this->assertDumpExportEquals($retrieve_message($messages, 0), $context, 'Twig context');
 
     // Ensures that if an argument is passed to the function it is dumped.
     $template = 'test-with-context {{ twig_string }} {{ twig_array.first }} {{ twig_array.second }}{{ devel_message(twig_array) }}';
     $output = (string) $environment->renderInline($template, $context);
     $this->assertContains($expected_template_output, $output);
-    $messages = drupal_get_messages();
+    $messages = $this->messenger()->deleteAll();
     $this->assertDumpExportEquals($retrieve_message($messages, 0), $context['twig_array']);
 
     // Ensures that if more than one argument is passed to the function works
@@ -192,7 +194,7 @@ class DevelTwigExtensionTest extends KernelTestBase {
     $template = 'test-with-context {{ twig_string }} {{ twig_array.first }} {{ twig_array.second }}{{ devel_message(twig_string, twig_array.first, twig_array, twig_object) }}';
     $output = (string) $environment->renderInline($template, $context);
     $this->assertContains($expected_template_output, $output);
-    $messages = drupal_get_messages();
+    $messages = $this->messenger()->deleteAll();
     $this->assertDumpExportEquals($retrieve_message($messages, 0), $context['twig_string']);
     $this->assertDumpExportEquals($retrieve_message($messages, 1), $context['twig_array']['first']);
     $this->assertDumpExportEquals($retrieve_message($messages, 2), $context['twig_array']);
