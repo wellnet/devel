@@ -38,14 +38,12 @@ class BlocksDataCollector extends DataCollector implements DrupalDataCollectorIn
    * {@inheritdoc}
    */
   public function collect(Request $request, Response $response, \Exception $exception = NULL) {
-    $storage = $this->entityManager->getStorage('block');
-
+    $storage = $this->entityTypeManager->getStorage('block');
     $loaded = $this->entityTypeManager->getLoaded('config', 'block');
     $rendered = $this->entityTypeManager->getRendered('block');
 
     if ($loaded) {
       $this->data['blocks']['loaded'] = $this->getBlocksData($loaded, $storage);
-
     }
 
     if ($rendered) {
