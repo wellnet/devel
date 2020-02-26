@@ -19,7 +19,7 @@ class DataCollectorTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['webprofiler', 'block', 'd8testing'];
+  protected static $modules = ['webprofiler', 'block'];
 
   /**
    * {@inheritdoc}
