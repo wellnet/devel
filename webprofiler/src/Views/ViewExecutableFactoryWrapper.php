@@ -11,11 +11,12 @@ use Drupal\views\ViewsData;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class ViewExecutableFactoryWrapper
+ * Class ViewExecutableFactoryWrapper.
  */
 class ViewExecutableFactoryWrapper extends ViewExecutableFactory {
 
-  /** @var ViewExecutable $view_executable */
+  /**
+   * @var ViewExecutable $view_executable */
   private $views;
 
   /**
@@ -44,4 +45,5 @@ class ViewExecutableFactoryWrapper extends ViewExecutableFactory {
   public function getViews() {
     return $this->views;
   }
+
 }

@@ -154,4 +154,5 @@ class TimeDataCollector extends BaseTimeDataCollector implements DrupalDataColle
 
     return $data;
   }
+
 }

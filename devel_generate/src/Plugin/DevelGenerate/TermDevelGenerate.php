@@ -250,7 +250,7 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
     if (count($bundles) < 1) {
       throw new \Exception(dt('Please provide a vocabulary machine name (--bundles).'));
     }
-    foreach ($bundles As $bundle) {
+    foreach ($bundles as $bundle) {
       // Verify that each bundle is a valid vocabulary id.
       if (!$this->vocabularyStorage->load($bundle)) {
         throw new \Exception(dt('Invalid vocabulary machine name: @name', ['@name' => $bundle]));

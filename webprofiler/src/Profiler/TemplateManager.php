@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Profiler\Profiler as SymfonyProfiler;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 
 /**
- * Profiler Templates Manager
+ * Profiler Templates Manager.
  */
 class TemplateManager {
 
@@ -127,4 +127,5 @@ class TemplateManager {
 
     return $templates;
   }
+
 }

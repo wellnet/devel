@@ -13,7 +13,7 @@ use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\webprofiler\DataCollector\MailDataCollector;
 
 /**
- * Class MailManagerWrapper
+ * Class MailManagerWrapper.
  */
 class MailManagerWrapper extends DefaultPluginManager implements MailManagerInterface {
 
@@ -96,9 +96,11 @@ class MailManagerWrapper extends DefaultPluginManager implements MailManagerInte
    * {@inheritdoc}
    *
    * Must call getInstance on the decorated MailManager.
+   *
    * @see https://www.drupal.org/node/2625554
    */
   public function getInstance(array $options) {
     return $this->mailManager->getInstance($options);
   }
+
 }

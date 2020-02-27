@@ -156,7 +156,6 @@ class EntityTypeInfoController extends ControllerBase {
     return $this->dumper->exportAsRenderable($entity_type, $entity_type_id);
   }
 
-
   /**
    * Returns a render array representation of the entity type field definitions.
    *

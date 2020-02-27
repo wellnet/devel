@@ -17,7 +17,7 @@ use Symfony\Component\HttpKernel\Profiler\Profile;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
- * Class DashboardController
+ * Class DashboardController.
  */
 class DashboardController extends ControllerBase {
 
@@ -241,4 +241,5 @@ class DashboardController extends ControllerBase {
 
     return new JsonResponse(['data' => $data]);
   }
+
 }

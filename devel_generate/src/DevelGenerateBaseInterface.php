@@ -13,7 +13,6 @@ use Drupal\Core\Form\FormStateInterface;
  *
  * DevelGenerate impementationa plugins should developing settingsForm() and generateElements()
  * to achieve its own behaviour.
- *
  */
 interface DevelGenerateBaseInterface extends PluginInspectionInterface {
 
@@ -60,7 +59,7 @@ interface DevelGenerateBaseInterface extends PluginInspectionInterface {
   function settingsFormValidate(array $form, FormStateInterface $form_state);
 
   /**
-   * Execute the instructions in common for all DevelGenerate plugin
+   * Execute the instructions in common for all DevelGenerate plugin.
    *
    * @param array $values
    *   The input values from the settings form.

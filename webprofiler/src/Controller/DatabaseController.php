@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Profiler\Profile;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 
 /**
- * Class DatabaseController
+ * Class DatabaseController.
  */
 class DatabaseController extends ControllerBase {
 
@@ -71,7 +71,7 @@ class DatabaseController extends ControllerBase {
   }
 
   /**
-   * @param $profile ->getToken()
+   * @param Profile $profile
    * @param int $qid
    *
    * @return array
@@ -92,4 +92,5 @@ class DatabaseController extends ControllerBase {
 
     return $query;
   }
+
 }

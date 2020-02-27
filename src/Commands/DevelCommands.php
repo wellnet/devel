@@ -1,5 +1,7 @@
 <?php
+
 namespace Drupal\devel\Commands;
+
 use Consolidation\OutputFormatters\StructuredData\RowsOfFields;
 use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
 use Consolidation\SiteProcess\Util\Escape;
@@ -33,6 +35,9 @@ class DevelCommands extends DrushCommands implements SiteAliasManagerAwareInterf
 
   protected $moduleHandler;
 
+  /**
+   *
+   */
   public function __construct(Token $token, $container, $eventDispatcher, $moduleHandler) {
     parent::__construct();
     $this->token = $token;
@@ -71,9 +76,11 @@ class DevelCommands extends DrushCommands implements SiteAliasManagerAwareInterf
 
   /**
    * Uninstall, and Install modules.
-
+   *
    * @command devel:reinstall
-   * @param $modules A comma-separated list of module names.
+   * @param $modules
+   *   A comma-separated list of module names.
+   *
    * @aliases dre,devel-reinstall
    * @allow-additional-options pm-uninstall,pm-enable
    */
@@ -91,8 +98,11 @@ class DevelCommands extends DrushCommands implements SiteAliasManagerAwareInterf
    * List implementations of a given hook and optionally edit one.
    *
    * @command devel:hook
-   * @param $hook The name of the hook to explore.
-   * @param $implementation The name of the implementation to edit. Usually omitted.
+   * @param $hook
+   *   The name of the hook to explore.
+   * @param $implementation
+   *   The name of the implementation to edit. Usually omitted.
+   *
    * @usage devel-hook cron
    *   List implementations of hook_cron().
    * @aliases fnh,fn-hook,hook,devel-hook
@@ -106,7 +116,7 @@ class DevelCommands extends DrushCommands implements SiteAliasManagerAwareInterf
     $exec = self::getEditor();
     $cmd = sprintf($exec, Escape::shellArg($info['file']));
     $process = $this->processManager()->shell($cmd);
-    $process->setTty(true);
+    $process->setTty(TRUE);
     $process->mustRun();
   }
 
@@ -131,8 +141,11 @@ class DevelCommands extends DrushCommands implements SiteAliasManagerAwareInterf
    * List implementations of a given event and optionally edit one.
    *
    * @command devel:event
-   * @param $event The name of the event to explore. If omitted, a list of events is shown.
-   * @param $implementation The name of the implementation to show. Usually omitted.
+   * @param $event
+   *   The name of the event to explore. If omitted, a list of events is shown.
+   * @param $implementation
+   *   The name of the implementation to show. Usually omitted.
+   *
    * @usage devel-event
    *   Pick a Kernel event, then pick an implementation, and then view its source code.
    * @usage devel-event kernel.terminate
@@ -140,11 +153,11 @@ class DevelCommands extends DrushCommands implements SiteAliasManagerAwareInterf
    * @aliases fne,fn-event,event
    */
   function event($event, $implementation) {
-    $info= $this->codeLocate($implementation);
+    $info = $this->codeLocate($implementation);
     $exec = self::getEditor();
     $cmd = sprintf($exec, Escape::shellArg($info['file']));
     $process = $this->processManager()->shell($cmd);
-    $process->setTty(true);
+    $process->setTty(TRUE);
     $process->mustRun();
   }
 
@@ -219,7 +232,6 @@ class DevelCommands extends DrushCommands implements SiteAliasManagerAwareInterf
     return $uuid->generate();
   }
 
-
   /**
    * Get source code line for specified function or method.
    */
@@ -249,7 +261,9 @@ class DevelCommands extends DrushCommands implements SiteAliasManagerAwareInterf
    * Get a list of available container services.
    *
    * @command devel:services
-   * @param $prefix A prefix to filter the service list by.
+   * @param $prefix
+   *   A prefix to filter the service list by.
+   *
    * @aliases devel-container-services,dcs,devel-services
    * @usage drush devel-services
    *   Gets a list of all available container services
@@ -276,4 +290,5 @@ class DevelCommands extends DrushCommands implements SiteAliasManagerAwareInterf
     sort($services);
     return $services;
   }
+
 }

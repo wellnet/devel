@@ -9,7 +9,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 /**
  * Plugin type manager for DevelGenerate plugins.
  */
-Class DevelGeneratePluginManager extends DefaultPluginManager {
+class DevelGeneratePluginManager extends DefaultPluginManager {
 
   /**
    * Constructs a DevelGeneratePluginManager object.

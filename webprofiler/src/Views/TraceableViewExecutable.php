@@ -7,7 +7,7 @@ use Drupal\views\Views;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class TraceableViewExecutable
+ * Class TraceableViewExecutable.
  */
 class TraceableViewExecutable extends ViewExecutable {
 
@@ -153,4 +153,5 @@ class TraceableViewExecutable extends ViewExecutable {
 
     return $this->display_handler->output;
   }
+
 }

@@ -5,7 +5,7 @@ namespace Drupal\webprofiler\Entity\Decorators\Config;
 use Drupal\taxonomy\VocabularyStorageInterface;
 
 /**
- * Class EntityStorageDecorator
+ * Class EntityStorageDecorator.
  */
 class VocabularyStorageDecorator extends ConfigEntityStorageDecorator implements VocabularyStorageInterface {
 

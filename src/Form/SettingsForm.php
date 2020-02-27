@@ -208,10 +208,12 @@ class SettingsForm extends ConfigFormBase {
       case 'notice':
         $undefined = $undefined;
         break;
+
       case 'warning':
         $undefined = $undefined;
         1 / 0;
         break;
+
       case 'error':
         $undefined = $undefined;
         1 / 0;

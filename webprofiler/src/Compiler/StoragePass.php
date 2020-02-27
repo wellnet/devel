@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 
 /**
- * Class StoragePass
+ * Class StoragePass.
  */
 class StoragePass implements CompilerPassInterface {
 
@@ -29,4 +29,5 @@ class StoragePass implements CompilerPassInterface {
       ]);
     }
   }
+
 }

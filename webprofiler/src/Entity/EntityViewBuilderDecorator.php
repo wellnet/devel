@@ -11,7 +11,7 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class EntityViewBuilderDecorator
+ * Class EntityViewBuilderDecorator.
  */
 class EntityViewBuilderDecorator extends EntityDecorator implements EntityHandlerInterface, EntityViewBuilderInterface {
 
@@ -89,4 +89,5 @@ class EntityViewBuilderDecorator extends EntityDecorator implements EntityHandle
       $container->get('language_manager')
     );
   }
+
 }

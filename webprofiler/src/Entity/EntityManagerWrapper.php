@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class EntityManagerWrapper
+ * Class EntityManagerWrapper.
  */
 class EntityManagerWrapper extends DefaultPluginManager implements EntityTypeManagerInterface, ContainerAwareInterface {
 
@@ -93,22 +93,27 @@ class EntityManagerWrapper extends DefaultPluginManager implements EntityTypeMan
       switch ($entity_type) {
         case 'taxonomy_vocabulary':
           return new VocabularyStorageDecorator($handler);
-          break;
+        break;
+
         case 'user_role':
           return new RoleStorageDecorator($handler);
-          break;
+        break;
+        
         case 'shortcut_set':
           return new ShortcutSetStorageDecorator($handler);
-          break;
+        break;
+        
         case 'image_style':
           return new ImageStyleStorageDecorator($handler);
-          break;
+        break;
+        
         case 'domain':
           return new DomainStorageDecorator($handler);
-          break;
+        break;
+        
         default:
           return new ConfigEntityStorageDecorator($handler);
-          break;
+        break;
       }
     }
     return $handler;
@@ -129,7 +134,7 @@ class EntityManagerWrapper extends DefaultPluginManager implements EntityTypeMan
    *
    * @return array
    */
-  public function getRendered( $entity_type) {
+  public function getRendered($entity_type) {
     return isset($this->rendered[$entity_type]) ? $this->rendered[$entity_type] : NULL;
   }
 

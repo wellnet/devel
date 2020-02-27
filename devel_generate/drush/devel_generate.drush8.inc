@@ -2,8 +2,9 @@
 
 /**
  * @file
- *  Integration with Drush8. Drush9 commands are in src/Commands.
+ * Integration with Drush8. Drush9 commands are in src/Commands.
  */
+
 use Drupal\devel_generate\DevelGenerateBaseInterface;
 use Drupal\devel_generate\DevelGeneratePluginManager;
 
@@ -126,7 +127,7 @@ function devel_generate_drush_command() {
  */
 function drush_devel_generate_generate_users_validate() {
 
-  //Array of "Callback arguments" and "command line args".
+  // Array of "Callback arguments" and "command line args".
   $params = func_get_args();
   _drush_plugin_validate($params);
 }
@@ -136,7 +137,7 @@ function drush_devel_generate_generate_users_validate() {
  */
 function drush_devel_generate_generate_terms_validate() {
 
-  //Array of "Callback arguments" and "command line args".
+  // Array of "Callback arguments" and "command line args".
   $params = func_get_args();
   _drush_plugin_validate($params);
 }
@@ -146,7 +147,7 @@ function drush_devel_generate_generate_terms_validate() {
  */
 function drush_devel_generate_generate_vocabs_validate() {
 
-  //Array of "Callback arguments" and "command line args".
+  // Array of "Callback arguments" and "command line args".
   $params = func_get_args();
   _drush_plugin_validate($params);
 }
@@ -156,7 +157,7 @@ function drush_devel_generate_generate_vocabs_validate() {
  */
 function drush_devel_generate_generate_content_validate() {
 
-  //Array of "Callback arguments" and "command line args".
+  // Array of "Callback arguments" and "command line args".
   $params = func_get_args();
   _drush_plugin_validate($params);
 }
@@ -166,7 +167,7 @@ function drush_devel_generate_generate_content_validate() {
  */
 function drush_devel_generate_generate_menus_validate() {
 
-  //Array of "Callback arguments" and "command line args".
+  // Array of "Callback arguments" and "command line args".
   $params = func_get_args();
   _drush_plugin_validate($params);
 }
@@ -187,7 +188,7 @@ function drush_devel_generate_generate_media_validate() {
  */
 function _drush_plugin_validate($params) {
   $instance_and_values = &drupal_static('drush_devel_generate_generate_validate');
-  //Getting plugin_id and leaving the command line args
+  // Getting plugin_id and leaving the command line args.
   $plugin_id = array_shift($params);
 
   if (!isset($instance_and_values[$plugin_id])) {
@@ -198,7 +199,7 @@ function _drush_plugin_validate($params) {
     /* @var DevelGenerateBaseInterface $instance */
     $instance = $manager->createInstance($plugin_id, []);
 
-    //Plugin instance suit params in order to fit for generateElements
+    // Plugin instance suit params in order to fit for generateElements.
     $values = $instance->validateDrushParams($params);
     $instance_and_values[$plugin_id]['instance'] = $instance;
     $instance_and_values[$plugin_id]['values'] = $values;

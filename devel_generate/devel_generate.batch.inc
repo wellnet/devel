@@ -1,6 +1,10 @@
 <?php
 
 /**
+ * @file
+ */
+
+/**
  * Wrapping function for invoking the right
  * method responsible for handle a given batch operation.
  * Available for every DevelGeneratePlugin.

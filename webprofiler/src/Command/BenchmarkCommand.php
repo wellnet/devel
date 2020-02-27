@@ -17,7 +17,7 @@ use Symfony\Component\Yaml\Yaml;
 use Drupal\Console\Annotations\DrupalCommand;
 
 /**
- * Class BenchmarkCommand
+ * Class BenchmarkCommand.
  *
  * @DrupalCommand (
  *     extension="webprofiler",
@@ -231,7 +231,8 @@ class BenchmarkCommand extends Command {
       $process->setTimeout(3600);
       $process->run();
       $git_hash = $process->getOutput();
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       $git_hash = $this->trans('commands.webprofiler.benchmark.messages.not_git');
     }
 

@@ -22,6 +22,9 @@ use Drupal\Core\Form\FormStateInterface;
  */
 class ExampleDevelGenerate extends DevelGenerateBase {
 
+  /**
+   *
+   */
   public function settingsForm(array $form, FormStateInterface $form_state) {
 
     $form['num'] = [
@@ -48,10 +51,10 @@ class ExampleDevelGenerate extends DevelGenerateBase {
     $kill = $values['kill'];
 
     if ($kill) {
-        $this->setMessage($this->t('Old examples have been deleted.'));
+      $this->setMessage($this->t('Old examples have been deleted.'));
     }
 
-    //Creating user in order to demonstrate
+    // Creating user in order to demonstrate
     // how to override default business login generation.
     $edit = [
       'uid'     => NULL,
@@ -77,6 +80,9 @@ class ExampleDevelGenerate extends DevelGenerateBase {
     $this->setMessage($this->t('@num_examples created.', ['@num_examples' => $this->formatPlural($num, '1 example', '@count examples')]));
   }
 
+  /**
+   *
+   */
   public function validateDrushParams(array $args, array $options = []) {
     $values = [
       'num' => $options['num'],

@@ -8,8 +8,7 @@ use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Language\Language;
 use Drupal\taxonomy\Entity\Vocabulary;
 
-trait DevelGenerateSetupTrait
-{
+trait DevelGenerateSetupTrait {
 
   use CommentTestTrait;
   use EntityReferenceTestTrait;
@@ -21,6 +20,9 @@ trait DevelGenerateSetupTrait
    */
   protected $vocabulary;
 
+  /**
+   *
+   */
   public function setUpData() {
     $entity_type_manager = $this->container->get('entity_type.manager');
     // Create Basic page and Article node types.
@@ -57,7 +59,7 @@ trait DevelGenerateSetupTrait
         'type' => 'options_select',
       ])
       ->save();
-    
+
     $entity_type_manager->getStorage('entity_view_display')
       ->load('node.article.default')
       ->setComponent($field_name, [
@@ -65,4 +67,5 @@ trait DevelGenerateSetupTrait
       ])
       ->save();
   }
+
 }

@@ -21,4 +21,5 @@ class FileProfilerStorage extends SymfonyFileProfilerStorage {
 
     return $profile;
   }
+
 }

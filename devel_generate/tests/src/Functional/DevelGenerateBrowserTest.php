@@ -15,7 +15,7 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
   use MediaTypeCreationTrait;
 
   /**
-   * Tests generate commands
+   * Tests generate commands.
    */
   public function testDevelGenerate() {
     // Creating users.
@@ -102,7 +102,7 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
     $this->assertSession()->pageTextContains('Generate process complete.');
 
     // As the 'media' plugin has a dependency on 'media' module, the plugin is
-    // not generating a route to the plugin form
+    // not generating a route to the plugin form.
     $this->drupalGet('admin/config/development/generate/media');
     $this->assertSession()->statusCodeEquals(404);
     // Enable the module and retry.
@@ -180,4 +180,5 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
     $this->assertEquals(60, $count, sprintf('The expected number of %s is %s, found %s', $type, 60, $count));
 
   }
+
 }

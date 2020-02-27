@@ -9,7 +9,7 @@ use Drush\TestTraits\DrushTestTrait;
  * Note: Drush must be installed. See
  * https://cgit.drupalcode.org/devel/tree/drupalci.yml?h=8.x-2.x and its docs
  * at
- * https://www.drupal.org/drupalorg/docs/drupal-ci/customizing-drupalci-testing-for-projects
+ * https://www.drupal.org/drupalorg/docs/drupal-ci/customizing-drupalci-testing-for-projects.
  */
 
 /**

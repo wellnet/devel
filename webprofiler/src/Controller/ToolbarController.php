@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 
 /**
- * Class ToolbarController
+ * Class ToolbarController.
  */
 class ToolbarController extends ControllerBase {
 
@@ -107,4 +107,5 @@ class ToolbarController extends ControllerBase {
 
     return new JsonResponse(['success' => TRUE]);
   }
+
 }

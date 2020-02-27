@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 
 /**
- * Class DevelDataCollector
+ * Class DevelDataCollector.
  */
 class DevelDataCollector extends DataCollector implements DrupalDataCollectorInterface {
 
@@ -100,4 +100,5 @@ class DevelDataCollector extends DataCollector implements DrupalDataCollectorInt
 
     return $links;
   }
+
 }

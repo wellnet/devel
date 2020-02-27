@@ -82,4 +82,3 @@ Author/Maintainers
  - Juan Pablo Novillo https://www.drupal.org/u/juampynr
  - lussoluca https://www.drupal.org/u/lussoluca
  - willzyx https://www.drupal.org/u/willzyx
-

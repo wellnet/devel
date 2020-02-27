@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @file
+ */
+
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -30,7 +34,7 @@ function devel_generate_menu_links_discovered_alter(&$links) {
  * Inserts nodes properly based on generation options.
  *
  * @param \Drupal\Core\Entity\EntityInterface $entity
- *  The base node created on submit. Inspects $node->devel_generate.
+ *   The base node created on submit. Inspects $node->devel_generate.
  */
 function devel_generate_entity_insert(EntityInterface $entity) {
   if ($entity->getEntityTypeId() != 'node' || !isset($entity->devel_generate)) {
@@ -95,6 +99,7 @@ function devel_generate_add_comments(NodeInterface $node, FieldDefinitionInterfa
           ->range(0, 1)
           ->execute();
         break;
+
       case 2:
         // Non top level parent.
         $parents = \Drupal::entityQuery('comment')
@@ -123,7 +128,7 @@ function devel_generate_add_comments(NodeInterface $node, FieldDefinitionInterfa
     }
     $comment = \Drupal::entityTypeManager()->getStorage('comment')->create($stub);
 
-    //Populate all core fields on behalf of field.module
+    // Populate all core fields on behalf of field.module.
     DevelGenerateBase::populateFields($comment);
     $comment->save();
   }

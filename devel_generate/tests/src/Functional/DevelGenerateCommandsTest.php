@@ -1,4 +1,5 @@
 <?php
+
 namespace Drupal\Tests\devel_generate\Functional;
 
 use Drupal\comment\Entity\Comment;
@@ -15,15 +16,14 @@ use Drush\TestTraits\DrushTestTrait;
 
 /**
  * Note: Drush must be in the Composer project. See https://cgit.drupalcode.org/devel/tree/drupalci.yml?h=8.x-2.x and its docs at
- * https://www.drupal.org/drupalorg/docs/drupal-ci/customizing-drupalci-testing-for-projects
+ * https://www.drupal.org/drupalorg/docs/drupal-ci/customizing-drupalci-testing-for-projects.
  */
 
 /**
  * @coversDefaultClass \Drupal\devel_generate\Commands\DevelGenerateCommands
  * @group devel-generate
  */
-class DevelGenerateCommandsTest extends BrowserTestBase
-{
+class DevelGenerateCommandsTest extends BrowserTestBase {
   use DrushTestTrait;
   use DevelGenerateSetupTrait;
   use MediaTypeCreationTrait;
@@ -47,33 +47,36 @@ class DevelGenerateCommandsTest extends BrowserTestBase
   protected $defaultTheme = 'stark';
 
   /**
-   * Prepares the testing environment
+   * Prepares the testing environment.
    */
   public function setUp() {
     parent::setUp();
     $this->setUpData();
   }
 
+  /**
+   *
+   */
   public function testGeneration() {
     // Make sure users get created, and with correct roles.
-    $this->drush('devel-generate-users', [55], ['kill' => null, 'roles' => 'administrator']);
+    $this->drush('devel-generate-users', [55], ['kill' => NULL, 'roles' => 'administrator']);
     $user = User::load(55);
     $this->assertTrue($user->hasRole('administrator'));
 
     // Make sure terms get created, and with correct vocab.
-    $this->drush('devel-generate-terms', [55], ['kill' => null, 'bundles' => $this->vocabulary->id()]);
+    $this->drush('devel-generate-terms', [55], ['kill' => NULL, 'bundles' => $this->vocabulary->id()]);
     $term = Term::load(55);
     $this->assertEquals($this->vocabulary->id(), $term->bundle());
 
     // Make sure vocabs get created.
-    $this->drush('devel-generate-vocabs', [5], ['kill' => null]);
+    $this->drush('devel-generate-vocabs', [5], ['kill' => NULL]);
     $vocabs = Vocabulary::loadMultiple();
     $this->assertGreaterThan(4, count($vocabs));
     $vocab = array_pop($vocabs);
     $this->assertNotEmpty($vocab);
 
     // Make sure menus, and with correct properties.
-    $this->drush('devel-generate-menus', [1, 5], ['kill' => null]);
+    $this->drush('devel-generate-menus', [1, 5], ['kill' => NULL]);
     $menus = Menu::loadMultiple();
     foreach ($menus as $key => $menu) {
       if (strstr($menu->id(), 'devel-') !== FALSE) {
@@ -98,7 +101,7 @@ class DevelGenerateCommandsTest extends BrowserTestBase
     $this->assertNotEmpty($comment);
 
     // Generate content with a higher number that triggers batch running.
-    $this->drush('devel-generate-content', [55], ['kill' => null]);
+    $this->drush('devel-generate-content', [55], ['kill' => NULL]);
     $node = Node::load(55);
     $this->assertNotEmpty($node);
     $messages = $this->getErrorOutput();

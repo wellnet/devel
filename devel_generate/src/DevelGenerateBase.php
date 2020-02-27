@@ -84,7 +84,7 @@ abstract class DevelGenerateBase extends PluginBase implements DevelGenerateBase
   }
 
   /**
-   * Business logic relating with each DevelGenerate plugin
+   * Business logic relating with each DevelGenerate plugin.
    *
    * @param array $values
    *   The input values from the settings form.
@@ -121,7 +121,7 @@ abstract class DevelGenerateBase extends PluginBase implements DevelGenerateBase
       $field_storage = $instance->getFieldStorageDefinition();
       $max = $cardinality = $field_storage->getCardinality();
       if ($cardinality == FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED) {
-        // Just an arbitrary number for 'unlimited'
+        // Just an arbitrary number for 'unlimited'.
         $max = rand(1, 3);
       }
       $field_name = $field_storage->getName();
@@ -143,7 +143,7 @@ abstract class DevelGenerateBase extends PluginBase implements DevelGenerateBase
    *   The message to display.
    * @param string $type
    *   (optional) The message type, as defined in MessengerInterface. Defaults
-   *   to MessengerInterface::TYPE_STATUS
+   *   to MessengerInterface::TYPE_STATUS.
    */
   protected function setMessage($msg, $type = MessengerInterface::TYPE_STATUS) {
     if (function_exists('drush_log')) {
@@ -183,7 +183,6 @@ abstract class DevelGenerateBase extends PluginBase implements DevelGenerateBase
     return $this->entityTypeManager;
   }
 
-
   /**
    * Returns the random data generator.
    *
@@ -197,7 +196,11 @@ abstract class DevelGenerateBase extends PluginBase implements DevelGenerateBase
     return $this->random;
   }
 
+  /**
+   *
+   */
   protected function isDrush8() {
     return function_exists('drush_drupal_load_autoloader');
   }
+
 }

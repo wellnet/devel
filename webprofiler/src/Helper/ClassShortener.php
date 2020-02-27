@@ -5,7 +5,7 @@ namespace Drupal\webprofiler\Helper;
 use Drupal\Component\Render\FormattableMarkup;
 
 /**
- * Class ClassShortener
+ * Class ClassShortener.
  */
 class ClassShortener implements ClassShortenerInterface {
 
@@ -31,4 +31,5 @@ class ClassShortener implements ClassShortenerInterface {
       '@short' => implode('\\', $result),
     ]);
   }
+
 }

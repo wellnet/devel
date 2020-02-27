@@ -3,7 +3,7 @@
 namespace Drupal\webprofiler {
 
   /**
-   * Class Stopwatch
+   * Class Stopwatch.
    */
   class Stopwatch extends \Symfony\Component\Stopwatch\Stopwatch {
 
@@ -14,7 +14,7 @@ namespace Drupal\webprofiler {
 namespace Symfony\Component\Stopwatch {
 
   /**
-   * Class Stopwatch
+   * Class Stopwatch.
    */
   class Stopwatch {
     /**
@@ -37,7 +37,8 @@ namespace Symfony\Component\Stopwatch {
     /**
      * Creates a new section or re-opens an existing section.
      *
-     * @param string|null $id The id of the session to re-open, null to create a new one
+     * @param string|null $id
+     *   The id of the session to re-open, null to create a new one.
      *
      * @throws \LogicException When the section to re-open is not reachable
      */
@@ -60,7 +61,8 @@ namespace Symfony\Component\Stopwatch {
      *
      * @see getSectionEvents
      *
-     * @param string $id The identifier of the section
+     * @param string $id
+     *   The identifier of the section.
      *
      * @throws \LogicException When there's no started section to be stopped
      */
@@ -78,8 +80,10 @@ namespace Symfony\Component\Stopwatch {
     /**
      * Starts an event.
      *
-     * @param string $name The event name
-     * @param string $category The event category
+     * @param string $name
+     *   The event name.
+     * @param string $category
+     *   The event category.
      *
      * @return StopwatchEvent A StopwatchEvent instance
      */
@@ -88,9 +92,10 @@ namespace Symfony\Component\Stopwatch {
     }
 
     /**
-     * Checks if the event was started
+     * Checks if the event was started.
      *
-     * @param string $name The event name
+     * @param string $name
+     *   The event name.
      *
      * @return bool
      */
@@ -101,7 +106,8 @@ namespace Symfony\Component\Stopwatch {
     /**
      * Stops an event.
      *
-     * @param string $name The event name
+     * @param string $name
+     *   The event name.
      *
      * @return StopwatchEvent A StopwatchEvent instance
      */
@@ -112,7 +118,8 @@ namespace Symfony\Component\Stopwatch {
     /**
      * Stops then restarts an event.
      *
-     * @param string $name The event name
+     * @param string $name
+     *   The event name.
      *
      * @return StopwatchEvent A StopwatchEvent instance
      */
@@ -123,13 +130,15 @@ namespace Symfony\Component\Stopwatch {
     /**
      * Gets all events for a given section.
      *
-     * @param string $id A section identifier
+     * @param string $id
+     *   A section identifier.
      *
      * @return StopwatchEvent[] An array of StopwatchEvent instances
      */
     public function getSectionEvents($id) {
       return isset($this->sections[$id]) ? $this->sections[$id]->getEvents() : [];
     }
+
   }
 
 
@@ -162,7 +171,8 @@ namespace Symfony\Component\Stopwatch {
     /**
      * Constructor.
      *
-     * @param float|null $origin Set the origin of the events in this section, use null to set their origin to their start time
+     * @param float|null $origin
+     *   Set the origin of the events in this section, use null to set their origin to their start time.
      */
     public function __construct($origin = NULL) {
       $this->origin = is_numeric($origin) ? $origin : NULL;
@@ -171,7 +181,8 @@ namespace Symfony\Component\Stopwatch {
     /**
      * Returns the child section.
      *
-     * @param string $id The child section identifier
+     * @param string $id
+     *   The child section identifier.
      *
      * @return Section|null The child section or null when none found
      */
@@ -188,7 +199,8 @@ namespace Symfony\Component\Stopwatch {
     /**
      * Creates or re-opens a child section.
      *
-     * @param string|null $id null to create a new section, the identifier to re-open an existing one.
+     * @param string|null $id
+     *   null to create a new section, the identifier to re-open an existing one.
      *
      * @return Section A child section
      */
@@ -210,7 +222,8 @@ namespace Symfony\Component\Stopwatch {
     /**
      * Sets the session identifier.
      *
-     * @param string $id The session identifier
+     * @param string $id
+     *   The session identifier.
      *
      * @return Section The current section
      */
@@ -223,8 +236,10 @@ namespace Symfony\Component\Stopwatch {
     /**
      * Starts an event.
      *
-     * @param string $name The event name
-     * @param string $category The event category
+     * @param string $name
+     *   The event name.
+     * @param string $category
+     *   The event category.
      *
      * @return StopwatchEvent The event
      */
@@ -237,9 +252,10 @@ namespace Symfony\Component\Stopwatch {
     }
 
     /**
-     * Checks if the event was started
+     * Checks if the event was started.
      *
-     * @param string $name The event name
+     * @param string $name
+     *   The event name.
      *
      * @return bool
      */
@@ -250,7 +266,8 @@ namespace Symfony\Component\Stopwatch {
     /**
      * Stops an event.
      *
-     * @param string $name The event name
+     * @param string $name
+     *   The event name.
      *
      * @return StopwatchEvent The event
      *
@@ -267,7 +284,8 @@ namespace Symfony\Component\Stopwatch {
     /**
      * Stops then restarts an event.
      *
-     * @param string $name The event name
+     * @param string $name
+     *   The event name.
      *
      * @return StopwatchEvent The event
      *
@@ -285,10 +303,11 @@ namespace Symfony\Component\Stopwatch {
     public function getEvents() {
       return $this->events;
     }
+
   }
 
   /**
-   * Class StopwatchEvent
+   * Class StopwatchEvent.
    */
   class StopwatchEvent {
     /**
@@ -314,8 +333,10 @@ namespace Symfony\Component\Stopwatch {
     /**
      * Constructor.
      *
-     * @param float $origin The origin time in milliseconds
-     * @param string|null $category The event category or null to use the default
+     * @param float $origin
+     *   The origin time in milliseconds.
+     * @param string|null $category
+     *   The event category or null to use the default.
      *
      * @throws \InvalidArgumentException When the raw time is not valid
      */
@@ -373,7 +394,7 @@ namespace Symfony\Component\Stopwatch {
     }
 
     /**
-     * Checks if the event was started
+     * Checks if the event was started.
      *
      * @return bool
      */
@@ -468,7 +489,8 @@ namespace Symfony\Component\Stopwatch {
     /**
      * Formats a time.
      *
-     * @param integer|float $time A raw time
+     * @param int|float $time
+     *   A raw time.
      *
      * @return float The formatted time
      *
@@ -481,10 +503,11 @@ namespace Symfony\Component\Stopwatch {
 
       return round($time, 1);
     }
+
   }
 
   /**
-   * Class StopwatchPeriod
+   * Class StopwatchPeriod.
    */
   class StopwatchPeriod {
     private $start;
@@ -494,8 +517,10 @@ namespace Symfony\Component\Stopwatch {
     /**
      * Constructor.
      *
-     * @param integer $start The relative time of the start of the period (in milliseconds)
-     * @param integer $end The relative time of the end of the period (in milliseconds)
+     * @param int $start
+     *   The relative time of the start of the period (in milliseconds)
+     * @param int $end
+     *   The relative time of the end of the period (in milliseconds)
      */
     public function __construct($start, $end) {
       $this->start = (integer) $start;
@@ -538,6 +563,7 @@ namespace Symfony\Component\Stopwatch {
     public function getMemory() {
       return $this->memory;
     }
+
   }
 
 }

@@ -72,6 +72,7 @@ class DevelGenerateManagerTest extends UnitTestCase {
  * constructor.
  */
 class TestDevelGeneratePluginManager extends DevelGeneratePluginManager {
+
   /**
    * Sets the discovery for the manager.
    *
@@ -81,4 +82,5 @@ class TestDevelGeneratePluginManager extends DevelGeneratePluginManager {
   public function setDiscovery(DiscoveryInterface $discovery) {
     $this->discovery = $discovery;
   }
+
 }

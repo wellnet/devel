@@ -37,10 +37,10 @@ class DevelGeneratePermissions implements ContainerInjectionInterface {
     return new static($container->get('plugin.manager.develgenerate'));
   }
 
-  /*
+  /**
    * A permissions callback.
    *
-   * @see devel_generate.permissions.yml.
+   * @see devel_generate.permissions.yml
    *
    * @return array
    */
@@ -54,11 +54,11 @@ class DevelGeneratePermissions implements ContainerInjectionInterface {
       ];
     }
 
-//    $permissions = array(
-//      'administer devel_generate' => array(
-//        'title' => $this->t('Administer devel generate'),
-//      ),
-//    );
+    // $permissions = array(
+    //      'administer devel_generate' => array(
+    //        'title' => $this->t('Administer devel generate'),
+    //      ),
+    //    );
     return $permissions;
   }
 

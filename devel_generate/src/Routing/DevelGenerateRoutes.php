@@ -31,6 +31,9 @@ class DevelGenerateRoutes implements ContainerInjectionInterface {
     );
   }
 
+  /**
+   *
+   */
   public function routes() {
     $devel_generate_plugins = $this->DevelGenerateManager->getDefinitions();
 

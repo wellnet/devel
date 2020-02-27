@@ -96,7 +96,7 @@ class ConfigEditor extends FormBase {
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     $value = $form_state->getValue('new');
-    // try to parse the new provided value
+    // Try to parse the new provided value.
     try {
       $parsed_value = Yaml::decode($value);
       // Config::setData needs array for the new configuration and

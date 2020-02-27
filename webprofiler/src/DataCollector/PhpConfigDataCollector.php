@@ -89,7 +89,7 @@ class PhpConfigDataCollector extends DataCollector implements DrupalDataCollecto
   }
 
   /**
-   * Returns true if Zend OPcache is enabled
+   * Returns true if Zend OPcache is enabled.
    *
    * @return Boolean true if Zend OPcache is enabled, false otherwise
    */
@@ -160,4 +160,5 @@ class PhpConfigDataCollector extends DataCollector implements DrupalDataCollecto
   public function getIcon() {
     return 'iVBORw0KGgoAAAANSUhEUgAAABUAAAAcCAMAAAC5xgRsAAAAZlBMVEX///////////////////////////////////////////////////////////////////////////////////////////+ZmZmZmZlISEhJSUmdnZ1HR0fR0dFZWVlpaWlfX18/Pz+puygPAAAAIXRSTlMACwwlJygpLzIzNjs8QEtMUmd6e32AucDBw8fIydTm6u5l8MjvAAAAo0lEQVR42r2P2Q6CMBBFL6XsZRGRfZv//0nbDBNEE19MnJeTc5ILKf58ahiUwzy/AJpIWwREwQnEXRdbGCLjrO+djWRvVMiJcigxB7viGogxDdJpSmHEmCVPS7YczJvgUu+CS30IvtbNYZMvsGVo2mVpG/kbm4auiCpdcC3YPCAhSpAdUzaAn6qPKZtUT6ZSzb4bi2hdo9MQ1nX4ASjfV+/4/Z40pyCHrNTbIgAAAABJRU5ErkJggg==';
   }
+
 }

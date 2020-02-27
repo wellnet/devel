@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 
 /**
- * Class ConfigForm
+ * Class ConfigForm.
  */
 class ConfigForm extends ConfigFormBase {
 
@@ -216,7 +216,7 @@ class ConfigForm extends ConfigFormBase {
   private function getCollectors() {
     $options = [];
     foreach ($this->templates as $template) {
-      // drupal collector should not be disabled
+      // Drupal collector should not be disabled.
       if ($template[0] != 'drupal') {
         $options[$template[0]] = $template[2];
       }

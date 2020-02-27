@@ -124,7 +124,8 @@ class DatabaseProfilerStorage implements ProfilerStorageInterface {
       }
 
       $status = TRUE;
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       $status = FALSE;
     }
 
@@ -155,4 +156,5 @@ class DatabaseProfilerStorage implements ProfilerStorageInterface {
 
     return $profile;
   }
+
 }

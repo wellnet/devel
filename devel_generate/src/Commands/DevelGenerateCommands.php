@@ -1,4 +1,5 @@
 <?php
+
 namespace Drupal\devel_generate\Commands;
 
 use Consolidation\AnnotatedCommand\CommandData;
@@ -35,6 +36,7 @@ class DevelGenerateCommands extends DrushCommands {
 
   /**
    * DevelGenerateCommands constructor.
+   *
    * @param $manager
    */
   public function __construct($manager) {
@@ -89,7 +91,9 @@ class DevelGenerateCommands extends DrushCommands {
    *
    * @command devel-generate:users
    * @pluginId user
-   * @param $num Number of users to generate.
+   * @param $num
+   *   Number of users to generate.
+   *
    * @option kill Delete all users before generating new ones.
    * @option roles A comma delimited list of role IDs for new users. Don't specify 'authenticated'.
    * @option pass Specify a password to be set for all generated users.
@@ -105,7 +109,9 @@ class DevelGenerateCommands extends DrushCommands {
    *
    * @command devel-generate:terms
    * @pluginId term
-   * @param $num Number of terms to generate.
+   * @param $num
+   *   Number of terms to generate.
+   *
    * @option kill Delete all terms before generating new ones.
    * @option bundles A comma-delimited list of machine names for the vocabularies where terms will be created.
    * @option feedback An integer representing interval for insertion rate logging.
@@ -120,7 +126,9 @@ class DevelGenerateCommands extends DrushCommands {
    *
    * @command devel-generate:vocabs
    * @pluginId vocabulary
-   * @param $num Number of vocabularies to generate.
+   * @param $num
+   *   Number of vocabularies to generate.
+   *
    * @option kill Delete all vocabs before generating new ones.
    * @aliases genv, devel-generate-vocabs
    * @validate-module-enabled taxonomy
@@ -134,10 +142,15 @@ class DevelGenerateCommands extends DrushCommands {
    *
    * @command devel-generate:menus
    * @pluginId menu
-   * @param $number_menus Number of menus to generate.
-   * @param $number_links Number of links to generate.
-   * @param $max_depth Max link depth.
-   * @param $max_width Max width of first level of links.
+   * @param $number_menus
+   *   Number of menus to generate.
+   * @param $number_links
+   *   Number of links to generate.
+   * @param $max_depth
+   *   Max link depth.
+   * @param $max_width
+   *   Max width of first level of links.
+   *
    * @option kill Delete any menus and menu links previously created by devel_generate before generating new ones.
    * @aliases genm, devel-generate-menus
    * @validate-module-enabled menu_link_content
@@ -151,8 +164,11 @@ class DevelGenerateCommands extends DrushCommands {
    *
    * @command devel-generate:content
    * @pluginId content
-   * @param int $num Number of nodes to generate.
-   * @param int $max_comments Maximum number of comments to generate.
+   * @param int $num
+   *   Number of nodes to generate.
+   * @param int $max_comments
+   *   Maximum number of comments to generate.
+   *
    * @option kill Delete all content before generating new content.
    * @option bundles A comma-delimited list of content types to create.
    * @option feedback An integer representing interval for insertion rate logging.
@@ -170,7 +186,9 @@ class DevelGenerateCommands extends DrushCommands {
    *
    * @command devel-generate:media
    * @pluginId media
-   * @param int $num Number of media items to generate.
+   * @param int $num
+   *   Number of media items to generate.
+   *
    * @option kill Delete all media items before generating new media.
    * @option media-types A comma-delimited list of media types to create.
    * @option feedback An integer representing interval for insertion rate logging.
@@ -199,8 +217,12 @@ class DevelGenerateCommands extends DrushCommands {
     $this->setParameters($parameters);
   }
 
+  /**
+   *
+   */
   public function generate() {
     $instance = $this->getPluginInstance();
     $instance->generate($this->getParameters());
   }
+
 }

@@ -380,7 +380,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     }
 
     // Add the operations to create the nodes.
-    for ($num = 0; $num < $values['num']; $num ++) {
+    for ($num = 0; $num < $values['num']; $num++) {
       $operations[] = ['devel_generate_operation', [$this, 'batchContentAddNode', $values]];
     }
 
@@ -398,6 +398,9 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     }
   }
 
+  /**
+   *
+   */
   public function batchContentPreNode($vars, &$context) {
     $context['results'] = $vars;
     $context['results']['num'] = 0;
@@ -417,6 +420,9 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     $context['results']['num']++;
   }
 
+  /**
+   *
+   */
   public function batchContentKill($vars, &$context) {
     if ($this->drushBatch) {
       $this->contentKill($vars);
@@ -474,6 +480,9 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     return $values;
   }
 
+  /**
+   *
+   */
   protected function isBatch($content_count, $comment_count) {
     return $content_count >= 50 || $comment_count >= 10;
   }

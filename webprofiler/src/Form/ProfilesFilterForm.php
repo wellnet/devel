@@ -7,7 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
 /**
- * Class ProfilesFilterForm
+ * Class ProfilesFilterForm.
  */
 class ProfilesFilterForm extends FormBase {
 
@@ -83,4 +83,5 @@ class ProfilesFilterForm extends FormBase {
 
     $form_state->setRedirectUrl($url);
   }
+
 }

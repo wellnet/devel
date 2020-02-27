@@ -403,6 +403,7 @@ if (!function_exists('dd')) {
 }
 
 if (!function_exists('ddm')) {
+
   /**
    * Wrapper for DevelDumperManager::debug() to replace previous dd function.
    *
@@ -411,9 +412,11 @@ if (!function_exists('ddm')) {
   function ddm($data, $label = NULL) {
     return \Drupal::service('devel.dumper')->debug($data, $label, 'default');
   }
+
 }
 
 if (!function_exists('kint')) {
+
   /**
    * Prints passed argument(s) using Kint debug tool.
    *
@@ -436,9 +439,11 @@ if (!function_exists('kint')) {
 
     return \Drupal::service('devel.dumper')->dump($args, $name, 'kint');
   }
+
 }
 
 if (!function_exists('ksm')) {
+
   /**
    * Prints passed argument(s) to the 'message' area of the page.
    *
@@ -461,6 +466,7 @@ if (!function_exists('ksm')) {
 
     return \Drupal::service('devel.dumper')->message($args, $name, 'kint');
   }
+
 }
 
 /**
@@ -566,7 +572,7 @@ function dargs($always = TRUE) {
  *
  * @param object $query
  *   An object that implements the SelectInterface interface.
- * @param boolean $return
+ * @param bool $return
  *   Whether to return the string. Default is FALSE, meaning to print it
  *   and return $query instead.
  * @param string $name
@@ -623,7 +629,7 @@ function devel_render() {
  * @param $options
  *   Options to pass on to PHP's debug_backtrace().
  *
- * @return string|NULL
+ * @return string|null
  *   The formatted backtrace, if requested, or NULL.
  *
  * @see http://php.net/manual/en/function.debug-backtrace.php
@@ -698,8 +704,8 @@ function devel_form_user_admin_permissions_alter(&$form, FormStateInterface $for
       if (isset($form['permissions'][$key][0])) {
         $form['permissions'][$key][0]['#wrapper_attributes']['title'] = $key;
       }
-      elseif(isset($form['permissions'][$key]['description'])) {
-        $form['permissions'][$key]['description']['#wrapper_attributes']['title']  = $key;
+      elseif (isset($form['permissions'][$key]['description'])) {
+        $form['permissions'][$key]['description']['#wrapper_attributes']['title'] = $key;
       }
     }
   }

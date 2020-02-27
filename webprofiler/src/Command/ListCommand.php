@@ -12,7 +12,7 @@ use Drupal\Console\Annotations\DrupalCommand;
 
 /**
  * Class ListCommand
- **
+ *
  * @DrupalCommand (
  *     extension="webprofiler",
  *     extensionType="module"
@@ -79,4 +79,5 @@ class ListCommand extends Command {
    */
   public function showMessage($output, $message, $type = 'info') {
   }
+
 }
