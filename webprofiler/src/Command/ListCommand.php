@@ -11,7 +11,7 @@ use Drupal\Console\Core\Command\Shared\ContainerAwareCommandTrait;
 use Drupal\Console\Annotations\DrupalCommand;
 
 /**
- * Class ListCommand
+ * Class ListCommand.
  *
  * @DrupalCommand (
  *     extension="webprofiler",

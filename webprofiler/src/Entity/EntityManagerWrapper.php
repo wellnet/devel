@@ -91,29 +91,24 @@ class EntityManagerWrapper extends DefaultPluginManager implements EntityTypeMan
   private function getStorageDecorator($entity_type, $handler) {
     if ($handler instanceof ConfigEntityStorageInterface) {
       switch ($entity_type) {
+        // Do not need a 'break' statement after each case-breaking 'return'.
         case 'taxonomy_vocabulary':
           return new VocabularyStorageDecorator($handler);
-        break;
 
         case 'user_role':
           return new RoleStorageDecorator($handler);
-        break;
-        
+
         case 'shortcut_set':
           return new ShortcutSetStorageDecorator($handler);
-        break;
-        
+
         case 'image_style':
           return new ImageStyleStorageDecorator($handler);
-        break;
-        
+
         case 'domain':
           return new DomainStorageDecorator($handler);
-        break;
-        
+
         default:
           return new ConfigEntityStorageDecorator($handler);
-        break;
       }
     }
     return $handler;
