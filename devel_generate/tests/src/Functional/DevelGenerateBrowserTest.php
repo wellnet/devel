@@ -15,10 +15,9 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
   use MediaTypeCreationTrait;
 
   /**
-   * Tests generate commands.
+   * Tests generating users.
    */
-  public function testDevelGenerate() {
-    // Creating users.
+  public function testDevelGenerateUsers() {
     $edit = [
       'num' => 4,
     ];
@@ -33,8 +32,12 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
     ];
     $this->drupalPostForm('admin/config/development/generate/content', $edit, 'Generate');
     $this->assertText('Please select at least one content type');
+  }
 
-    // Creating content.
+  /**
+   * Tests generating content.
+   */
+  public function testDevelGenerateContent() {
     // First we create a node in order to test the Delete content checkbox.
     $this->drupalCreateNode(['type' => 'article']);
 
@@ -63,8 +66,12 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
       $this->assertSession()->statusCodeEquals('200');
       $this->assertSession()->pageTextContains($node->getTitle(), 'Generated url alias for the node works.');
     }
+  }
 
-    // Creating terms.
+  /**
+   * Tests generating terms.
+   */
+  public function testDevelGenerateTerms() {
     $edit = [
       'vids[]' => $this->vocabulary->id(),
       'num' => 5,
@@ -73,8 +80,12 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
     $this->drupalPostForm('admin/config/development/generate/term', $edit, 'Generate');
     $this->assertSession()->pageTextContains('Created the following new terms: ');
     $this->assertSession()->pageTextContains('Generate process complete.');
+  }
 
-    // Creating vocabularies.
+  /**
+   * Tests generating vocabularies.
+   */
+  public function testDevelGenerateVocabs() {
     $edit = [
       'num' => 5,
       'title_length' => 12,
@@ -83,8 +94,12 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
     $this->drupalPostForm('admin/config/development/generate/vocabs', $edit, 'Generate');
     $this->assertSession()->pageTextContains('Created the following new vocabularies: ');
     $this->assertSession()->pageTextContains('Generate process complete.');
+  }
 
-    // Creating menus.
+  /**
+   * Tests generating menus.
+   */
+  public function testDevelGenerateMenus() {
     $edit = [
       'num_menus' => 5,
       'num_links' => 7,
@@ -100,7 +115,12 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
     $this->assertSession()->pageTextContains('Created the following new menus: ');
     $this->assertSession()->pageTextContains('Created 7 new menu links');
     $this->assertSession()->pageTextContains('Generate process complete.');
+  }
 
+  /**
+   * Tests generating media.
+   */
+  public function testDevelGenerateMedia() {
     // As the 'media' plugin has a dependency on 'media' module, the plugin is
     // not generating a route to the plugin form.
     $this->drupalGet('admin/config/development/generate/media');
@@ -145,7 +165,7 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
   /**
    * Tests generating content in batch mode.
    */
-  public function testDevelGenerateBatch() {
+  public function testDevelGenerateBatchContent() {
     // For 50 or more nodes, the processing will be done via batch.
     $edit = [
       'num' => 55,
