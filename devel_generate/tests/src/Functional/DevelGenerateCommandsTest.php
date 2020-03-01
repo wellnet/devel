@@ -21,7 +21,7 @@ use Drush\TestTraits\DrushTestTrait;
 
 /**
  * @coversDefaultClass \Drupal\devel_generate\Commands\DevelGenerateCommands
- * @group devel-generate
+ * @group devel_generate
  */
 class DevelGenerateCommandsTest extends BrowserTestBase {
   use DrushTestTrait;

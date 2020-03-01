@@ -91,7 +91,7 @@ before_script:
 
 script:
   # Run the PHPUnit tests.
-  - ./vendor/bin/phpunit -c ./core/phpunit.xml.dist --verbose --group=devel,devel-generate,devel_generate,webprofiler ./modules/$MODULE
+  - ./vendor/bin/phpunit -c ./core/phpunit.xml.dist --verbose --group=devel,devel_generate,webprofiler ./modules/$MODULE
 
   # Check for coding standards. First change directory to our module.
   - cd $DRUPAL_ROOT/modules/$MODULE
