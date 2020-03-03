@@ -76,7 +76,7 @@ class EntityViewBuilderDecorator extends EntityDecorator implements EntityHandle
    * {@inheritdoc}
    */
   public function getCacheTags() {
-    return $this->getOriginalObject()->getCacheTag();
+    return $this->getOriginalObject()->getCacheTags();
   }
 
   /**
