@@ -45,7 +45,7 @@ class DrupalDataCollector extends DataCollector implements DrupalDataCollectorIn
    */
   public function collect(Request $request, Response $response, \Exception $exception = NULL) {
     $this->data['version'] = Drupal::VERSION;
-    $this->data['profile'] = drupal_get_profile();
+    $this->data['profile'] = \Drupal::installProfile();
     $this->data['config_url'] = (new Drupal\Core\Url('webprofiler.settings', [], ['query' => $this->redirectDestination->getAsArray()]))->toString();
 
     try {
