@@ -9,6 +9,11 @@ use Drupal\Core\Language\Language;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\language\Entity\ConfigurableLanguage;
 
+/**
+ * Provides methods to assist Devel Generate testing.
+ *
+ * Referenced in DevelGenerateBrowserTestBase and DevelGenerateCommandsTest.
+ */
 trait DevelGenerateSetupTrait {
 
   use CommentTestTrait;
@@ -22,7 +27,7 @@ trait DevelGenerateSetupTrait {
   protected $vocabulary;
 
   /**
-   *
+   * General set-up for all tests.
    */
   public function setUpData() {
     $entity_type_manager = $this->container->get('entity_type.manager');
@@ -49,7 +54,7 @@ trait DevelGenerateSetupTrait {
       'weight' => mt_rand(0, 10),
     ]);
     $this->vocabulary->save();
-    // Enable translation for this vocabulary.
+    // Enable translation for terms in this vocabulary.
     \Drupal::service('content_translation.manager')->setEnabled('taxonomy_term', $this->vocabulary->id(), TRUE);
 
     // Creates a field of an entity reference field storage on article.

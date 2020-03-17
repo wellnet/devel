@@ -2,16 +2,16 @@
 
 namespace Drupal\devel_generate\Plugin\DevelGenerate;
 
+use Drupal\content_translation\ContentTranslationManagerInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\content_translation\ContentTranslationManagerInterface;
-use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\devel_generate\DevelGenerateBase;
+use Drupal\taxonomy\TermInterface;
 use Drush\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -192,7 +192,7 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
    * @param array $vids
    *   Array of vocabulary vid.
    */
-  protected function deleteVocabularyTerms($vids) {
+  protected function deleteVocabularyTerms(array $vids) {
     $tids = $this->vocabularyStorage->getToplevelTids($vids);
     $terms = $this->termStorage->loadMultiple($tids);
     $this->termStorage->delete($terms);
@@ -205,10 +205,10 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
    *   The input parameters from the settings form.
    *
    * @return array
-   *   The list of names of the created terms.
+   *   Information about the created terms.
    */
-  protected function generateTerms($parameters) {
-    $terms = [
+  protected function generateTerms(array $parameters) {
+    $info = [
       'terms' => [],
       'terms_translations' => 0,
     ];
@@ -270,20 +270,20 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
 
       // Add translations.
       if (isset($parameters['translate_language']) && !empty($parameters['translate_language'])) {
-        $terms['terms_translations'] += $this->generateTermTranslation($parameters['translate_language'], $term);
+        $info['terms_translations'] += $this->generateTermTranslation($parameters['translate_language'], $term);
       }
 
       $max++;
 
       // Limit memory usage. Only report first 20 created terms.
       if ($i < 20) {
-        $terms['terms'][] = $term->label();
+        $info['terms'][] = $term->label();
       }
 
       unset($term);
     }
 
-    return $terms;
+    return $info;
   }
 
   /**
@@ -293,23 +293,28 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
    *   Potential translate languages array.
    * @param \Drupal\taxonomy\TermInterface $term
    *   Term to add translations to.
+   *
    * @return int
    *   Number of translations added.
    */
   protected function generateTermTranslation(array $translate_language, TermInterface $term) {
     if (is_null($this->contentTranslationManager)) {
-      return;
+      return 0;
     }
     if (!$this->contentTranslationManager->isEnabled('taxonomy_term', $term->bundle())) {
-      return;
+      return 0;
     }
     if ($term->langcode == LanguageInterface::LANGCODE_NOT_SPECIFIED || $term->langcode == LanguageInterface::LANGCODE_NOT_APPLICABLE) {
-      return;
+      return 0;
     }
 
     $num_translations = 0;
     // Translate term to each target language.
-    $skip_languages = [LanguageInterface::LANGCODE_NOT_SPECIFIED, LanguageInterface::LANGCODE_NOT_APPLICABLE, $term->langcode->value];
+    $skip_languages = [
+      LanguageInterface::LANGCODE_NOT_SPECIFIED,
+      LanguageInterface::LANGCODE_NOT_APPLICABLE,
+      $term->langcode->value,
+    ];
     foreach ($translate_language as $langcode) {
       if (in_array($langcode, $skip_languages)) {
         continue;

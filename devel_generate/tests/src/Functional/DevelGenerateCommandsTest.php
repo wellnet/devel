@@ -15,11 +15,12 @@ use Drupal\user\Entity\User;
 use Drush\TestTraits\DrushTestTrait;
 
 /**
- * Note: Drush must be in the Composer project. See https://cgit.drupalcode.org/devel/tree/drupalci.yml?h=8.x-2.x and its docs at
- * https://www.drupal.org/drupalorg/docs/drupal-ci/customizing-drupalci-testing-for-projects.
- */
-
-/**
+ * Test class for the Devel Generate drush commands.
+ *
+ * Note: Drush must be in the Composer project.
+ * See https://cgit.drupalcode.org/devel/tree/drupalci.yml?h=8.x-3.x and its
+ * docs at https://www.drupal.org/drupalorg/docs/drupal-ci/customizing-drupalci-testing-for-projects.
+ *
  * @coversDefaultClass \Drupal\devel_generate\Commands\DevelGenerateCommands
  * @group devel_generate
  */
@@ -58,7 +59,7 @@ class DevelGenerateCommandsTest extends BrowserTestBase {
   }
 
   /**
-   *
+   * Tests all generation commands.
    */
   public function testGeneration() {
     // Make sure users get created, and with correct roles.
@@ -72,12 +73,21 @@ class DevelGenerateCommandsTest extends BrowserTestBase {
     $this->assertEquals($this->vocabulary->id(), $term->bundle());
 
     // Make sure terms get created, with proper language.
-    $this->drush('devel-generate-terms', [10], ['kill' => null, 'bundles' => $this->vocabulary->id(), 'languages' => 'fr']);
+    $this->drush('devel-generate-terms', [10], [
+      'kill' => NULL,
+      'bundles' => $this->vocabulary->id(),
+      'languages' => 'fr',
+    ]);
     $term = Term::load(60);
     $this->assertEquals($term->language()->getId(), 'fr');
 
     // Make sure terms gets created, with proper translation.
-    $this->drush('devel-generate-terms', [10], ['kill' => null, 'bundles' => $this->vocabulary->id(), 'languages' => 'fr', 'translations' => 'de']);
+    $this->drush('devel-generate-terms', [10], [
+      'kill' => NULL,
+      'bundles' => $this->vocabulary->id(),
+      'languages' => 'fr',
+      'translations' => 'de',
+    ]);
     $term = Term::load(70);
     $this->assertTrue($term->hasTranslation('de'));
     $this->assertTrue($term->hasTranslation('fr'));
@@ -92,7 +102,7 @@ class DevelGenerateCommandsTest extends BrowserTestBase {
     // Make sure menus, and with correct properties.
     $this->drush('devel-generate-menus', [1, 5], ['kill' => NULL]);
     $menus = Menu::loadMultiple();
-    foreach ($menus as $key => $menu) {
+    foreach ($menus as $menu) {
       if (strstr($menu->id(), 'devel-') !== FALSE) {
         // We have a menu that we created.
         break;
@@ -122,12 +132,17 @@ class DevelGenerateCommandsTest extends BrowserTestBase {
     $this->assertContains('Finished 55 elements created successfully.', $messages, 'devel-generate-content batch ending message not found', TRUE);
 
     // Make sure content gets created, with proper language.
-    $this->drush('devel-generate-content', [10], ['kill' => null, 'languages' => 'fr']);
+    $this->drush('devel-generate-content', [10], ['kill' => NULL, 'languages' => 'fr']);
     $node = Node::load(110);
     $this->assertEquals($node->language()->getId(), 'fr');
 
     // Make sure content gets created with all translations.
-    $this->drush('devel-generate-content', [10], ['kill' => null, 'bundles' => 'article', 'languages' => 'fr', 'translations' => 'de']);
+    $this->drush('devel-generate-content', [10], [
+      'kill' => NULL,
+      'bundles' => 'article',
+      'languages' => 'fr',
+      'translations' => 'de',
+    ]);
     $nodes = \Drupal::entityQuery('node')->condition('type', 'article')->execute();
     $this->assertCount(10, $nodes);
     $node = Node::load(end($nodes));

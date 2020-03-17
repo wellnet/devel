@@ -3,86 +3,109 @@
 namespace Drupal\devel_generate\Commands;
 
 use Consolidation\AnnotatedCommand\CommandData;
-use Drupal\devel_generate\DevelGenerateBaseInterface;
+use Drupal\devel_generate\DevelGeneratePluginManager;
 use Drush\Commands\DrushCommands;
 
 /**
+ * Provide Drush commands for all the Devel Generate processes.
+ *
  * For commands that are parts of modules, Drush expects to find commandfiles in
  * __MODULE__/src/Commands, and the namespace is Drupal/__MODULE__/Commands.
  *
- * In addition to a commandfile like this one, you need to add a drush.services.yml
- * in root of your module like this module does.
+ * In addition to a commandfile like this one, you need to add a
+ * drush.services.yml in the root of your module like this module does.
  */
 class DevelGenerateCommands extends DrushCommands {
 
   /**
-   * @var DevelGenerateBaseInterface $manager
+   * The DevelGenerate plugin manager.
+   *
+   * @var \Drupal\devel_generate\DevelGeneratePluginManager
    */
   protected $manager;
 
   /**
    * The plugin instance.
    *
-   * @var DevelGenerateBaseInterface $instance
+   * @var \Drupal\devel_generate\DevelGenerateBaseInterface
    */
   protected $pluginInstance;
 
   /**
    * The Generate plugin parameters.
    *
-   * @var array $parameters
+   * @var array
    */
   protected $parameters;
 
   /**
    * DevelGenerateCommands constructor.
    *
-   * @param $manager
+   * @param \Drupal\devel_generate\DevelGeneratePluginManager $manager
+   *   The DevelGenerate plugin manager.
    */
-  public function __construct($manager) {
+  public function __construct(DevelGeneratePluginManager $manager) {
     parent::__construct();
     $this->setManager($manager);
   }
 
   /**
-   * @return \Drupal\devel_generate\DevelGenerateBaseInterface
+   * Get the DevelGenerate plugin manager.
+   *
+   * @return \Drupal\devel_generate\DevelGeneratePluginManager
+   *   The DevelGenerate plugin manager.
    */
   public function getManager() {
     return $this->manager;
   }
 
   /**
-   * @param \Drupal\devel_generate\DevelGenerateBaseInterface $manager
+   * Set the DevelGenerate plugin manager.
+   *
+   * @param \Drupal\devel_generate\DevelGeneratePluginManager $manager
+   *   The DevelGenerate plugin manager.
    */
-  public function setManager($manager) {
+  public function setManager(DevelGeneratePluginManager $manager) {
     $this->manager = $manager;
   }
 
   /**
+   * Get the DevelGenerate plugin instance.
+   *
    * @return mixed
+   *   The DevelGenerate plugin instance.
    */
   public function getPluginInstance() {
     return $this->pluginInstance;
   }
 
   /**
+   * Set the DevelGenerate plugin instance.
+   *
    * @param mixed $pluginInstance
+   *   The DevelGenerate plugin instance.
    */
   public function setPluginInstance($pluginInstance) {
     $this->pluginInstance = $pluginInstance;
   }
 
   /**
+   * Get the DevelGenerate plugin parameters.
+   *
    * @return array
+   *   The plugin parameters.
    */
   public function getParameters() {
     return $this->parameters;
   }
 
   /**
+   * Set the DevelGenerate plugin parameters.
+   *
    * @param array $parameters
+   *   The plugin parameters.
    */
-  public function setParameters($parameters) {
+  public function setParameters(array $parameters) {
     $this->parameters = $parameters;
   }
 
@@ -90,16 +113,19 @@ class DevelGenerateCommands extends DrushCommands {
    * Create users.
    *
    * @command devel-generate:users
+   * @aliases genu, devel-generate-users
    * @pluginId user
-   * @param $num
+   *
+   * @param int $num
    *   Number of users to generate.
+   * @param array $options
+   *   Array of options as described below.
    *
    * @option kill Delete all users before generating new ones.
    * @option roles A comma delimited list of role IDs for new users. Don't specify 'authenticated'.
    * @option pass Specify a password to be set for all generated users.
-   * @aliases genu, devel-generate-users
    */
-  public function users($num = 50, $options = ['kill' => FALSE, 'roles' => '']) {
+  public function users($num = 50, array $options = ['kill' => FALSE, 'roles' => '']) {
     // @todo pass $options to the plugins.
     $this->generate();
   }
@@ -108,18 +134,21 @@ class DevelGenerateCommands extends DrushCommands {
    * Create terms in specified vocabulary.
    *
    * @command devel-generate:terms
+   * @aliases gent, devel-generate-terms
    * @pluginId term
-   * @param $num
+   *
+   * @param int $num
    *   Number of terms to generate.
+   * @param array $options
+   *   Array of options as described below.
    *
    * @option kill Delete all terms before generating new ones.
    * @option bundles A comma-delimited list of machine names for the vocabularies where terms will be created.
    * @option feedback An integer representing interval for insertion rate logging.
    * @option languages A comma-separated list of language codes
    * @option translations A comma-separated list of language codes for translations.
-   * @aliases gent, devel-generate-terms
    */
-  public function terms($num = 50, $options = ['kill' => FALSE, 'bundles' => NULL, 'feedback' => 1000, 'languages' => NULL, 'translations' => NULL]) {
+  public function terms($num = 50, array $options = ['kill' => FALSE, 'bundles' => NULL, 'feedback' => 1000, 'languages' => NULL, 'translations' => NULL]) {
     $this->generate();
   }
 
@@ -127,15 +156,18 @@ class DevelGenerateCommands extends DrushCommands {
    * Create vocabularies.
    *
    * @command devel-generate:vocabs
+   * @aliases genv, devel-generate-vocabs
    * @pluginId vocabulary
-   * @param $num
+   * @validate-module-enabled taxonomy
+   *
+   * @param int $num
    *   Number of vocabularies to generate.
+   * @param array $options
+   *   Array of options as described below.
    *
    * @option kill Delete all vocabs before generating new ones.
-   * @aliases genv, devel-generate-vocabs
-   * @validate-module-enabled taxonomy
    */
-  public function vocabs($num = 1, $options = ['kill' => FALSE]) {
+  public function vocabs($num = 1, array $options = ['kill' => FALSE]) {
     $this->generate();
   }
 
@@ -143,21 +175,24 @@ class DevelGenerateCommands extends DrushCommands {
    * Create menus.
    *
    * @command devel-generate:menus
+   * @aliases genm, devel-generate-menus
    * @pluginId menu
-   * @param $number_menus
+   * @validate-module-enabled menu_link_content
+   *
+   * @param int $number_menus
    *   Number of menus to generate.
-   * @param $number_links
+   * @param int $number_links
    *   Number of links to generate.
-   * @param $max_depth
+   * @param int $max_depth
    *   Max link depth.
-   * @param $max_width
+   * @param int $max_width
    *   Max width of first level of links.
+   * @param array $options
+   *   Array of options as described below.
    *
    * @option kill Delete any menus and menu links previously created by devel_generate before generating new ones.
-   * @aliases genm, devel-generate-menus
-   * @validate-module-enabled menu_link_content
    */
-  public function menus($number_menus = 2, $number_links = 50, $max_depth = 3, $max_width = 8, $options = ['kill' => FALSE]) {
+  public function menus($number_menus = 2, $number_links = 50, $max_depth = 3, $max_width = 8, array $options = ['kill' => FALSE]) {
     $this->generate();
   }
 
@@ -165,11 +200,16 @@ class DevelGenerateCommands extends DrushCommands {
    * Create content.
    *
    * @command devel-generate:content
+   * @aliases genc, devel-generate-content
    * @pluginId content
+   * @validate-module-enabled node
+   *
    * @param int $num
    *   Number of nodes to generate.
    * @param int $max_comments
    *   Maximum number of comments to generate.
+   * @param array $options
+   *   Array of options as described below.
    *
    * @option kill Delete all content before generating new content.
    * @option bundles A comma-delimited list of content types to create.
@@ -177,10 +217,8 @@ class DevelGenerateCommands extends DrushCommands {
    * @option skip-fields A comma delimited list of fields to omit when generating random values
    * @option languages A comma-separated list of language codes
    * @option translations A comma-separated list of language codes for translations.
-   * @aliases genc, devel-generate-content
-   * @validate-module-enabled node
    */
-  public function content($num = 50, $max_comments = 0, $options = ['kill' => FALSE, 'bundles' => 'page,article', 'feedback' => 1000, 'languages' => NULL, 'translations' => NULL]) {
+  public function content($num = 50, $max_comments = 0, array $options = ['kill' => FALSE, 'bundles' => 'page,article', 'feedback' => 1000, 'languages' => NULL, 'translations' => NULL]) {
     $this->generate();
   }
 
@@ -188,31 +226,38 @@ class DevelGenerateCommands extends DrushCommands {
    * Create media items.
    *
    * @command devel-generate:media
+   * @aliases genmd, devel-generate-media
    * @pluginId media
+   * @validate-module-enabled media
+   *
    * @param int $num
    *   Number of media items to generate.
+   * @param array $options
+   *   Array of options as described below.
    *
    * @option kill Delete all media items before generating new media.
    * @option media-types A comma-delimited list of media types to create.
    * @option feedback An integer representing interval for insertion rate logging.
    * @option skip-fields A comma delimited list of fields to omit when generating random values.
    * @option languages A comma-separated list of language codes
-   * @aliases genmd, devel-generate-media
-   * @validate-module-enabled media
    */
-  public function media($num = 50, $options = ['kill' => FALSE, 'media-types' => NULL, 'feedback' => 1000]) {
+  public function media($num = 50, array $options = ['kill' => FALSE, 'media-types' => NULL, 'feedback' => 1000]) {
     $this->generate();
   }
 
   /**
+   * The standard drush validate hook.
+   *
    * @hook validate
+   *
    * @param \Consolidation\AnnotatedCommand\CommandData $commandData
-   * @return \Consolidation\AnnotatedCommand\CommandError|null
+   *   The data sent from the drush command.
    */
   public function validate(CommandData $commandData) {
     $manager = $this->getManager();
     $args = $commandData->input()->getArguments();
-    $commandName = array_shift($args);
+    // The command name is the first argument but we do not need this.
+    array_shift($args);
     /* @var DevelGenerateBaseInterface $instance */
     $instance = $manager->createInstance($commandData->annotationData()->get('pluginId'), []);
     $this->setPluginInstance($instance);
@@ -221,7 +266,7 @@ class DevelGenerateCommands extends DrushCommands {
   }
 
   /**
-   *
+   * Wrapper for calling the plugin instance generate function.
    */
   public function generate() {
     $instance = $this->getPluginInstance();

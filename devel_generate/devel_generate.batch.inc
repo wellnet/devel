@@ -2,20 +2,20 @@
 
 /**
  * @file
+ * Provides common batch functions for every DevelGeneratePlugin.
  */
 
+use Drupal\devel_generate\DevelGenerateBaseInterface;
+
 /**
- * Wrapping function for invoking the right
- * method responsible for handle a given batch operation.
- * Available for every DevelGeneratePlugin.
+ * Calls the correct method responsible for handling a given batch operation.
  */
-function devel_generate_operation(Drupal\devel_generate\DevelGenerateBaseInterface $class, $method, $vars, &$context) {
+function devel_generate_operation(DevelGenerateBaseInterface $class, $method, $vars, &$context) {
   return $class->$method($vars, $context);
 }
 
 /**
- * Common finish batch function available for
- * every DevelGeneratePlugin.
+ * Standard finish batch function.
  */
 function devel_generate_batch_finished($success, $results, $operations) {
 

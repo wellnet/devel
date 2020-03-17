@@ -5,6 +5,7 @@ namespace Drupal\devel_generate\Plugin\DevelGenerate;
 use Drupal\comment\CommentManagerInterface;
 use Drupal\Component\Datetime\Time;
 use Drupal\Component\Render\FormattableMarkup;
+use Drupal\content_translation\ContentTranslationManagerInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -12,13 +13,12 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\content_translation\ContentTranslationManagerInterface;
-use Drupal\node\NodeInterface;
+use Drupal\Core\Path\AliasStorageInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\UrlGeneratorInterface;
-use Drupal\Core\Path\AliasStorageInterface;
 use Drupal\devel_generate\DevelGenerateBase;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\node\NodeInterface;
 use Drush\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -326,7 +326,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
   /**
    * {@inheritdoc}
    */
-  function settingsFormValidate(array $form, FormStateInterface $form_state) {
+  public function settingsFormValidate(array $form, FormStateInterface $form_state) {
     if (!array_filter($form_state->getValue('node_types'))) {
       $form_state->setErrorByName('node_types', $this->t('Please select at least one content type'));
     }
@@ -345,8 +345,9 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
   }
 
   /**
-   * Method responsible for creating content when
-   * the number of elements is less than 50.
+   * Generate content when not in batch mode.
+   *
+   * This method is used when the number of elements is under 50.
    */
   private function generateContent($values) {
     $values['node_types'] = array_filter($values['node_types']);
@@ -363,7 +364,11 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
         $this->develGenerateContentAddNode($values);
         if ($this->isDrush8() && function_exists('drush_log') && $i % drush_get_option('feedback', 1000) == 0) {
           $now = time();
-          drush_log(dt('Completed @feedback nodes (@rate nodes/min)', ['@feedback' => drush_get_option('feedback', 1000), '@rate' => (drush_get_option('feedback', 1000) * 60) / ($now - $start)]), 'ok');
+          $options = [
+            '@feedback' => drush_get_option('feedback', 1000),
+            '@rate' => (drush_get_option('feedback', 1000) * 60) / ($now - $start),
+          ];
+          drush_log(dt('Completed @feedback nodes (@rate nodes/min)', $options), 'ok');
           $start = $now;
         }
       }
@@ -375,8 +380,9 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
   }
 
   /**
-   * Method responsible for creating content when
-   * the number of elements is greater than 50.
+   * Generate content in batch mode.
+   *
+   * This method is used when the number of elements is 50 or more.
    */
   private function generateBatchContent($values) {
     // Remove unselected node types.
@@ -385,17 +391,23 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     // self::validateDrushParams().
     if (!$this->drushBatch) {
       // Setup the batch operations and save the variables.
-      $operations[] = ['devel_generate_operation', [$this, 'batchContentPreNode', $values]];
+      $operations[] = ['devel_generate_operation',
+        [$this, 'batchContentPreNode', $values],
+      ];
     }
 
     // Add the kill operation.
     if ($values['kill']) {
-      $operations[] = ['devel_generate_operation', [$this, 'batchContentKill', $values]];
+      $operations[] = ['devel_generate_operation',
+        [$this, 'batchContentKill', $values],
+      ];
     }
 
     // Add the operations to create the nodes.
     for ($num = 0; $num < $values['num']; $num++) {
-      $operations[] = ['devel_generate_operation', [$this, 'batchContentAddNode', $values]];
+      $operations[] = ['devel_generate_operation',
+        [$this, 'batchContentAddNode', $values],
+      ];
     }
 
     // Set the batch.
@@ -413,7 +425,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
   }
 
   /**
-   *
+   * Batch wrapper for calling ContentPreNode.
    */
   public function batchContentPreNode($vars, &$context) {
     $context['results'] = $vars;
@@ -423,7 +435,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
   }
 
   /**
-   * Add node to existings batch operation.
+   * Batch wrapper for calling ContentAddNode.
    */
   public function batchContentAddNode($vars, &$context) {
     if ($this->drushBatch) {
@@ -439,7 +451,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
   }
 
   /**
-   *
+   * Batch wrapper for calling ContentKill.
    */
   public function batchContentKill($vars, &$context) {
     if ($this->drushBatch) {
@@ -502,7 +514,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
   }
 
   /**
-   *
+   * Determines if the content should be generated in batch mode.
    */
   protected function isBatch($content_count, $comment_count) {
     return $content_count >= 50 || $comment_count >= 10;
@@ -514,7 +526,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
    * @param array $values
    *   The input values from the settings form.
    */
-  protected function contentKill($values) {
+  protected function contentKill(array $values) {
     $nids = $this->nodeStorage->getQuery()
       ->condition('type', $values['node_types'], 'IN')
       ->execute();
@@ -527,19 +539,24 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
   }
 
   /**
-   * Return the same array passed as parameter,
-   * but with an array of uids for the key 'users'.
+   * Preprocesses $results before adding content.
+   *
+   * @param array $results
+   *   Results information.
    */
-  protected function develGenerateContentPreNode(&$results) {
-    // Get user id.
+  protected function develGenerateContentPreNode(array &$results) {
+    // Get an array of user ids.
     $users = $this->getUsers();
     $results['users'] = $users;
   }
 
   /**
    * Create one node. Used by both batch and non-batch code branches.
+   *
+   * @param array $results
+   *   Results information.
    */
-  protected function develGenerateContentAddNode(&$results) {
+  protected function develGenerateContentAddNode(array &$results) {
     if (!isset($results['time_range'])) {
       $results['time_range'] = 0;
     }
@@ -572,8 +589,8 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     // Populate all fields with sample values.
     $this->populateFields($node);
 
-    // See devel_generate_entity_insert() for actions that happen before and after
-    // this save.
+    // See devel_generate_entity_insert() for actions that happen before and
+    // after this save.
     $node->save();
 
     // Add translations.
@@ -592,14 +609,14 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  protected function develGenerateContentAddNodeTranslation(&$results, NodeInterface $node) {
+  protected function develGenerateContentAddNodeTranslation(array &$results, NodeInterface $node) {
     if (is_null($this->contentTranslationManager)) {
       return;
     }
     if (!$this->contentTranslationManager->isEnabled('node', $node->getType())) {
       return;
     }
-    if ($node->langcode == LanguageInterface::LANGCODE_NOT_SPECIFIED || $node->langcode == LanguageInterface::LANGCODE_NOT_APPLICABLE){
+    if ($node->langcode == LanguageInterface::LANGCODE_NOT_SPECIFIED || $node->langcode == LanguageInterface::LANGCODE_NOT_APPLICABLE) {
       return;
     }
 
@@ -607,7 +624,11 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       $results['num_translations'] = 0;
     }
     // Translate node to each target language.
-    $skip_languages = [LanguageInterface::LANGCODE_NOT_SPECIFIED, LanguageInterface::LANGCODE_NOT_APPLICABLE, $node->langcode->value];
+    $skip_languages = [
+      LanguageInterface::LANGCODE_NOT_SPECIFIED,
+      LanguageInterface::LANGCODE_NOT_APPLICABLE,
+      $node->langcode->value,
+    ];
     foreach ($results['translate_language'] as $langcode) {
       if (in_array($langcode, $skip_languages)) {
         continue;

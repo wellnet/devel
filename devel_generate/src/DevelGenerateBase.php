@@ -72,7 +72,7 @@ abstract class DevelGenerateBase extends PluginBase implements DevelGenerateBase
   /**
    * {@inheritdoc}
    */
-  function settingsFormValidate(array $form, FormStateInterface $form_state) {
+  public function settingsFormValidate(array $form, FormStateInterface $form_state) {
     // Validation is optional.
   }
 
@@ -166,8 +166,12 @@ abstract class DevelGenerateBase extends PluginBase implements DevelGenerateBase
    *   TRUE if the parameter is a number, FALSE otherwise.
    */
   public static function isNumber($number) {
-    if ($number == NULL) return FALSE;
-    if (!is_numeric($number)) return FALSE;
+    if ($number == NULL) {
+      return FALSE;
+    }
+    if (!is_numeric($number)) {
+      return FALSE;
+    }
     return TRUE;
   }
 
@@ -198,7 +202,10 @@ abstract class DevelGenerateBase extends PluginBase implements DevelGenerateBase
   }
 
   /**
+   * Determines if Drush is version 8.
    *
+   * Later versions do not have the 'drush_drupal_load_autoloader' function so
+   * will return FALSE for 9 and higher.
    */
   protected function isDrush8() {
     return function_exists('drush_drupal_load_autoloader');

@@ -5,11 +5,8 @@
  * Integration with Drush8. Drush9 commands are in src/Commands.
  */
 
-use Drupal\devel_generate\DevelGenerateBaseInterface;
-use Drupal\devel_generate\DevelGeneratePluginManager;
-
 /**
- * Implementation of hook_drush_command().
+ * Implements hook_drush_command().
  */
 function devel_generate_drush_command() {
   $items['generate-users'] = [
@@ -90,7 +87,7 @@ function devel_generate_drush_command() {
       'plugin_id' => 'menu',
     ],
     'description' => 'Create menus and menu items.',
-    'drupal dependencies' => ['devel_generate'], // Remove these once devel.module is moved down a directory. http://drupal.org/node/925246
+    'drupal dependencies' => ['devel_generate'],
     'arguments' => [
       'number_menus' => 'Number of menus to generate. Defaults to 2.',
       'number_links' => 'Number of links to generate. Defaults to 50.',
@@ -126,7 +123,7 @@ function devel_generate_drush_command() {
 }
 
 /**
- * Implements drush_hook_COMMAND_validate().
+ * Implements drush_hook_COMMAND_validate() for generate_users.
  */
 function drush_devel_generate_generate_users_validate() {
 
@@ -136,7 +133,7 @@ function drush_devel_generate_generate_users_validate() {
 }
 
 /**
- * Implements drush_hook_COMMAND_validate().
+ * Implements drush_hook_COMMAND_validate() for generate_terms.
  */
 function drush_devel_generate_generate_terms_validate() {
 
@@ -146,7 +143,7 @@ function drush_devel_generate_generate_terms_validate() {
 }
 
 /**
- * Implements drush_hook_COMMAND_validate().
+ * Implements drush_hook_COMMAND_validate() for generate_vocabs.
  */
 function drush_devel_generate_generate_vocabs_validate() {
 
@@ -156,7 +153,7 @@ function drush_devel_generate_generate_vocabs_validate() {
 }
 
 /**
- * Implements drush_hook_COMMAND_validate().
+ * Implements drush_hook_COMMAND_validate() for generate_content.
  */
 function drush_devel_generate_generate_content_validate() {
 
@@ -166,7 +163,7 @@ function drush_devel_generate_generate_content_validate() {
 }
 
 /**
- * Implements drush_hook_COMMAND_validate().
+ * Implements drush_hook_COMMAND_validate() for generate_menus.
  */
 function drush_devel_generate_generate_menus_validate() {
 
@@ -176,7 +173,7 @@ function drush_devel_generate_generate_menus_validate() {
 }
 
 /**
- * Implements drush_hook_COMMAND_validate().
+ * Implements drush_hook_COMMAND_validate() for generate_media.
  */
 function drush_devel_generate_generate_media_validate() {
   // Array of "Callback arguments" and "command line args".
@@ -185,9 +182,10 @@ function drush_devel_generate_generate_media_validate() {
 }
 
 /**
- * Helper function which returns an array with a plugin instance
- * for a given id and the validated values ready to be used by
- * the generate() function of the plugin.
+ * Get the plugin instance and the validated values.
+ *
+ * Returns an array with a plugin instance for a given id and the validated
+ * values ready to be used by the generate() function of the plugin.
  */
 function _drush_plugin_validate($params) {
   $instance_and_values = &drupal_static('drush_devel_generate_generate_validate');
