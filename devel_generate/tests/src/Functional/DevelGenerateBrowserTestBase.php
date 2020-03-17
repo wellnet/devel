@@ -21,8 +21,10 @@ abstract class DevelGenerateBrowserTestBase extends BrowserTestBase {
    * @var array
    */
   public static $modules = [
+    'content_translation',
     'devel',
     'devel_generate',
+    'language',
     'menu_ui',
     'node',
     'comment',
@@ -40,7 +42,7 @@ abstract class DevelGenerateBrowserTestBase extends BrowserTestBase {
    */
   public function setUp() {
     parent::setUp();
-    $admin_user = $this->drupalCreateUser(['administer devel_generate']);
+    $admin_user = $this->drupalCreateUser(['administer devel_generate', 'access devel information']);
     $this->drupalLogin($admin_user);
     $this->setUpData();
   }

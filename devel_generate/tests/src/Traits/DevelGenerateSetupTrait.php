@@ -7,6 +7,7 @@ use Drupal\Tests\field\Traits\EntityReferenceTestTrait;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Language\Language;
 use Drupal\taxonomy\Entity\Vocabulary;
+use Drupal\language\Entity\ConfigurableLanguage;
 
 trait DevelGenerateSetupTrait {
 
@@ -32,6 +33,13 @@ trait DevelGenerateSetupTrait {
       $this->addDefaultCommentField('node', 'article');
     }
 
+    // Enable translation for article content type (but not for page).
+    \Drupal::service('content_translation.manager')->setEnabled('node', 'article', TRUE);
+    // Create languages for generated translations.
+    ConfigurableLanguage::createFromLangcode('ca')->save();
+    ConfigurableLanguage::createFromLangcode('de')->save();
+    ConfigurableLanguage::createFromLangcode('fr')->save();
+
     // Creating a vocabulary to associate taxonomy terms generated.
     $this->vocabulary = Vocabulary::create([
       'name' => $this->randomMachineName(),
@@ -41,6 +49,8 @@ trait DevelGenerateSetupTrait {
       'weight' => mt_rand(0, 10),
     ]);
     $this->vocabulary->save();
+    // Enable translation for this vocabulary.
+    \Drupal::service('content_translation.manager')->setEnabled('taxonomy_term', $this->vocabulary->id(), TRUE);
 
     // Creates a field of an entity reference field storage on article.
     $field_name = 'taxonomy_' . $this->vocabulary->id();

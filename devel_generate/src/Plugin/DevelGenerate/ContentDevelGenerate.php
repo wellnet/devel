@@ -12,8 +12,11 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\content_translation\ContentTranslationManagerInterface;
+use Drupal\node\NodeInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\UrlGeneratorInterface;
+use Drupal\Core\Path\AliasStorageInterface;
 use Drupal\devel_generate\DevelGenerateBase;
 use Drupal\field\Entity\FieldConfig;
 use Drush\Utils\StringUtils;
@@ -74,11 +77,25 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
   protected $languageManager;
 
   /**
+   * The content translation manager.
+   *
+   * @var \Drupal\content_translation\ContentTranslationManagerInterface
+   */
+  protected $contentTranslationManager;
+
+  /**
    * The url generator service.
    *
    * @var \Drupal\Core\Routing\UrlGeneratorInterface
    */
   protected $urlGenerator;
+
+  /**
+   * The alias storage service.
+   *
+   * @var \Drupal\Core\Path\AliasStorageInterface
+   */
+  protected $aliasStorage;
 
   /**
    * The date formatter service.
@@ -127,8 +144,12 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
    *   The comment manager service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
+   * @param \Drupal\content_translation\ContentTranslationManagerInterface $content_translation_manager
+   *   The content translation manager service.
    * @param \Drupal\Core\Routing\UrlGeneratorInterface $url_generator
    *   The url generator service.
+   * @param \Drupal\Core\Path\AliasStorageInterface $alias_storage
+   *   The alias storage service.
    * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
    *   The date formatter service.
    * @param \Drupal\Core\Datetime\Time $time
@@ -136,7 +157,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
    * @param \Drupal\Core\Database\Connection $database
    *   Database connection.
    */
-  public function __construct(array $configuration, $plugin_id, array $plugin_definition, EntityStorageInterface $node_storage, EntityStorageInterface $node_type_storage, ModuleHandlerInterface $module_handler, CommentManagerInterface $comment_manager = NULL, LanguageManagerInterface $language_manager, UrlGeneratorInterface $url_generator, DateFormatterInterface $date_formatter, Time $time, Connection $database) {
+  public function __construct(array $configuration, $plugin_id, array $plugin_definition, EntityStorageInterface $node_storage, EntityStorageInterface $node_type_storage, ModuleHandlerInterface $module_handler, CommentManagerInterface $comment_manager = NULL, LanguageManagerInterface $language_manager, ContentTranslationManagerInterface $content_translation_manager = NULL, UrlGeneratorInterface $url_generator, AliasStorageInterface $alias_storage, DateFormatterInterface $date_formatter, Time $time, Connection $database) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->moduleHandler = $module_handler;
@@ -144,7 +165,9 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     $this->nodeTypeStorage = $node_type_storage;
     $this->commentManager = $comment_manager;
     $this->languageManager = $language_manager;
+    $this->contentTranslationManager = $content_translation_manager;
     $this->urlGenerator = $url_generator;
+    $this->aliasStorage = $alias_storage;
     $this->dateFormatter = $date_formatter;
     $this->time = $time;
     $this->database = $database;
@@ -162,7 +185,9 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       $container->get('module_handler'),
       $container->has('comment.manager') ? $container->get('comment.manager') : NULL,
       $container->get('language_manager'),
+      $container->has('content_translation.manager') ? $container->get('content_translation.manager') : NULL,
       $container->get('url_generator'),
+      $container->get('path.alias_storage'),
       $container->get('date.formatter'),
       $container->get('datetime.time'),
       $container->get('database')
@@ -290,23 +315,8 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       '#access' => $this->moduleHandler->moduleExists('statistics'),
     ];
 
-    $options = [];
-    // We always need a language.
-    $languages = $this->languageManager->getLanguages(LanguageInterface::STATE_ALL);
-    foreach ($languages as $langcode => $language) {
-      $options[$langcode] = $language->getName();
-    }
-
-    $form['add_language'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Set language on nodes'),
-      '#multiple' => TRUE,
-      '#description' => $this->t('Requires locale.module'),
-      '#options' => $options,
-      '#default_value' => [
-        $this->languageManager->getDefaultLanguage()->getId(),
-      ],
-    ];
+    // Add the language and translation options.
+    $form += $this->getLanguageForm('nodes');
 
     $form['#redirect'] = FALSE;
 
@@ -348,6 +358,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       // Generate nodes.
       $this->develGenerateContentPreNode($values);
       $start = time();
+      $values['num_translations'] = 0;
       for ($i = 1; $i <= $values['num']; $i++) {
         $this->develGenerateContentAddNode($values);
         if ($this->isDrush8() && function_exists('drush_log') && $i % drush_get_option('feedback', 1000) == 0) {
@@ -357,7 +368,10 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
         }
       }
     }
-    $this->setMessage($this->formatPlural($values['num'], '1 node created.', 'Finished creating @count nodes'));
+    $this->setMessage($this->formatPlural($values['num'], 'Created 1 node', 'Created @count nodes'));
+    if ($values['num_translations'] > 0) {
+      $this->setMessage($this->formatPlural($values['num_translations'], 'Created 1 node translation', 'Created @count node translations'));
+    }
   }
 
   /**
@@ -404,6 +418,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
   public function batchContentPreNode($vars, &$context) {
     $context['results'] = $vars;
     $context['results']['num'] = 0;
+    $context['results']['num_translations'] = 0;
     $this->develGenerateContentPreNode($context['results']);
   }
 
@@ -418,6 +433,9 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       $this->develGenerateContentAddNode($context['results']);
     }
     $context['results']['num']++;
+    if (!empty($vars['num_translations'])) {
+      $context['results']['num_translations'] += $vars['num_translations'];
+    }
   }
 
   /**
@@ -436,13 +454,16 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
    * {@inheritdoc}
    */
   public function validateDrushParams(array $args, array $options = []) {
-    $add_language = $this->isDrush8() ? drush_get_option('languages') : $options['languages'];
-    if (!empty($add_language)) {
-      $add_language = explode(',', str_replace(' ', '', $add_language));
-      // Intersect with the enabled languages to make sure the language args
-      // passed are actually enabled.
-      $values['values']['add_language'] = array_intersect($add_language, array_keys($this->languageManager->getLanguages(LanguageInterface::STATE_ALL)));
-    }
+    $add_language = $this->isDrush8() ?
+      explode(',', drush_get_option('languages', '')) : StringUtils::csvToArray($options['languages']);
+    // Intersect with the enabled languages to make sure the language args
+    // passed are actually enabled.
+    $valid_languages = array_keys($this->languageManager->getLanguages(LanguageInterface::STATE_ALL));
+    $values['add_language'] = array_intersect($add_language, $valid_languages);
+
+    $translate_language = $this->isDrush8() ?
+      explode(',', drush_get_option('translations', '')) : StringUtils::csvToArray($options['translations']);
+    $values['translate_language'] = array_intersect($translate_language, $valid_languages);
 
     $values['kill'] = $this->isDrush8() ? drush_get_option('kill') : $options['kill'];
     $values['title_length'] = 6;
@@ -527,7 +548,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     $node_type = array_rand($results['node_types']);
     $uid = $users[array_rand($users)];
 
-    $node = $this->nodeStorage->create([
+    $values = [
       'nid' => NULL,
       'type' => $node_type,
       'title' => $node_type . '_' . $this->getRandom()->sentences(mt_rand(1, $results['title_length']), TRUE),
@@ -536,8 +557,13 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       'status' => TRUE,
       'promote' => mt_rand(0, 1),
       'created' => $this->time->getRequestTime() - mt_rand(0, $results['time_range']),
-      'langcode' => $this->getLangcode($results),
-    ]);
+    ];
+
+    if (isset($results['add_language'])) {
+      $values['langcode'] = $this->getLangcode($results['add_language']);
+    }
+
+    $node = $this->nodeStorage->create($values);
 
     // A flag to let hook_node_insert() implementations know that this is a
     // generated node.
@@ -549,20 +575,57 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     // See devel_generate_entity_insert() for actions that happen before and after
     // this save.
     $node->save();
+
+    // Add translations.
+    if (isset($results['translate_language']) && !empty($results['translate_language'])) {
+      $this->develGenerateContentAddNodeTranslation($results, $node);
+    }
   }
 
   /**
-   * Determine language based on $results.
+   * Create translation for the given node.
+   *
+   * @param array $results
+   *   Results array.
+   * @param \Drupal\node\NodeInterface $node
+   *   Node to add translations to.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  protected function getLangcode($results) {
-    if (isset($results['add_language'])) {
-      $langcodes = $results['add_language'];
-      $langcode = $langcodes[array_rand($langcodes)];
+  protected function develGenerateContentAddNodeTranslation(&$results, NodeInterface $node) {
+    if (is_null($this->contentTranslationManager)) {
+      return;
     }
-    else {
-      $langcode = $this->languageManager->getDefaultLanguage()->getId();
+    if (!$this->contentTranslationManager->isEnabled('node', $node->getType())) {
+      return;
     }
-    return $langcode;
+    if ($node->langcode == LanguageInterface::LANGCODE_NOT_SPECIFIED || $node->langcode == LanguageInterface::LANGCODE_NOT_APPLICABLE){
+      return;
+    }
+
+    if (!isset($results['num_translations'])) {
+      $results['num_translations'] = 0;
+    }
+    // Translate node to each target language.
+    $skip_languages = [LanguageInterface::LANGCODE_NOT_SPECIFIED, LanguageInterface::LANGCODE_NOT_APPLICABLE, $node->langcode->value];
+    foreach ($results['translate_language'] as $langcode) {
+      if (in_array($langcode, $skip_languages)) {
+        continue;
+      }
+      $translation_node = $node->addTranslation($langcode);
+      $translation_node->devel_generate = $results;
+      $translation_node->setTitle($node->getTitle() . ' (' . $langcode . ')');
+      $this->populateFields($translation_node);
+      $translation_node->save();
+      if ($translation_node->id() > 0 && !empty($results['add_alias'])) {
+        $path = [
+          'source' => '/node/' . $translation_node->id(),
+          'alias' => '/node-' . $translation_node->id() . '-' . $translation_node->bundle(),
+        ];
+        $this->aliasStorage->save($path['source'], $path['alias'], $langcode);
+      }
+      $results['num_translations']++;
+    }
   }
 
   /**

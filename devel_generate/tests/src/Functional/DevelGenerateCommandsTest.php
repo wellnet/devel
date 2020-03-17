@@ -33,7 +33,10 @@ class DevelGenerateCommandsTest extends BrowserTestBase {
    */
   protected static $modules = [
     'comment',
+    'content_translation',
+    'devel',
     'devel_generate',
+    'language',
     'media',
     'menu_ui',
     'node',
@@ -67,6 +70,17 @@ class DevelGenerateCommandsTest extends BrowserTestBase {
     $this->drush('devel-generate-terms', [55], ['kill' => NULL, 'bundles' => $this->vocabulary->id()]);
     $term = Term::load(55);
     $this->assertEquals($this->vocabulary->id(), $term->bundle());
+
+    // Make sure terms get created, with proper language.
+    $this->drush('devel-generate-terms', [10], ['kill' => null, 'bundles' => $this->vocabulary->id(), 'languages' => 'fr']);
+    $term = Term::load(60);
+    $this->assertEquals($term->language()->getId(), 'fr');
+
+    // Make sure terms gets created, with proper translation.
+    $this->drush('devel-generate-terms', [10], ['kill' => null, 'bundles' => $this->vocabulary->id(), 'languages' => 'fr', 'translations' => 'de']);
+    $term = Term::load(70);
+    $this->assertTrue($term->hasTranslation('de'));
+    $this->assertTrue($term->hasTranslation('fr'));
 
     // Make sure vocabs get created.
     $this->drush('devel-generate-vocabs', [5], ['kill' => NULL]);
@@ -106,6 +120,19 @@ class DevelGenerateCommandsTest extends BrowserTestBase {
     $this->assertNotEmpty($node);
     $messages = $this->getErrorOutput();
     $this->assertContains('Finished 55 elements created successfully.', $messages, 'devel-generate-content batch ending message not found', TRUE);
+
+    // Make sure content gets created, with proper language.
+    $this->drush('devel-generate-content', [10], ['kill' => null, 'languages' => 'fr']);
+    $node = Node::load(110);
+    $this->assertEquals($node->language()->getId(), 'fr');
+
+    // Make sure content gets created with all translations.
+    $this->drush('devel-generate-content', [10], ['kill' => null, 'bundles' => 'article', 'languages' => 'fr', 'translations' => 'de']);
+    $nodes = \Drupal::entityQuery('node')->condition('type', 'article')->execute();
+    $this->assertCount(10, $nodes);
+    $node = Node::load(end($nodes));
+    $this->assertTrue($node->hasTranslation('de'));
+    $this->assertTrue($node->hasTranslation('fr'));
 
     // Create two media types.
     $media_type1 = $this->createMediaType('image');

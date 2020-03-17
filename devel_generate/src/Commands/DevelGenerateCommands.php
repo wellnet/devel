@@ -115,9 +115,11 @@ class DevelGenerateCommands extends DrushCommands {
    * @option kill Delete all terms before generating new ones.
    * @option bundles A comma-delimited list of machine names for the vocabularies where terms will be created.
    * @option feedback An integer representing interval for insertion rate logging.
+   * @option languages A comma-separated list of language codes
+   * @option translations A comma-separated list of language codes for translations.
    * @aliases gent, devel-generate-terms
    */
-  public function terms($num = 50, $options = ['kill' => FALSE, 'bundles' => NULL, 'feedback' => 1000]) {
+  public function terms($num = 50, $options = ['kill' => FALSE, 'bundles' => NULL, 'feedback' => 1000, 'languages' => NULL, 'translations' => NULL]) {
     $this->generate();
   }
 
@@ -174,10 +176,11 @@ class DevelGenerateCommands extends DrushCommands {
    * @option feedback An integer representing interval for insertion rate logging.
    * @option skip-fields A comma delimited list of fields to omit when generating random values
    * @option languages A comma-separated list of language codes
+   * @option translations A comma-separated list of language codes for translations.
    * @aliases genc, devel-generate-content
    * @validate-module-enabled node
    */
-  public function content($num = 50, $max_comments = 0, $options = ['kill' => FALSE, 'bundles' => 'page,article', 'feedback' => 1000]) {
+  public function content($num = 50, $max_comments = 0, $options = ['kill' => FALSE, 'bundles' => 'page,article', 'feedback' => 1000, 'languages' => NULL, 'translations' => NULL]) {
     $this->generate();
   }
 

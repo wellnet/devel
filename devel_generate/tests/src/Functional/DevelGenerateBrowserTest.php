@@ -3,6 +3,7 @@
 namespace Drupal\Tests\devel_generate\Functional;
 
 use Drupal\node\Entity\Node;
+use Drupal\taxonomy\Entity\Term;
 use Drupal\Tests\media\Traits\MediaTypeCreationTrait;
 
 /**
@@ -51,9 +52,10 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
       'add_alias' => 1,
     ];
     $this->drupalPostForm('admin/config/development/generate/content', $edit, 'Generate');
-    $this->assertSession()->pageTextContains('Deleted 1 nodes.');
-    $this->assertSession()->pageTextContains('Finished creating 4 nodes');
+    $this->assertSession()->pageTextContains('Deleted 1 node');
+    $this->assertSession()->pageTextContains('Created 4 nodes');
     $this->assertSession()->pageTextContains('Generate process complete.');
+    $this->assertSession()->pageTextNotContains('translations');
 
     // Tests that nodes have been created in the generation process.
     $nodes = Node::loadMultiple();
@@ -66,6 +68,44 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
       $this->assertSession()->statusCodeEquals('200');
       $this->assertSession()->pageTextContains($node->getTitle(), 'Generated url alias for the node works.');
     }
+
+    $edit = [
+      'num' => 3,
+      'kill' => TRUE,
+      'node_types[article]' => TRUE,
+      'add_language[]' => ['en'],
+      'translate_language[]' => ['de', 'ca'],
+    ];
+    $this->drupalPostForm('admin/config/development/generate/content', $edit, 'Generate');
+    $this->assertSession()->pageTextContains('Deleted 4 nodes');
+    $this->assertSession()->pageTextContains('Created 3 nodes');
+    // Two translations for each node makes six.
+    $this->assertSession()->pageTextContains('Created 6 node translations');
+    $articles = \Drupal::entityQuery('node')->execute();
+    $this->assertCount(3, $articles);
+    $node = Node::load(end($articles));
+    $this->assertTrue($node->hasTranslation('de'));
+    $this->assertTrue($node->hasTranslation('ca'));
+    $this->assertFalse($node->hasTranslation('fr'));
+
+    // The 'page' content type is not enabled for translation.
+    $edit = [
+      'num' => 2,
+      'kill' => TRUE,
+      'node_types[page]' => TRUE,
+      'add_language[]' => ['en'],
+      'translate_language[]' => ['fr'],
+    ];
+    $this->drupalPostForm('admin/config/development/generate/content', $edit, 'Generate');
+    $this->assertSession()->pageTextNotContains('Deleted');
+    $this->assertSession()->pageTextContains('Created 2 nodes');
+    $this->assertSession()->pageTextNotContains('node translations');
+    // Check that 'kill' has not deleted the articles.
+    $this->assertCount(5, \Drupal::entityQuery('node')->execute());
+    $pages = \Drupal::entityQuery('node')->condition('type', 'page')->execute();
+    $this->assertCount(2, $pages);
+    $node = Node::load(end($pages));
+    $this->assertFalse($node->hasTranslation('fr'));
   }
 
   /**
@@ -79,7 +119,27 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
     ];
     $this->drupalPostForm('admin/config/development/generate/term', $edit, 'Generate');
     $this->assertSession()->pageTextContains('Created the following new terms: ');
+    $this->assertSession()->pageTextNotContains('translations');
     $this->assertSession()->pageTextContains('Generate process complete.');
+    $this->assertCount(5, \Drupal::entityQuery('taxonomy_term')->execute());
+
+    // Generate terms with translations.
+    $edit = [
+      'vids[]' => $this->vocabulary->id(),
+      'num' => 3,
+      'add_language[]' => ['en'],
+      'translate_language[]' => ['ca'],
+    ];
+    $this->drupalPostForm('admin/config/development/generate/term', $edit, 'Generate');
+    $this->assertSession()->pageTextContains('Created 3 term translations');
+    // Not using 'kill' so there should be 8 terms.
+    $terms = \Drupal::entityQuery('taxonomy_term')->execute();
+    $this->assertCount(8, $terms);
+    // Check the translations created (and not created).
+    $term = Term::load(end($terms));
+    $this->assertTrue($term->hasTranslation('ca'));
+    $this->assertFalse($term->hasTranslation('de'));
+    $this->assertFalse($term->hasTranslation('fr'));
   }
 
   /**
@@ -180,6 +240,21 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
     // Tests that the expected number of nodes have been created.
     $count = count(Node::loadMultiple());
     $this->assertEquals(55, $count, sprintf('The expected total number of nodes is %s, found %s', 55, $count));
+
+    // Create nodes with translations via batch.
+    $edit = [
+      'num' => 52,
+      'kill' => TRUE,
+      'node_types[article]' => TRUE,
+      'node_types[page]' => TRUE,
+      'add_language[]' => ['en'],
+      'translate_language[]' => ['de', 'ca'],
+    ];
+    $this->drupalPostForm('admin/config/development/generate/content', $edit, 'Generate');
+    $this->assertCount(52, \Drupal::entityQuery('node')->execute());
+    // Only aticles will have translations so get that number.
+    $articles = \Drupal::entityQuery('node')->condition('type', 'article')->execute();
+    $this->assertSession()->pageTextContains(sprintf('Finished 52 elements and %s translations created successfully.', 2 * count($articles)));
 
     // Generate only articles.
     $edit = [

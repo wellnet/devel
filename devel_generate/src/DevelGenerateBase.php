@@ -6,6 +6,7 @@ use Drupal\Component\Utility\Random;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Plugin\PluginBase;
 
@@ -201,6 +202,72 @@ abstract class DevelGenerateBase extends PluginBase implements DevelGenerateBase
    */
   protected function isDrush8() {
     return function_exists('drush_drupal_load_autoloader');
+  }
+
+  /**
+   * Creates the language and translation section of the form.
+   *
+   * This is used by both Content and Term generation.
+   *
+   * @param string $items
+   *   The name of the things that are being generated - 'nodes' or 'terms'.
+   *
+   * @return array
+   *   The language details section of the form.
+   */
+  protected function getLanguageForm($items) {
+    // We always need a language, even if the language module is not installed.
+    $options = [];
+    $languages = $this->languageManager->getLanguages(LanguageInterface::STATE_CONFIGURABLE);
+    foreach ($languages as $langcode => $language) {
+      $options[$langcode] = $language->getName();
+    }
+
+    $language_module_exists = $this->moduleHandler->moduleExists('language');
+    $translation_module_exists = $this->moduleHandler->moduleExists('content_translation');
+
+    $form['language'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Language'),
+      '#open' => $language_module_exists,
+    ];
+    $form['language']['add_language'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Select the primary language(s) for @items', ['@items' => $items]),
+      '#multiple' => TRUE,
+      '#description' => $language_module_exists ? '' : $this->t('Disabled - requires Language module'),
+      '#options' => $options,
+      '#default_value' => [
+        $this->languageManager->getDefaultLanguage()->getId(),
+      ],
+      '#disabled' => !$language_module_exists,
+    ];
+    $form['language']['translate_language'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Select the language(s) for translated @items', ['@items' => $items]),
+      '#multiple' => TRUE,
+      '#description' => $translation_module_exists ? $this->t('Translated @items will be created for each language selected.', ['@items' => $items]) : $this->t('Disabled - requires Content Translation module.'),
+      '#options' => $options,
+      '#disabled' => !$translation_module_exists,
+    ];
+    return $form;
+  }
+
+  /**
+   * Return a language code.
+   *
+   * @param array $add_language
+   *   Optional array of language codes from which to select one at random.
+   *   If empty then return the site's default language.
+   *
+   * @return string
+   *   The language code to use.
+   */
+  protected function getLangcode(array $add_language) {
+    if (empty($add_language)) {
+      return $this->languageManager->getDefaultLanguage()->getId();
+    }
+    return $add_language[array_rand($add_language)];
   }
 
 }

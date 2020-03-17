@@ -42,6 +42,8 @@ function devel_generate_drush_command() {
       'bundles' => 'A comma-delimited list of machine names for the vocabularies where terms will be created.',
       'feedback' => 'An integer representing interval for insertion rate logging. Defaults to 1000',
       'pipe' => 'Returns the list of generated terms, one per line.',
+      'languages' => 'A comma-separated list of language codes',
+      'translations' => 'A comma-separated list of language codes for translations.',
     ],
     'aliases' => ['gent'],
 
@@ -78,6 +80,7 @@ function devel_generate_drush_command() {
       'feedback' => 'An integer representing interval for insertion rate logging. Defaults to 1000',
       'skip-fields' => 'A comma delimited list of fields to omit when generating random values',
       'languages' => 'A comma-separated list of language codes',
+      'translations' => 'A comma-separated list of language codes for translations.',
     ],
     'aliases' => ['genc'],
   ];
