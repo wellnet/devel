@@ -18,5 +18,6 @@
   <exclude-pattern>vendor</exclude-pattern>
   <exclude-pattern>_ignore*</exclude-pattern>
   <exclude-pattern>*.patch</exclude-pattern>
+  <exclude-pattern>*interdif*</exclude-pattern>
 
 </ruleset>
