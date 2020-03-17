@@ -4,6 +4,7 @@ namespace Drupal\devel\Plugin\Mail;
 
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Mail\MailFormatHelper;
 use Drupal\Core\Mail\MailInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -53,6 +54,13 @@ class DevelMailLog implements MailInterface, ContainerFactoryPluginInterface {
   protected $config;
 
   /**
+   * The file system service.
+   *
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  protected $fileSystem;
+
+  /**
    * Constructs a new DevelMailLog object.
    *
    * @param array $configuration
@@ -63,9 +71,12 @@ class DevelMailLog implements MailInterface, ContainerFactoryPluginInterface {
    *   The plugin implementation definition.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory service.
+   * @param \Drupal\Core\File\FileSystemInterface $file_system
+   *   The file system service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, FileSystemInterface $file_system) {
     $this->config = $config_factory->get('devel.settings');
+    $this->fileSystem = $file_system;
   }
 
   /**
@@ -76,7 +87,8 @@ class DevelMailLog implements MailInterface, ContainerFactoryPluginInterface {
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('file_system')
     );
   }
 
@@ -177,7 +189,7 @@ class DevelMailLog implements MailInterface, ContainerFactoryPluginInterface {
    *   protected (if it is public). FALSE otherwise.
    */
   protected function prepareDirectory($directory) {
-    if (!file_prepare_directory($directory, FILE_CREATE_DIRECTORY)) {
+    if (!$this->fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY)) {
       return FALSE;
     }
     if (0 === strpos($directory, 'public://')) {
