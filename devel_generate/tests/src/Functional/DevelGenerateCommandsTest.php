@@ -131,8 +131,8 @@ class DevelGenerateCommandsTest extends BrowserTestBase {
    * Tests generating content.
    */
   public function testDrushGenerateContent() {
-    // Make sure content gets created.
-    $this->drush('devel-generate-content', [21], ['kill' => NULL]);
+    // Generate content using the minimum parameters.
+    $this->drush('devel-generate-content', [21]);
     $node = Node::load(21);
     $this->assertNotEmpty($node);
 
@@ -146,28 +146,32 @@ class DevelGenerateCommandsTest extends BrowserTestBase {
 
     // Generate content with a higher number that triggers batch running.
     $this->drush('devel-generate-content', [55], ['kill' => NULL]);
-    $node = Node::load(55);
-    $this->assertNotEmpty($node);
+    $nodes = \Drupal::entityQuery('node')->execute();
+    $this->assertCount(55, $nodes);
     $messages = $this->getErrorOutput();
     $this->assertContains('Finished 55 elements created successfully.', $messages, 'devel-generate-content batch ending message not found', TRUE);
 
-    // Make sure content gets created, with proper language.
+    // Generate content with specified language.
     $this->drush('devel-generate-content', [10], ['kill' => NULL, 'languages' => 'fr']);
-    $node = Node::load(110);
+    $nodes = \Drupal::entityQuery('node')->execute();
+    $node = Node::load(end($nodes));
     $this->assertEquals($node->language()->getId(), 'fr');
 
-    // Make sure content gets created with all translations.
-    $this->drush('devel-generate-content', [10], [
+    // Generate content with translations.
+    $this->drush('devel-generate-content', [18], [
       'kill' => NULL,
-      'bundles' => 'article',
       'languages' => 'fr',
       'translations' => 'de',
     ]);
-    $nodes = \Drupal::entityQuery('node')->condition('type', 'article')->execute();
-    $this->assertCount(10, $nodes);
-    $node = Node::load(end($nodes));
+    // Only articles are enabled for translations.
+    $articles = \Drupal::entityQuery('node')->condition('type', 'article')->execute();
+    $pages = \Drupal::entityQuery('node')->condition('type', 'page')->execute();
+    $this->assertCount(18, $articles + $pages);
+    // Check that the last article has 'de' and 'fr' but no 'ca' translation.
+    $node = Node::load(end($articles));
     $this->assertTrue($node->hasTranslation('de'));
     $this->assertTrue($node->hasTranslation('fr'));
+    $this->assertFalse($node->hasTranslation('ca'));
   }
 
   /**
