@@ -172,6 +172,24 @@ class DevelGenerateCommandsTest extends BrowserTestBase {
     $this->assertTrue($node->hasTranslation('de'));
     $this->assertTrue($node->hasTranslation('fr'));
     $this->assertFalse($node->hasTranslation('ca'));
+
+    // Generate just page content with option --add-type-label.
+    // Note: Use the -v verbose option to get the ending message shown when not
+    // generating enough to trigger batch mode.
+    // @todo Remove -v when the messages are shown for both run types.
+    $this->drush('devel-generate-content -v', [9], [
+      'kill' => NULL,
+      'bundles' => 'page',
+      'add-type-label' => NULL,
+    ]);
+    // Count the page nodes.
+    $nodes = \Drupal::entityQuery('node')->condition('type', 'page')->execute();
+    $this->assertCount(9, $nodes);
+    $messages = $this->getErrorOutput();
+    $this->assertContains('Created 9 nodes', $messages, 'batch end message not found', TRUE);
+    // Load the final node and verify that the title starts with the label.
+    $node = Node::load(end($nodes));
+    $this->assertEquals('Basic Page - ', substr($node->title->value, 0, 13));
   }
 
   /**

@@ -217,8 +217,9 @@ class DevelGenerateCommands extends DrushCommands {
    * @option skip-fields A comma delimited list of fields to omit when generating random values
    * @option languages A comma-separated list of language codes
    * @option translations A comma-separated list of language codes for translations.
+   * @option add-type-label Add the content type label to the front of the node title
    */
-  public function content($num = 50, $max_comments = 0, array $options = ['kill' => FALSE, 'bundles' => 'page,article', 'feedback' => 1000, 'languages' => NULL, 'translations' => NULL]) {
+  public function content($num = 50, $max_comments = 0, array $options = ['kill' => FALSE, 'bundles' => 'page,article', 'feedback' => 1000, 'languages' => NULL, 'translations' => NULL, 'add-type-label' => FALSE]) {
     $this->generate();
   }
 

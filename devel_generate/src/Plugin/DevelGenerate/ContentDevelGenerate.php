@@ -35,7 +35,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *     "num" = 50,
  *     "kill" = FALSE,
  *     "max_comments" = 0,
- *     "title_length" = 4
+ *     "title_length" = 4,
+ *     "add_type_label" = FALSE
  *   }
  * )
  */
@@ -301,6 +302,12 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       '#min' => 1,
       '#max' => 255,
     ];
+    $form['add_type_label'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Prefix the title with the content type label.'),
+      '#description' => $this->t('This will not count against the maximum number of title words specified above.'),
+      '#default_value' => $this->getSetting('add_type_label'),
+    ];
     $form['add_alias'] = [
       '#type' => 'checkbox',
       '#disabled' => !$this->moduleHandler->moduleExists('path'),
@@ -477,6 +484,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       explode(',', drush_get_option('translations', '')) : StringUtils::csvToArray($options['translations']);
     $values['translate_language'] = array_intersect($translate_language, $valid_languages);
 
+    $values['add_type_label'] = $this->isDrush8() ? drush_get_option('add-type-label') : $options['add-type-label'];
     $values['kill'] = $this->isDrush8() ? drush_get_option('kill') : $options['kill'];
     $values['title_length'] = 6;
     $values['num'] = array_shift($args);
@@ -565,10 +573,13 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     $node_type = array_rand($results['node_types']);
     $uid = $users[array_rand($users)];
 
+    // Add the content type label if required.
+    $title_prefix = $results['add_type_label'] ? $this->nodeTypeStorage->load($node_type)->label() . ' - ' : '';
+
     $values = [
       'nid' => NULL,
       'type' => $node_type,
-      'title' => $node_type . '_' . $this->getRandom()->sentences(mt_rand(1, $results['title_length']), TRUE),
+      'title' => $title_prefix . $this->getRandom()->sentences(mt_rand(1, $results['title_length']), TRUE),
       'uid' => $uid,
       'revision' => mt_rand(0, 1),
       'status' => TRUE,

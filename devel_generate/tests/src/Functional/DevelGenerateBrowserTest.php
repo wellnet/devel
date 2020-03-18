@@ -106,12 +106,32 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
     $this->assertCount(2, $pages);
     $node = Node::load(end($pages));
     $this->assertFalse($node->hasTranslation('fr'));
+
+    // Create content with add-content-label option.
+    $edit = [
+      'num' => 5,
+      'kill' => TRUE,
+      'node_types[article]' => TRUE,
+      'add_type_label' => TRUE,
+    ];
+    $this->drupalPostForm('admin/config/development/generate/content', $edit, 'Generate');
+    $this->assertSession()->pageTextContains('Created 5 nodes');
+    $this->assertSession()->pageTextContains('Generate process complete');
+
+    // Count the articles created in the generation process.
+    $nodes = \Drupal::entityQuery('node')->condition('type', 'article')->execute();
+    $this->assertCount(5, $nodes);
+
+    // Load the final node and verify that the title starts with the label.
+    $node = Node::load(end($nodes));
+    $this->assertEquals('Article - ', substr($node->title->value, 0, 10));
   }
 
   /**
    * Tests generating terms.
    */
   public function testDevelGenerateTerms() {
+    // Generate terms.
     $edit = [
       'vids[]' => $this->vocabulary->id(),
       'num' => 5,
