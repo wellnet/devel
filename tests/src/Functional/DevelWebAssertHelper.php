@@ -23,7 +23,7 @@ trait DevelWebAssertHelper {
   protected function assertLocalTasks(array $routes, $level = 0) {
     $tab_label = $level == 0 ? 'Primary tabs' : 'Secondary tabs';
     $elements = $this->xpath('//h2[text()="' . $tab_label . '"]/following-sibling::ul//a');
-    $this->assertTrue(count($elements), 'Local tasks found.');
+    $this->assertNotEmpty($elements, 'Local tasks not found.');
     foreach ($routes as $index => $route_info) {
       list($route_name, $route_parameters) = $route_info;
       $expected = Url::fromRoute($route_name, $route_parameters)->toString();
