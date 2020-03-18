@@ -59,14 +59,19 @@ class DevelGenerateCommandsTest extends BrowserTestBase {
   }
 
   /**
-   * Tests all generation commands.
+   * Tests generating users.
    */
-  public function testGeneration() {
+  public function testDrushGenerateUsers() {
     // Make sure users get created, and with correct roles.
     $this->drush('devel-generate-users', [55], ['kill' => NULL, 'roles' => 'administrator']);
     $user = User::load(55);
     $this->assertTrue($user->hasRole('administrator'));
+  }
 
+  /**
+   * Tests generating terms.
+   */
+  public function testDrushGenerateTerms() {
     // Make sure terms get created, and with correct vocab.
     $this->drush('devel-generate-terms', [55], ['kill' => NULL, 'bundles' => $this->vocabulary->id()]);
     $term = Term::load(55);
@@ -91,14 +96,24 @@ class DevelGenerateCommandsTest extends BrowserTestBase {
     $term = Term::load(70);
     $this->assertTrue($term->hasTranslation('de'));
     $this->assertTrue($term->hasTranslation('fr'));
+  }
 
+  /**
+   * Tests generating vocabularies.
+   */
+  public function testDrushGenerateVocabs() {
     // Make sure vocabs get created.
     $this->drush('devel-generate-vocabs', [5], ['kill' => NULL]);
     $vocabs = Vocabulary::loadMultiple();
     $this->assertGreaterThan(4, count($vocabs));
     $vocab = array_pop($vocabs);
     $this->assertNotEmpty($vocab);
+  }
 
+  /**
+   * Tests generating menus.
+   */
+  public function testDrushGenerateMenus() {
     // Make sure menus, and with correct properties.
     $this->drush('devel-generate-menus', [1, 5], ['kill' => NULL]);
     $menus = Menu::loadMultiple();
@@ -110,7 +125,12 @@ class DevelGenerateCommandsTest extends BrowserTestBase {
     }
     $link = MenuLinkContent::load(5);
     $this->assertEquals($menu->id(), $link->getMenuName());
+  }
 
+  /**
+   * Tests generating content.
+   */
+  public function testDrushGenerateContent() {
     // Make sure content gets created.
     $this->drush('devel-generate-content', [21], ['kill' => NULL]);
     $node = Node::load(21);
@@ -148,7 +168,12 @@ class DevelGenerateCommandsTest extends BrowserTestBase {
     $node = Node::load(end($nodes));
     $this->assertTrue($node->hasTranslation('de'));
     $this->assertTrue($node->hasTranslation('fr'));
+  }
 
+  /**
+   * Tests generating media.
+   */
+  public function testDrushGenerateMedia() {
     // Create two media types.
     $media_type1 = $this->createMediaType('image');
     $media_type2 = $this->createMediaType('audio_file');
