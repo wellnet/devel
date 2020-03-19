@@ -166,7 +166,8 @@ class DevelCommands extends DrushCommands implements SiteAliasManagerAwareInterf
    */
   public function interactEvent(Input $input, Output $output) {
     $dispatcher = $this->getEventDispatcher();
-    if (!$input->getArgument('event')) {
+    $event = $input->getArgument('event');
+    if (!$event) {
       // @todo Expand this list.
       $events = ['kernel.controller', 'kernel.exception', 'kernel.request', 'kernel.response', 'kernel.terminate', 'kernel.view'];
       $events = array_combine($events, $events);
