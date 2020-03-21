@@ -35,6 +35,9 @@ function devel_generate_menu_links_discovered_alter(&$links) {
  *
  * @param \Drupal\Core\Entity\EntityInterface $entity
  *   The base node created on submit. Inspects $node->devel_generate.
+ *
+ * @todo Can more of this processing move into develGenerateContentAddNode() ?
+ * Adding url alias is now moved.
  */
 function devel_generate_entity_insert(EntityInterface $entity) {
   if ($entity->getEntityTypeId() != 'node' || !isset($entity->devel_generate)) {
@@ -50,15 +53,6 @@ function devel_generate_entity_insert(EntityInterface $entity) {
         devel_generate_add_comments($entity, $field_definition, $results['users'], $results['max_comments'], $results['title_length']);
       }
     }
-  }
-
-  // Add an url alias. Cannot happen before save because we don't know the nid.
-  if (!empty($results['add_alias'])) {
-    $path = [
-      'source' => '/node/' . $entity->id(),
-      'alias' => '/node-' . $entity->id() . '-' . $entity->bundle(),
-    ];
-    \Drupal::service('path.alias_storage')->save($path['source'], $path['alias'], $entity->language()->getId());
   }
 
   // Add node statistics.

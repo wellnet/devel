@@ -75,6 +75,7 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
       'node_types[article]' => TRUE,
       'add_language[]' => ['en'],
       'translate_language[]' => ['de', 'ca'],
+      'add_alias' => TRUE,
     ];
     $this->drupalPostForm('admin/config/development/generate/content', $edit, 'Generate');
     $this->assertSession()->pageTextContains('Deleted 4 nodes');
@@ -88,6 +89,19 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
     $this->assertTrue($node->hasTranslation('ca'));
     $this->assertFalse($node->hasTranslation('fr'));
 
+    // Check url alias for each of the translations.
+    foreach (Node::loadMultiple($articles) as $node) {
+      foreach (['de', 'ca'] as $langcode) {
+        $translation_node = $node->getTranslation($langcode);
+        $alias = 'node-' . $translation_node->id() . '-' . $translation_node->bundle() . '-' . $langcode;
+        $this->drupalGet($langcode . '/' . $alias);
+        $this->assertSession()->statusCodeEquals('200');
+        $this->assertSession()->pageTextContains($translation_node->getTitle());
+      }
+    }
+
+    // Create article to make sure it is not deleted when only killing pages.
+    $article = $this->drupalCreateNode(['type' => 'article', 'title' => 'Alive']);
     // The 'page' content type is not enabled for translation.
     $edit = [
       'num' => 2,
@@ -100,8 +114,8 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
     $this->assertSession()->pageTextNotContains('Deleted');
     $this->assertSession()->pageTextContains('Created 2 nodes');
     $this->assertSession()->pageTextNotContains('node translations');
-    // Check that 'kill' has not deleted the articles.
-    $this->assertCount(5, \Drupal::entityQuery('node')->execute());
+    // Check that 'kill' has not deleted the article.
+    $this->assertNotEmpty(Node::load($article->id()));
     $pages = \Drupal::entityQuery('node')->condition('type', 'page')->execute();
     $this->assertCount(2, $pages);
     $node = Node::load(end($pages));

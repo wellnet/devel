@@ -604,6 +604,16 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     // after this save.
     $node->save();
 
+    // Add url alias if required.
+    if (!empty($results['add_alias'])) {
+      $path = [
+        'source' => '/node/' . $node->id(),
+        'alias' => '/node-' . $node->id() . '-' . $node->bundle(),
+        'langcode' => $values['langcode'] ?? LanguageInterface::LANGCODE_NOT_SPECIFIED,
+      ];
+      $this->aliasStorage->save($path['source'], $path['alias'], $path['langcode']);
+    }
+
     // Add translations.
     if (isset($results['translate_language']) && !empty($results['translate_language'])) {
       $this->develGenerateContentAddNodeTranslation($results, $node);
@@ -652,7 +662,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       if ($translation_node->id() > 0 && !empty($results['add_alias'])) {
         $path = [
           'source' => '/node/' . $translation_node->id(),
-          'alias' => '/node-' . $translation_node->id() . '-' . $translation_node->bundle(),
+          'alias' => '/node-' . $translation_node->id() . '-' . $translation_node->bundle() . '-' . $langcode,
         ];
         $this->aliasStorage->save($path['source'], $path['alias'], $langcode);
       }
