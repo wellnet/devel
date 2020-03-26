@@ -34,7 +34,8 @@
   "support": {
     "issues": "http://drupal.org/project/devel",
     "irc": "irc://irc.freenode.org/drupal-contribute",
-    "source": "http://cgit.drupalcode.org/devel"
+    "docs": "https://www.drupal.org/docs/8/modules/devel",
+    "source": "https://git.drupalcode.org/project/devel"
   },
   "license": "GPL-2.0+",
   "minimum-stability": "dev",
