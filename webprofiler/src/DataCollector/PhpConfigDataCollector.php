@@ -2,7 +2,6 @@
 
 namespace Drupal\webprofiler\DataCollector;
 
-use Drupal\Core\Routing\LinkGeneratorTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
@@ -14,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class PhpConfigDataCollector extends DataCollector implements DrupalDataCollectorInterface {
 
-  use StringTranslationTrait, DrupalDataCollectorTrait, LinkGeneratorTrait;
+  use StringTranslationTrait, DrupalDataCollectorTrait;
 
   /**
    * {@inheritdoc}
