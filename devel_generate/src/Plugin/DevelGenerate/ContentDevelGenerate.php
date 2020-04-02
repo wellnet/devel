@@ -13,12 +13,12 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Path\AliasStorageInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\UrlGeneratorInterface;
 use Drupal\devel_generate\DevelGenerateBase;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\node\NodeInterface;
+use Drupal\path_alias\PathAliasStorage;
 use Drush\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -92,9 +92,9 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
   protected $urlGenerator;
 
   /**
-   * The alias storage service.
+   * The alias storage.
    *
-   * @var \Drupal\Core\Path\AliasStorageInterface
+   * @var \Drupal\path_alias\PathAliasStorage
    */
   protected $aliasStorage;
 
@@ -149,8 +149,8 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
    *   The content translation manager service.
    * @param \Drupal\Core\Routing\UrlGeneratorInterface $url_generator
    *   The url generator service.
-   * @param \Drupal\Core\Path\AliasStorageInterface $alias_storage
-   *   The alias storage service.
+   * @param \Drupal\path_alias\PathAliasStorage $alias_storage
+   *   The alias storage.
    * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
    *   The date formatter service.
    * @param \Drupal\Core\Datetime\Time $time
@@ -158,7 +158,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
    * @param \Drupal\Core\Database\Connection $database
    *   Database connection.
    */
-  public function __construct(array $configuration, $plugin_id, array $plugin_definition, EntityStorageInterface $node_storage, EntityStorageInterface $node_type_storage, ModuleHandlerInterface $module_handler, CommentManagerInterface $comment_manager = NULL, LanguageManagerInterface $language_manager, ContentTranslationManagerInterface $content_translation_manager = NULL, UrlGeneratorInterface $url_generator, AliasStorageInterface $alias_storage, DateFormatterInterface $date_formatter, Time $time, Connection $database) {
+  public function __construct(array $configuration, $plugin_id, array $plugin_definition, EntityStorageInterface $node_storage, EntityStorageInterface $node_type_storage, ModuleHandlerInterface $module_handler, CommentManagerInterface $comment_manager = NULL, LanguageManagerInterface $language_manager, ContentTranslationManagerInterface $content_translation_manager = NULL, UrlGeneratorInterface $url_generator, PathAliasStorage $alias_storage, DateFormatterInterface $date_formatter, Time $time, Connection $database) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->moduleHandler = $module_handler;
@@ -188,7 +188,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       $container->get('language_manager'),
       $container->has('content_translation.manager') ? $container->get('content_translation.manager') : NULL,
       $container->get('url_generator'),
-      $container->get('path.alias_storage'),
+      $entity_type_manager->getStorage('path_alias'),
       $container->get('date.formatter'),
       $container->get('datetime.time'),
       $container->get('database')
@@ -606,12 +606,12 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
 
     // Add url alias if required.
     if (!empty($results['add_alias'])) {
-      $path = [
-        'source' => '/node/' . $node->id(),
+      $path_alias = $this->aliasStorage->create([
+        'path' => '/node/' . $node->id(),
         'alias' => '/node-' . $node->id() . '-' . $node->bundle(),
         'langcode' => $values['langcode'] ?? LanguageInterface::LANGCODE_NOT_SPECIFIED,
-      ];
-      $this->aliasStorage->save($path['source'], $path['alias'], $path['langcode']);
+      ]);
+      $path_alias->save();
     }
 
     // Add translations.
@@ -660,11 +660,12 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       $this->populateFields($translation_node);
       $translation_node->save();
       if ($translation_node->id() > 0 && !empty($results['add_alias'])) {
-        $path = [
-          'source' => '/node/' . $translation_node->id(),
+        $path_alias = $this->aliasStorage->create([
+          'path' => '/node/' . $translation_node->id(),
           'alias' => '/node-' . $translation_node->id() . '-' . $translation_node->bundle() . '-' . $langcode,
-        ];
-        $this->aliasStorage->save($path['source'], $path['alias'], $langcode);
+          'langcode' => $langcode,
+        ]);
+        $path_alias->save();
       }
       $results['num_translations']++;
     }
