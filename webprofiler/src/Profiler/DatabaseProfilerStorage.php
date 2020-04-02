@@ -31,7 +31,7 @@ class DatabaseProfilerStorage implements ProfilerStorageInterface {
   /**
    * {@inheritdoc}
    */
-  public function find($ip, $url, $limit, $method, $start = NULL, $end = NULL) {
+  public function find($ip, $url, $limit, $method, $start = NULL, $end = NULL): array {
     $select = $this->database->select('webprofiler', 'wp', ['fetch' => \PDO::FETCH_ASSOC]);
 
     if (NULL === $start) {
@@ -80,7 +80,7 @@ class DatabaseProfilerStorage implements ProfilerStorageInterface {
   /**
    * {@inheritdoc}
    */
-  public function read($token) {
+  public function read($token): ?Profile {
     $record = $this->database->select('webprofiler', 'w')
       ->fields('w')
       ->condition('token', $token)
@@ -94,7 +94,7 @@ class DatabaseProfilerStorage implements ProfilerStorageInterface {
   /**
    * {@inheritdoc}
    */
-  public function write(Profile $profile) {
+  public function write(Profile $profile): bool {
     $args = [
       'token' => $profile->getToken(),
       'parent' => $profile->getParentToken(),

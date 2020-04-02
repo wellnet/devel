@@ -3,4 +3,4 @@ type: module
 description: 'Support module for Devel testing.'
 package: Testing
 version: VERSION
-core: 8.x
+core_version_requirement: ^8.8 || ^9
