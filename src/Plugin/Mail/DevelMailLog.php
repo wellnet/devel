@@ -2,6 +2,7 @@
 
 namespace Drupal\devel\Plugin\Mail;
 
+use Drupal\Component\FileSecurity\FileSecurity;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\File\FileSystemInterface;
@@ -193,7 +194,7 @@ class DevelMailLog implements MailInterface, ContainerFactoryPluginInterface {
       return FALSE;
     }
     if (0 === strpos($directory, 'public://')) {
-      return file_save_htaccess($directory);
+      return FileSecurity::writeHtaccess($directory);
     }
 
     return TRUE;
