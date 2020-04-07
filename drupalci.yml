@@ -10,7 +10,7 @@ build:
       host_command:
         # Temporary patch for JavascriptTestBase when running D9. See https://www.drupal.org/project/devel/issues/3097125
         commands:
-          - 'cd ${SOURCE_DIR} && git status | awk "{print \$3}"| grep 9.0.x && cd ${PROJECT_DIR} && sudo -u www-data curl "https://www.drupal.org/files/issues/2020-04-04/3097125-26.replace-JavascriptTestBase.patch" | sudo -u www-data patch -p1 --verbose'
+          - 'cd ${SOURCE_DIR} && git status | awk "{print \$3}"| grep 9.0.x && cd ${PROJECT_DIR} && sudo -u www-data curl "https://www.drupal.org/files/issues/2020-04-07/3097125-33.replace-JavascriptTestBase.patch" | sudo -u www-data patch -p1 --verbose'
       phplint:
       container_composer:
       csslint:
