@@ -40,7 +40,8 @@
   "license": "GPL-2.0+",
   "minimum-stability": "dev",
   "require": {
-    "symfony/var-dumper": "^4 || ^5"
+    "symfony/var-dumper": "^4 || ^5",
+    "doctrine/common": "^2.7"
   },
   "suggest": {
     "kint-php/kint": "Kint provides an informative display of arrays/objects. Useful for debugging and developing."
