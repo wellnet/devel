@@ -60,7 +60,7 @@ class ToolbarController extends ControllerBase {
   /**
    * Generates the toolbar.
    *
-   * @param Profile $profile
+   * @param \Symfony\Component\HttpKernel\Profiler\Profile $profile
    *
    * @return \Symfony\Component\HttpFoundation\Response
    *

@@ -2,7 +2,6 @@
 
 namespace Drupal\webprofiler\DataCollector;
 
-use Drupal\block\Entity\Block;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -121,7 +120,7 @@ class BlocksDataCollector extends DataCollector implements DrupalDataCollectorIn
 
     /** @var \Drupal\block\BlockInterface $block */
     foreach ($decorator->getEntities() as $block) {
-      /** @var Block $entity */
+      /** @var \Drupal\block\Entity\Block $entity */
       if (NULL !== $block && $entity = $storage->load($block->get('id'))) {
 
         $route = '';

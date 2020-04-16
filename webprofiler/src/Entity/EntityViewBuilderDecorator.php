@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class EntityViewBuilderDecorator extends EntityDecorator implements EntityHandlerInterface, EntityViewBuilderInterface {
 
   /**
-   * @param EntityViewBuilderInterface $controller
+   * @param \Drupal\Core\Entity\EntityViewBuilderInterface $controller
    */
   public function __construct(EntityViewBuilderInterface $controller) {
     parent::__construct($controller);

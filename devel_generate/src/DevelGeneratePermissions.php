@@ -16,7 +16,7 @@ class DevelGeneratePermissions implements ContainerInjectionInterface {
   /**
    * The plugin manager.
    *
-   * @var \Drupal\devel_generate\DevelGeneratePluginManager;
+   * @var \Drupal\devel_generate\DevelGeneratePluginManager
    */
   protected $develGeneratePluginManager;
 
@@ -43,8 +43,9 @@ class DevelGeneratePermissions implements ContainerInjectionInterface {
    * @see devel_generate.permissions.yml
    *
    * @return array
+   *   An array of permissions for all plugins.
    */
-  function permissions() {
+  public function permissions() {
     $devel_generate_plugins = $this->develGeneratePluginManager->getDefinitions();
     foreach ($devel_generate_plugins as $plugin) {
 
@@ -54,11 +55,6 @@ class DevelGeneratePermissions implements ContainerInjectionInterface {
       ];
     }
 
-    // $permissions = array(
-    //      'administer devel_generate' => array(
-    //        'title' => $this->t('Administer devel generate'),
-    //      ),
-    //    );
     return $permissions;
   }
 

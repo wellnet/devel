@@ -5,7 +5,6 @@ namespace Drupal\webprofiler\DataCollector;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
-use Drupal\webprofiler\Views\TraceableViewExecutable;
 use Drupal\webprofiler\Views\ViewExecutableFactoryWrapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,7 +28,7 @@ class ViewsDataCollector extends DataCollector implements DrupalDataCollectorInt
   private $entityTypeManager;
 
   /**
-   * @param ViewExecutableFactoryWrapper $view_executable_factory
+   * @param \Drupal\webprofiler\Views\ViewExecutableFactoryWrapper $view_executable_factory
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    */
   public function __construct(ViewExecutableFactoryWrapper $view_executable_factory, EntityTypeManagerInterface $entity_type_manager) {
@@ -46,7 +45,7 @@ class ViewsDataCollector extends DataCollector implements DrupalDataCollectorInt
     $views = $this->view_executable_factory->getViews();
     $storage = $this->entityTypeManager->getStorage('view');
 
-    /** @var TraceableViewExecutable $view */
+    /** @var \Drupal\webprofiler\Views\TraceableViewExecutable $view */
     foreach ($views as $view) {
       if ($view->executed) {
         $data = [

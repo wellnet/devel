@@ -23,7 +23,7 @@ class WebprofilerRequestMatcher implements RequestMatcherInterface {
   private $pathMatcher;
 
   /**
-   * @param ConfigFactoryInterface $configFactory
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    * @param \Drupal\Core\Path\PathMatcherInterface $pathMatcher
    */
   public function __construct(ConfigFactoryInterface $configFactory, PathMatcherInterface $pathMatcher) {

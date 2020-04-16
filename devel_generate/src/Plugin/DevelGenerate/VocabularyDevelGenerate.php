@@ -2,7 +2,6 @@
 
 namespace Drupal\devel_generate\Plugin\DevelGenerate;
 
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\Language;

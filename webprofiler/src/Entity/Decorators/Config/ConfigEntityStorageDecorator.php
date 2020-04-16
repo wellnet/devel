@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ConfigEntityStorageDecorator extends EntityDecorator implements ConfigEntityStorageInterface, ImportableEntityStorageInterface, EntityHandlerInterface {
 
   /**
-   * @param ConfigEntityStorageInterface $controller
+   * @param \Drupal\Core\Config\ConfigEntityStorageInterface $controller
    */
   public function __construct(ConfigEntityStorageInterface $controller) {
     parent::__construct($controller);

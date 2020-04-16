@@ -47,7 +47,7 @@ class EntityManagerWrapper extends DefaultPluginManager implements EntityTypeMan
    * {@inheritdoc}
    */
   public function getStorage($entity_type) {
-    /** @var ConfigEntityStorageInterface $handler */
+    /** @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface $handler */
     $handler = $this->getHandler($entity_type, 'storage');
     $type = ($handler instanceof ConfigEntityStorageInterface) ? 'config' : 'content';
 
@@ -66,7 +66,7 @@ class EntityManagerWrapper extends DefaultPluginManager implements EntityTypeMan
    * {@inheritdoc}
    */
   public function getViewBuilder($entity_type) {
-    /** @var EntityViewBuilderInterface $handler */
+    /** @var \Drupal\Core\Entity\EntityViewBuilderInterface $handler */
     $handler = $this->getHandler($entity_type, 'view_builder');
 
     if ($handler instanceof EntityViewBuilderInterface) {

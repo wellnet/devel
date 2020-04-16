@@ -43,7 +43,7 @@ class ConfigForm extends ConfigFormBase {
 
   /**
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   * @param Profiler $profiler
+   * @param \Symfony\Component\HttpKernel\Profiler\Profiler $profiler
    * @param \Drupal\webprofiler\Profiler\ProfilerStorageManager $storageManager
    * @param array $templates
    */

@@ -24,7 +24,7 @@ class DatabaseProfilerStorage implements ProfilerStorageInterface {
    * @param \Drupal\Core\Database\Connection $database
    *   The database connection.
    */
-  function __construct(Connection $database) {
+  public function __construct(Connection $database) {
     $this->database = $database;
   }
 
@@ -143,7 +143,7 @@ class DatabaseProfilerStorage implements ProfilerStorageInterface {
    * @param string $token
    * @param $data
    *
-   * @return Profile
+   * @return \Symfony\Component\HttpKernel\Profiler\Profile
    */
   private function createProfileFromData($token, $data) {
     $profile = new Profile($token);

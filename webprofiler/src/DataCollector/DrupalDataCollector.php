@@ -5,8 +5,9 @@ namespace Drupal\webprofiler\DataCollector;
 use Drupal;
 use Drupal\Core\Routing\RedirectDestinationInterface;
 use Drupal\Core\Routing\UrlGeneratorInterface;
-use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
+use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
@@ -46,7 +47,7 @@ class DrupalDataCollector extends DataCollector implements DrupalDataCollectorIn
   public function collect(Request $request, Response $response, \Exception $exception = NULL) {
     $this->data['version'] = Drupal::VERSION;
     $this->data['profile'] = \Drupal::installProfile();
-    $this->data['config_url'] = (new Drupal\Core\Url('webprofiler.settings', [], ['query' => $this->redirectDestination->getAsArray()]))->toString();
+    $this->data['config_url'] = (new Url('webprofiler.settings', [], ['query' => $this->redirectDestination->getAsArray()]))->toString();
 
     try {
       $process = new Process("git log -1 --pretty=format:'%H - %s (%ci)' --abbrev-commit");
@@ -105,7 +106,8 @@ class DrupalDataCollector extends DataCollector implements DrupalDataCollectorIn
   /**
    * Returns the name of the collector.
    *
-   * @return string The collector name
+   * @return string
+   *   The collector name
    *
    * @api
    */

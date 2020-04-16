@@ -6,7 +6,6 @@ use Drupal\Core\Link;
 use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\devel\Plugin\Menu\DestinationMenuLink;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -89,7 +88,7 @@ class DevelDataCollector extends DataCollector implements DrupalDataCollectorInt
     $links = [];
 
     foreach ($tree as $item) {
-      /** @var DestinationMenuLink $link */
+      /** @var \Drupal\devel\Plugin\Menu\DestinationMenuLink $link */
       $link = $item->link;
       $renderable = Link::fromTextAndUrl($link->getTitle(), $link->getUrlObject())
         ->toRenderable();

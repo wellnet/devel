@@ -6,7 +6,6 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\DateFormatter;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
-use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Drupal\webprofiler\Profiler\ProfilerStorageManager;
 use Drupal\webprofiler\Profiler\TemplateManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -79,7 +78,7 @@ class DashboardController extends ControllerBase {
   /**
    * Generates the dashboard page.
    *
-   * @param Profile $profile
+   * @param \Symfony\Component\HttpKernel\Profiler\Profile $profile
    *
    * @return array
    */
@@ -102,7 +101,7 @@ class DashboardController extends ControllerBase {
     ];
 
     foreach ($templates as $name => $template) {
-      /** @var DrupalDataCollectorInterface $collector */
+      /** @var \Drupal\webprofiler\DrupalDataCollectorInterface $collector */
       $collector = $profile->getCollector($name);
 
       if ($collector->hasPanel()) {

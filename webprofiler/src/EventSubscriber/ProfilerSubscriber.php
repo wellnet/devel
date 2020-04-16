@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\RequestMatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+/**
+ *
+ */
 class ProfilerSubscriber implements EventSubscriberInterface {
 
   protected $profiler;
@@ -30,11 +33,11 @@ class ProfilerSubscriber implements EventSubscriberInterface {
   protected $parents;
 
   /**
-   * @param Profiler $profiler
+   * @param \Symfony\Component\HttpKernel\Profiler\Profiler $profiler
    *   A Profiler instance.
-   * @param RequestStack $requestStack
+   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
    *   A RequestStack instance.
-   * @param RequestMatcherInterface|null $matcher
+   * @param \Symfony\Component\HttpFoundation\RequestMatcherInterface|null $matcher
    *   A RequestMatcher instance.
    * @param bool $onlyException
    *   True if the profiler only collects data when an

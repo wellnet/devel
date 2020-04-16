@@ -2,7 +2,6 @@
 
 namespace Drupal\devel_generate\Plugin\DevelGenerate;
 
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -183,7 +182,7 @@ class MenuDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
       '#type' => 'number',
       '#title' => $this->t('Maximum menu width'),
       '#default_value' => $this->getSetting('max_width'),
-      '#description' => $this->t('Limit the width of the generated menu\'s first level of links to a certain number of items.'),
+      '#description' => $this->t("Limit the width of the generated menu's first level of links to a certain number of items."),
       '#required' => TRUE,
       '#min' => 0,
     ];
@@ -200,7 +199,7 @@ class MenuDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
    * {@inheritdoc}
    */
   public function generateElements(array $values) {
-    // If the create new menus checkbox is off, set the number of new menus to 0.
+    // If the create new menus checkbox is off, set the number of menus to 0.
     if (!isset($values['existing_menus']['__new-menu__']) || !$values['existing_menus']['__new-menu__']) {
       $values['num_menus'] = 0;
     }

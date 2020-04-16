@@ -5,7 +5,6 @@ namespace Drupal\devel_generate\Form;
 use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\devel_generate\DevelGenerateException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

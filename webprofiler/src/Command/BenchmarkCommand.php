@@ -14,7 +14,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Yaml\Yaml;
-use Drupal\Console\Annotations\DrupalCommand;
 
 /**
  * Class BenchmarkCommand.

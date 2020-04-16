@@ -67,7 +67,7 @@ class ProfilesFilterForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $ip = $form_state->getValue('ip');// ['values']['ip'];
+    $ip = $form_state->getValue('ip');
     $url = $form_state->getValue('url');
     $method = $form_state->getValue('method');
     $limit = $form_state->getValue('limit');

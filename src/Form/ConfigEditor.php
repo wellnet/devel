@@ -134,7 +134,7 @@ class ConfigEditor extends FormBase {
   /**
    * Builds the cancel link url for the form.
    *
-   * @return Url
+   * @return \Drupal\Core\Url
    *   Cancel url
    */
   private function buildCancelLinkUrl() {

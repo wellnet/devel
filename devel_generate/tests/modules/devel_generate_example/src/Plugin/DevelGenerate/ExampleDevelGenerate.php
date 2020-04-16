@@ -11,7 +11,7 @@ use Drupal\Core\Form\FormStateInterface;
  * @DevelGenerate(
  *   id = "devel_generate_example",
  *   label = "Example",
- *   description = "Generate a given number of examples. Optionally delete current examples.",
+ *   description = "Generate a given number of examples.",
  *   url = "devel_generate_example",
  *   permission = "administer devel_generate",
  *   settings = {
@@ -64,7 +64,8 @@ class ExampleDevelGenerate extends DevelGenerateBase {
       'status'  => 1,
       'created' => \Drupal::time()->getRequestTime(),
       'roles' => '',
-      'devel_generate' => TRUE, // A flag to let hook_user_* know that this is a generated user.
+      // A flag to let hook_user_* know that this is a generated user.
+      'devel_generate' => TRUE,
     ];
 
     $account = user_load_by_name('example_devel_generate');
@@ -77,7 +78,9 @@ class ExampleDevelGenerate extends DevelGenerateBase {
 
     $account->save();
 
-    $this->setMessage($this->t('@num_examples created.', ['@num_examples' => $this->formatPlural($num, '1 example', '@count examples')]));
+    $this->setMessage($this->t('@num_examples created.', [
+      '@num_examples' => $this->formatPlural($num, '1 example', '@count examples'),
+    ]));
   }
 
   /**

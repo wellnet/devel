@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\Profiler\ProfilerStorageInterface;
 class Profiler extends SymfonyProfiler {
 
   /**
-   * @var \Drupal\Core\Config\ConfigFactoryInterface $config
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   private $config;
 

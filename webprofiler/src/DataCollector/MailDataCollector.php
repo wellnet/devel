@@ -31,9 +31,9 @@ class MailDataCollector extends DataCollector implements DrupalDataCollectorInte
   /**
    * Collects data for the given Request and Response.
    *
-   * @param Request $request
+   * @param \Symfony\Component\HttpFoundation\Request $request
    *   A Request instance.
-   * @param Response $response
+   * @param \Symfony\Component\HttpFoundation\Response $response
    *   A Response instance.
    * @param \Exception $exception
    *   An Exception instance.
