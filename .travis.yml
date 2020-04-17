@@ -59,6 +59,11 @@ before_script:
   - mkdir $DRUPAL_ROOT/modules/$MODULE
   - cp -R $TRAVIS_BUILD_DIR/* $DRUPAL_ROOT/modules/$MODULE/
 
+  # Apply patch to reverse the addition of doctrine/debug in composer.json so that tests can run again.
+  - cd $DRUPAL_ROOT/modules/$MODULE;
+  - wget -q -O - https://www.drupal.org/files/issues/2020-04-17/3125678-9.remove-doctrine-common.patch | patch -p1 --verbose;
+  - cd $DRUPAL_ROOT;
+
   # Run composer self-update and install.
   - travis_retry composer self-update && travis_retry composer install
 
@@ -96,10 +101,9 @@ script:
   - $DRUPAL_ROOT/vendor/bin/phpcs --version
   - $DRUPAL_ROOT/vendor/bin/phpcs -i
   - $DRUPAL_ROOT/vendor/bin/phpcs -e
-  - $DRUPAL_ROOT/vendor/bin/phpcs --standard=drupal,drupalPractice -e
 
   # Show the violations in detail and do not fail for any errors or warnings.
-  - $DRUPAL_ROOT/vendor/bin/phpcs --standard=drupal,drupalPractice --ignore=vendor --report-width=130 --colors --runtime-set ignore_warnings_on_exit 1 --runtime-set ignore_errors_on_exit 1 .
+  - $DRUPAL_ROOT/vendor/bin/phpcs -s --report-width=130 --colors --runtime-set ignore_warnings_on_exit 1 --runtime-set ignore_errors_on_exit 1 .
 
   # Run again to give a summary and total count.
-  - $DRUPAL_ROOT/vendor/bin/phpcs --standard=drupal,drupalPractice --ignore=vendor --report-width=130 --colors --runtime-set ignore_warnings_on_exit 1 --runtime-set ignore_errors_on_exit 1 --report=summary .
+  - $DRUPAL_ROOT/vendor/bin/phpcs --report-width=130 --colors --runtime-set ignore_warnings_on_exit 1 --runtime-set ignore_errors_on_exit 1 --report=summary .
