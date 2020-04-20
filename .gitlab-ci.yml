@@ -1,0 +1,59 @@
+test:
+  stage: test
+  image: docker:latest
+  services:
+    - docker:dind
+  variables:
+    DRUPAL_CORE_CONSTRAINT: ^8.8
+    DB_DRIVER: sqlite
+    DOCKER_DRIVER: overlay2
+    # https://github.com/docker/compose/issues/5696
+    COMPOSE_INTERACTIVE_NO_CLI: 1
+  # Cache libraries in between jobs https://docs.gitlab.com/ee/ci/caching/index.html#caching-php-dependencies
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - vendor/
+  before_script:
+    # See https://stackoverflow.com/a/42697808/265501.
+    - apk add -q --no-cache py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
+    - pip install -q docker-compose
+    - docker-compose up -d --quiet-pull
+
+    #  Determine DB driver.
+    - |
+      [[ $DB_DRIVER == "sqlite" ]] && export SIMPLETEST_DB=sqlite://sites/default/files/.sqlite
+      [[ $DB_DRIVER == "mysql" ]] && export SIMPLETEST_DB=mysql://root:password@mariadb/devel
+      [[ $DB_DRIVER == "pgsql" ]] && export SIMPLETEST_DB=pgsql://root:password@postgres/devel
+   #- env # For debugging.
+
+    # Accept a constraint for Drupal core version.
+    - docker-compose exec -T drupal composer require --dev --no-update drupal/core-recommended:$DRUPAL_CORE_CONSTRAINT
+    - docker-compose exec -T drupal composer require --dev --no-update drupal/core-dev:$DRUPAL_CORE_CONSTRAINT
+    - docker-compose exec -T drupal composer require --dev --no-update drupal/core-composer-scaffold:$DRUPAL_CORE_CONSTRAINT
+
+    # Interim patch for 9.0 only to avoid the Webprofiler toolbar halting the test run with 'class not found'.
+    - |
+      if [[ $DRUPAL_CORE_CONSTRAINT == "9.0.x-dev"  || $DRUPAL_CORE_CONSTRAINT == "9.1.x-dev" ]]; then
+        cd web/modules/devel;
+        wget -q -O - https://www.drupal.org/files/issues/2020-04-07/3097125-33.replace-JavascriptTestBase.patch | patch -p1 --verbose;
+      fi
+
+    - docker-compose exec -T drupal composer install -n --prefer-dist --no-suggest --no-progress
+  script:
+    - docker-compose exec -T drupal composer validate
+    - docker-compose exec -T drupal composer phpcs
+    - docker-compose exec -T drupal composer lint
+    - docker-compose exec -T drupal mkdir web/sites/simpletest
+    # runserver requires a working site to launch, so install one.
+    - docker-compose exec -T drupal composer si -- -q
+    - docker-compose exec -T drupal nohup composer runserver &
+    - docker-compose exec -T drupal composer unit
+  artifacts:
+    when: on_failure
+    expire_in: 5 mos
+    reports:
+      # @todo Integrate with Code Quality https://docs.gitlab.com/ee/ci/yaml/#artifactsreportscodequality-starter, https://docs.gitlab.com/ee/user/project/merge_requests/code_quality.html#example-configuration
+      junit: junit.xml
+    paths:
+      - web/sites/simpletest/browser_output

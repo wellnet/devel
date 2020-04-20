@@ -66,11 +66,10 @@ providers for images.
  - http://drupal.org/project/devel_image_provider
 
 
-INSTALLATION
+TESTING
 ------------
 
- - Install the Devel module as you would normally install a contributed Drupal
-   module. Visit https://www.drupal.org/node/1897420 for further information.
+ - [Learn more about Devel's test environment](README.tests.md).
 
 
 Author/Maintainers

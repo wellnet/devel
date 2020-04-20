@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ruleset name="Devel Module">
-  <description>Default PHP CodeSniffer configuration for Devel module.</description>
+<ruleset name="Devel">
   <file>.</file>
+  <arg name="extensions" value="php,module,inc,install,test,profile,theme,css,info,txt,md,yml"/>
+  <config name="drupal_core_version" value="8"/>
 
   <!-- Initially include all Drupal and DrupalPractice sniffs. -->
-  <rule ref="Drupal"/>
-  <rule ref="DrupalPractice"/>
+  <rule ref="vendor/drupal/coder/coder_sniffer/Drupal"/>
+  <rule ref="vendor/drupal/coder/coder_sniffer/DrupalPractice"/>
 
   <!-- Use 's' to print the full sniff name in the report. -->
   <!-- A '-' is prefixed to each of these, so s becomes -s, etc. -->
@@ -16,9 +17,16 @@
   <arg name="extensions" value="inc,install,module,php,profile,test,theme,yml"/>
 
   <!-- ignore all files that match these patterns -->
+  <!--  The 2 lines are key to isolating just Devel files-->
+  <exclude-pattern>web</exclude-pattern>
   <exclude-pattern>vendor</exclude-pattern>
   <exclude-pattern>_ignore*</exclude-pattern>
   <exclude-pattern>*.patch</exclude-pattern>
   <exclude-pattern>*interdif*</exclude-pattern>
 
+  <!-- Example how you would disable an external rule you do not like:
+  <rule ref="PEAR.Functions.ValidDefaultValue.NotAtEnd">
+    <severity>0</severity>
+  </rule>
+  -->
 </ruleset>

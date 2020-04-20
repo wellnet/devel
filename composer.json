@@ -37,11 +37,21 @@
     "docs": "https://www.drupal.org/docs/8/modules/devel",
     "source": "https://git.drupalcode.org/project/devel"
   },
-  "license": "GPL-2.0+",
+  "license": "GPL-2.0-or-later",
   "minimum-stability": "dev",
+  "prefer-stable": true,
   "require": {
     "symfony/var-dumper": "^4 || ^5",
     "doctrine/common": "^2.7"
+  },
+  "require-dev": {
+    "drupal/core-composer-scaffold": "^8.8",
+    "cweagans/composer-patches": "~1.0",
+    "drupal/core-recommended": "^8.8",
+    "drupal/core-dev": "^8.8",
+    "drush/drush": "^10",
+    "jakub-onderka/php-parallel-lint": "^1.0",
+    "zaporylie/composer-drupal-optimizations": "^1.0"
   },
   "suggest": {
     "kint-php/kint": "Kint provides an informative display of arrays/objects. Useful for debugging and developing."
@@ -49,7 +59,36 @@
   "conflict": {
     "kint-php/kint": "<3"
   },
+  "config": {
+  	"process-timeout": 3600
+  },
+  "scripts": {
+      "si": "drush si -vvv --db-url=sqlite://sites/default/files/.sqlite testing",
+      "phpcs": "phpcs -n --report-summary --runtime-set ignore_warnings_on_exit 1 --runtime-set ignore_errors_on_exit 1",
+      "cbf": "phpcbf --standard=Drupal -n src tests",
+      "lint": "parallel-lint src tests",
+      "runserver": "drush runserver",
+      "create-symlinks": "cd web/modules/devel && find ../../.. -maxdepth 1 ! -name .git ! -name web ! -name vendor -print | while read file; do ln -s $file .; done",
+      "unit": "phpunit --verbose web/modules/devel",
+      "test": [
+        "@lint",
+        "@phpcs",
+        "@unit"
+      ],
+      "post-update-cmd": [
+        "rm -rf web/modules/devel && mkdir -p web/modules/devel",
+        "@create-symlinks"
+      ]
+  },
   "extra": {
+    "installer-paths": {
+      "web/core": ["type:drupal-core"]
+    },
+    "drupal-scaffold": {
+      "locations": {
+        "web-root": "web/"
+      }
+    },
     "drush": {
       "services": {
         "drush.services.yml": "^9 || ^10"

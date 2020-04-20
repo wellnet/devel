@@ -1,0 +1,11 @@
+/vendor/
+/web/
+composer.lock
+/.editorconfig
+/.gitattributes
+
+#JUnit phpunit output
+junit.xml
+
+# Ignore local overrides.
+docker-compose.override.yml
