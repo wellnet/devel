@@ -1,19 +1,15 @@
-README.txt for Devel module
----------------------------
+# Devel module
 
-CONTENTS OF THIS FILE
----------------------
+## Contents
 
- * Introduction
- * Requirements
- * Included Modules and Features
- * Recommended Modules
- * Installation
- * Configuration
- * Maintainers
+ - Introduction
+ - Requirements
+ - Included Modules and Features
+ - Recommended Modules
+ - Testing
+ - Maintainers
 
-INTRODUCTION
-------------
+## Introduction
 
 Devel module contains helper functions and pages for Drupal developers and
 inquisitive admins:
@@ -35,14 +31,12 @@ This module is safe to use on a production site. Just be sure to only grant
    https://www.drupal.org/project/issues/devel
 
 
-REQUIREMENTS
-------------
+## Requirements
 
 This module requires no modules outside of Drupal core.
 
 
-INCLUDED MODULES AND FEATURES
------------------------------
+## Included Modules and Features
 
 Webprofiler - Adds a debug bar at bottom of all pages with tons of useful
 information like a query list, cache hit/miss data, memory profiling, page
@@ -57,8 +51,7 @@ To run the tests, use run-tests-drush.sh. You may pass in any arguments that
 are valid for `phpunit`.
 
 
-RECOMMENDED MODULE
-------------------
+## Recommended Modules
 
 Devel Generate Extensions - Devel Images Provider allows to configure external
 providers for images.
@@ -66,18 +59,17 @@ providers for images.
  - http://drupal.org/project/devel_image_provider
 
 
-TESTING
-------------
+## Testing
 
  - [Learn more about Devel's test environment](README.tests.md).
 
 
-Author/Maintainers
-------------------
+## Author/Maintainers
 
- - Moshe Weitzman (moshe weitzman) - https://www.drupal.org/u/moshe-weitzman
- - Hans Salvisberg (salvis) - https://www.drupal.org/u/salvis
- - Pedro Cambra https://drupal.org/user/122101/contact http://www.ymbra.com/
- - Juan Pablo Novillo https://www.drupal.org/u/juampynr
- - lussoluca https://www.drupal.org/u/lussoluca
- - willzyx https://www.drupal.org/u/willzyx
+ - Moshe Weitzman (moshe weitzman) https://www.drupal.org/u/moshe-weitzman
+ - Hans Salvisberg (salvis) https://www.drupal.org/u/salvis
+ - Pedro Cambra (pcambra) https://www.drupal.org/u/pcambra
+ - Juan Pablo Novillo (Juampy NR) https://www.drupal.org/u/juampynr
+ - Luca Lusso (lussoluca) https://www.drupal.org/u/lussoluca
+ - Marco (willzyx) https://www.drupal.org/u/willzyx
+ - Jonathan Smith (jonathan1055) https://www.drupal.org/u/jonathan1055
