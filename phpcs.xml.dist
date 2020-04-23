@@ -12,6 +12,7 @@
   <!-- A '-' is prefixed to each of these, so s becomes -s, etc. -->
   <arg value="s"/>
   <arg value="-colors"/>
+  <arg name='report-width' value='120'/>
 
   <!-- Ignore all files that match these patterns. They are matched against -->
   <!-- the full file path and there is an implied wildcard at each end. -->
