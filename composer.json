@@ -64,7 +64,7 @@
   },
   "scripts": {
       "si": "drush si -vvv --db-url=sqlite://sites/default/files/.sqlite testing",
-      "phpcs": "phpcs -n --report-summary --runtime-set ignore_warnings_on_exit 1 --runtime-set ignore_errors_on_exit 1",
+      "phpcs": "phpcs -n --report-summary --runtime-set ignore_warnings_on_exit 1 --runtime-set ignore_errors_on_exit 1 devel.module devel.install webprofiler devel_generate src tests",
       "cbf": "phpcbf --standard=Drupal -n src tests",
       "lint": "parallel-lint src tests",
       "runserver": "drush runserver",
