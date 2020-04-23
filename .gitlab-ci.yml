@@ -35,7 +35,6 @@ test:
     # Interim patch for 9.0 only to avoid the Webprofiler toolbar halting the test run with 'class not found'.
     - |
       if [[ $DRUPAL_CORE_CONSTRAINT == "9.0.x-dev"  || $DRUPAL_CORE_CONSTRAINT == "9.1.x-dev" ]]; then
-        cd web/modules/devel;
         wget -q -O - https://www.drupal.org/files/issues/2020-04-07/3097125-33.replace-JavascriptTestBase.patch | patch -p1 --verbose;
       fi
 
