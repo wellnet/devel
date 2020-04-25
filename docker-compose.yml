@@ -1,17 +1,6 @@
 version: "3.1"
 
 services:
-  # More info at https://github.com/wodby/mariadb
-  mariadb:
-    image: wodby/mariadb:${MARIADB_TAG-10.2}
-    stop_grace_period: 30s
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-    volumes:
-      - mariadb-datavolume:/var/lib/mysql
-    ports:
-      - '3005:3306'
-
   # More info at https://github.com/wodby/php
   drupal:
     image: wodby/php:${PHP_TAG-7.3-dev}
@@ -23,9 +12,23 @@ services:
       PHP_XDEBUG_DEFAULT_ENABLE:
       PHP_IDE_CONFIG:
       PHP_XDEBUG_REMOTE_HOST:
+      # Specify 'drupal' instead of 127.0.0.1 so that chrome service can reach it.
+      SIMPLETEST_BASE_URL: http://drupal:8888
+      SIMPLETEST_DB:
     volumes:
       - ./:/var/www/html:cached
       - ./.docker/zz-php.ini:/usr/local/etc/php/conf.d/zz-php.ini
+
+  # More info at https://github.com/wodby/mariadb
+  mariadb:
+    image: wodby/mariadb:${MARIADB_TAG-10.2}
+    stop_grace_period: 30s
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - mariadb-datavolume:/var/lib/mysql
+    ports:
+      - '3005:3306'
 
   # More info at https://github.com/wodby/postgres
   postgres:

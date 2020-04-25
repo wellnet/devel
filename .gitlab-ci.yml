@@ -31,13 +31,6 @@ test:
     - docker-compose exec -T drupal composer require --dev --no-update drupal/core-recommended:$DRUPAL_CORE_CONSTRAINT
     - docker-compose exec -T drupal composer require --dev --no-update drupal/core-dev:$DRUPAL_CORE_CONSTRAINT
     - docker-compose exec -T drupal composer require --dev --no-update drupal/core-composer-scaffold:$DRUPAL_CORE_CONSTRAINT
-
-    # Interim patch for 9.0 only to avoid the Webprofiler toolbar halting the test run with 'class not found'.
-    - |
-      if [[ $DRUPAL_CORE_CONSTRAINT == "9.0.x-dev"  || $DRUPAL_CORE_CONSTRAINT == "9.1.x-dev" ]]; then
-        wget -q -O - https://www.drupal.org/files/issues/2020-04-07/3097125-33.replace-JavascriptTestBase.patch | patch -p1;
-      fi
-
     - docker-compose exec -T drupal composer install -n --prefer-dist --no-suggest --no-progress
   script:
     - docker-compose exec -T drupal composer validate
