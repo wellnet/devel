@@ -1,12 +1,14 @@
 Devel comes with a modern and useful test development environment.
 
-Local development
+Local Development
 ===========
 1. Clone devel `git clone --branch 8.x-3.x https://git.drupalcode.org/project/devel.git`
 1. `cd devel`
+1. Assemble a codebase (i.e. get Drupal core). `composer install`. Your source tree now looks like : ![Folder tree](/icons/folders.png)
 1. Install a testing site `composer si`
-1. Start a local webserver `composer runserver`
-1. Run all phpunit tests `composer unit`
+1. Configure a web server to serve devel's `/web` directory as docroot. __Either__ of these works fine:
+    1. `composer runserver`
+	1. Setup Apache/Nginx/Other. A virtal host will work fine. Any domain name works.
 
 Gitlab.com
 ============
@@ -34,14 +36,14 @@ Implementation
 - [phpunit.xml.dist](https://gitlab.com/weitzman/drupalcontrib/-/blob/add-gitlab-pipeline/phpunit.xml.dist). A lightly customized copy of Drupal core's phpunit.xml. Copy and rename to phpunit.xml to customize locally.
 - [docker-compose.yml](https://gitlab.com/drupalcontrib/devel/-/blob/add-gitlab-pipeline/docker-compose.yml). Containers suitable for testing on the full build matrix. Inspired by [docker4drupal](https://github.com/wodby/docker4drupal). Add a docker-compose.override.yml to customize locally.
 
-Misc
+Run Tests
 ==========
+- Run all tests - `composer unit`. See the `<scripts>` section of composer.json to learn what that does.
 - You may append arguments and options to Composer scripts: `composer unit -- --filter testDevelGenerateUsers`
 - Run a suite: `composer unit -- --testsuite functional`
 - Skip slow tests: `composer unit -- --exclude-group slow`
 - Use a different URL: `SIMPLETEST_BASE_URL=http://example.com composer unit`
 - docker-compose.yml is used by gitlab.com for test running. Its also available for local development if you wish. More info at [wodby/php](https://github.com/wodby/php).
-- [Manually trigger a pull](https://gitlab.com/drupalcontrib/devel/-/settings/repository) (requires admin perms).
 
 Philosophy and Roadmap
 ==========
