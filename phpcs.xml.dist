@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ruleset name="Devel">
+<ruleset name="Module">
   <file>.</file>
   <arg name="extensions" value="php,module,inc,install,test,profile,theme,css,info,txt,md,yml"/>
   <config name="drupal_core_version" value="8"/>

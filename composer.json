@@ -50,7 +50,7 @@
     "drupal/core-recommended": "^8.8",
     "drupal/core-dev": "^8.8",
     "drush/drush": "^10",
-    "jakub-onderka/php-parallel-lint": "^1.0",
+    "php-parallel-lint/php-parallel-lint": "^1.2",
     "zaporylie/composer-drupal-optimizations": "^1.0"
   },
   "suggest": {
@@ -66,7 +66,7 @@
       "si": "drush si -vvv --db-url=sqlite://sites/default/files/.sqlite testing",
       "phpcs": "PWD=$(pwd) && echo $PWD && phpcs --report-summary --runtime-set ignore_warnings_on_exit 1 --runtime-set ignore_errors_on_exit 1 --ignore=$PWD/web/,$PWD/vendor/",
       "cbf": "phpcbf --standard=Drupal -n src tests",
-      "lint": "parallel-lint src tests",
+      "lint": "parallel-lint --exclude web --exclude vendor .",
       "runserver": "drush runserver 0.0.0.0",
       "chromedriver": "chromedriver --port=9515 --verbose --whitelisted-ips --log-path=/tmp/chromedriver.log --no-sandbox",
       "create-symlinks": "cd web/modules/devel && find ../../.. -maxdepth 1 ! -name .git ! -name web ! -name vendor -print | while read file; do ln -s $file .; done",
@@ -83,7 +83,12 @@
   },
   "extra": {
     "installer-paths": {
-      "web/core": ["type:drupal-core"]
+      "web/core": ["type:drupal-core"],
+      "web/libraries/{$name}": ["type:drupal-library"],
+      "web/modules/{$name}": ["type:drupal-module"],
+      "web/profiles/{$name}": ["type:drupal-profile"],
+      "web/themes/{$name}": ["type:drupal-theme"],
+      "drush/{$name}": ["type:drupal-drush"]
     },
     "drupal-scaffold": {
       "locations": {
