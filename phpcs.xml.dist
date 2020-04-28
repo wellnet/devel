@@ -16,7 +16,7 @@
 
   <!-- Ignore all files that match these patterns. They are matched against -->
   <!-- the full file path and there is an implied wildcard at each end. -->
-  <!-- The first two are key to isolating just Devel files. -->
+  <!-- The first two are key to isolating just this project's files. -->
   <exclude-pattern>devel/web/</exclude-pattern>
   <exclude-pattern>devel/vendor/</exclude-pattern>
   <exclude-pattern>_ignore</exclude-pattern>

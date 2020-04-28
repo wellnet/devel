@@ -40,7 +40,8 @@
         "lint": "parallel-lint --exclude web --exclude vendor .",
         "runserver": "drush runserver 0.0.0.0",
         "chromedriver": "chromedriver --port=9515 --verbose --whitelisted-ips --log-path=/tmp/chromedriver.log --no-sandbox",
-        "create-symlinks": "cd web/modules/${PWD##*/} && find ../../.. -maxdepth 1 ! -name .git ! -name web ! -name vendor -print | while read file; do ln -s $file .; done",     "unit": "phpunit --verbose web/modules/${PWD##*/}",
+        "create-symlinks": "cd web/modules/${PWD##*/} && find ../../.. -maxdepth 1 ! -name .git ! -name web ! -name vendor -print | while read file; do ln -s $file .; done",
+        "unit": "phpunit --verbose web/modules/${PWD##*/}",
         "test": [
             "@lint",
             "@phpcs",

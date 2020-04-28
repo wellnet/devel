@@ -8,7 +8,9 @@ services:
       PHP_SENDMAIL_PATH: /dev/null
       COLUMNS: ${COLUMNS-80} # Set 80 columns for docker exec -it.
       ## Read instructions at https://wodby.com/docs/stacks/drupal/local/#debugging-cli-requests
-      PHP_XDEBUG:
+      # The line below is commented out because the mere presence of that env variable loads XDebug regardless of the value.
+      # Enable XDebug when you `up` your container: PHP_XDEBUG=1 docker-compose up -d
+      # PHP_XDEBUG:
       PHP_XDEBUG_DEFAULT_ENABLE:
       PHP_IDE_CONFIG:
       PHP_XDEBUG_REMOTE_HOST:
