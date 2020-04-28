@@ -12,11 +12,11 @@ Local Development
 
 Gitlab.com
 ============
-A [mirror](https://gitlab.com/help/user/project/repository/repository_mirroring.md) of Devel exists at [gitlab.com](https://gitlab.com/drupalcontrib/devel/). Note that this is different from the private Gitlab instance at [git.drupalcode.org](https://git.drupalcode.org/). [All commits to all branches are automatically tested](https://gitlab.com/drupalcontrib/devel/pipelines). We benefit from Gitlab's outstanding [CI functionality](https://docs.gitlab.com/ee/ci/introduction/index.html). DrupalCI is not used.
+A [mirror](https://gitlab.com/help/user/project/repository/repository_mirroring.md) of Devel exists at [gitlab.com](https://gitlab.com/drupalspoons/devel/). Note that this is different from the private Gitlab instance at [git.drupalcode.org](https://git.drupalcode.org/). [All commits to all branches are automatically tested](https://gitlab.com/drupalspoons/devel/pipelines). We benefit from Gitlab's outstanding [CI functionality](https://docs.gitlab.com/ee/ci/introduction/index.html). DrupalCI is not used.
 
 Build Matrix
 ===============
-Use the excellent [Run Pipeline](https://gitlab.com/drupalcontrib/devel/pipelines/new)
+Use the excellent [Run Pipeline](https://gitlab.com/drupalspoons/devel/pipelines/new)
 page to test any branch with alternate versions of Drupal core, PHP version, or
 DB driver. The recognized variables and default values are:
 
@@ -32,9 +32,9 @@ DB_DRIVER recognizes `sqlite`, `mysql`, or `pgsql`.
 
 Implementation
 ==========
-- [composer.json](https://gitlab.com/drupalcontrib/devel/-/blob/add-gitlab-pipeline/composer.json). After a `composer install`, a /web directory is present, containing the specified Drupal core, and a symlinked copy of web/modules/devel. The drupal/core-recommended, drupal/core-dev, and drupal/core-composer-scaffold packages are happily used. A few helpful bash snippits are shared as Composer scripts (e.g. `composer si`).
-- [phpunit.xml.dist](https://gitlab.com/weitzman/drupalcontrib/-/blob/add-gitlab-pipeline/phpunit.xml.dist). A lightly customized copy of Drupal core's phpunit.xml. Copy and rename to phpunit.xml to customize locally.
-- [docker-compose.yml](https://gitlab.com/drupalcontrib/devel/-/blob/add-gitlab-pipeline/docker-compose.yml). Containers suitable for testing on the full build matrix. Inspired by [docker4drupal](https://github.com/wodby/docker4drupal). Add a docker-compose.override.yml to customize locally.
+- [composer.json](https://gitlab.com/drupalspoons/devel/-/blob/add-gitlab-pipeline/composer.json). After a `composer install`, a /web directory is present, containing the specified Drupal core, and a symlinked copy of web/modules/devel. The drupal/core-recommended, drupal/core-dev, and drupal/core-composer-scaffold packages are happily used. A few helpful bash snippits are shared as Composer scripts (e.g. `composer si`).
+- [phpunit.xml.dist](https://gitlab.com/weitzman/drupalspoons/-/blob/add-gitlab-pipeline/phpunit.xml.dist). A lightly customized copy of Drupal core's phpunit.xml. Copy and rename to phpunit.xml to customize locally.
+- [docker-compose.yml](https://gitlab.com/drupalspoons/devel/-/blob/add-gitlab-pipeline/docker-compose.yml). Containers suitable for testing on the full build matrix. Inspired by [docker4drupal](https://github.com/wodby/docker4drupal). Add a docker-compose.override.yml to customize locally.
 
 Run Tests
 ==========
@@ -47,7 +47,7 @@ Run Tests
 
 Philosophy and Roadmap
 ==========
-We encourage folks to click around https://gitlab.com/drupalcontrib/devel/pipelines, and admire its
+We encourage folks to click around https://gitlab.com/drupalspoons/devel/pipelines, and admire its
 feature set and user experience. Projects can add services (e.g. Solr, Elasticsearch),
 customize their build matrix, and so much more. We hope more contrib projects move
 to gitlab.com. Hopefully this movement informs the evolution of DrupalCI.

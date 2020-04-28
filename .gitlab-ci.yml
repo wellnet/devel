@@ -1,5 +1,5 @@
 include:
-  - project: 'drupalcontrib/webmasters'
+  - project: 'drupalspoons/webmasters'
     # Best practice is to pin to a tag or a SHA1.
     ref: master
     file: 'templates/gitlab-ci.yml'
