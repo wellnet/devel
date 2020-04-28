@@ -62,25 +62,24 @@
   "config": {
   	"process-timeout": 36000
   },
-  "scripts": {
-      "si": "drush si -vvv --db-url=sqlite://sites/default/files/.sqlite testing",
-      "phpcs": "PWD=$(pwd) && echo $PWD && phpcs --report-summary --runtime-set ignore_warnings_on_exit 1 --runtime-set ignore_errors_on_exit 1 --ignore=$PWD/web/,$PWD/vendor/",
-      "cbf": "phpcbf --standard=Drupal -n src tests",
-      "lint": "parallel-lint --exclude web --exclude vendor .",
-      "runserver": "drush runserver 0.0.0.0",
-      "chromedriver": "chromedriver --port=9515 --verbose --whitelisted-ips --log-path=/tmp/chromedriver.log --no-sandbox",
-      "create-symlinks": "cd web/modules/devel && find ../../.. -maxdepth 1 ! -name .git ! -name web ! -name vendor -print | while read file; do ln -s $file .; done",
-      "unit": "phpunit --verbose web/modules/devel",
-      "test": [
-        "@lint",
-        "@phpcs",
-        "@unit"
-      ],
-      "post-update-cmd": [
-        "rm -rf web/modules/devel && mkdir -p web/modules/devel",
-        "@create-symlinks"
-      ]
-  },
+    "scripts": {
+        "si": "drush si -vvv --db-url=sqlite://sites/default/files/.sqlite testing",
+        "phpcs": "PWD=$(pwd) && phpcs --report-summary --runtime-set ignore_warnings_on_exit 1 --runtime-set ignore_errors_on_exit 1 --ignore=$PWD/web/,$PWD/vendor/",
+        "cbf": "phpcbf --standard=Drupal -n src tests",
+        "lint": "parallel-lint --exclude web --exclude vendor .",
+        "runserver": "drush runserver 0.0.0.0",
+        "chromedriver": "chromedriver --port=9515 --verbose --whitelisted-ips --log-path=/tmp/chromedriver.log --no-sandbox",
+        "create-symlinks": "cd web/modules/${PWD##*/} && find ../../.. -maxdepth 1 ! -name .git ! -name web ! -name vendor -print | while read file; do ln -s $file .; done",     "unit": "phpunit --verbose web/modules/${PWD##*/}",
+        "test": [
+            "@lint",
+            "@phpcs",
+            "@unit"
+        ],
+        "post-update-cmd": [
+            "DIR=${PWD##*/} && rm -rf web/modules/$DIR && mkdir -p web/modules/$DIR",
+            "@create-symlinks"
+        ]
+    },
   "extra": {
     "installer-paths": {
       "web/core": ["type:drupal-core"],
