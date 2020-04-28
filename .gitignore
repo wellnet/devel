@@ -1,7 +1,9 @@
 /vendor/
 /web/
+/node_modules/
 .env
 composer.lock
+yarn.lock
 /.editorconfig
 /.gitattributes
 
