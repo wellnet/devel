@@ -23,7 +23,7 @@ services:
 
   # More info at https://github.com/wodby/mariadb
   mariadb:
-    image: wodby/mariadb:${MARIADB_TAG-10.2}
+    image: wodby/mariadb:${MARIADB_TAG-10.3}
     stop_grace_period: 30s
     environment:
       MYSQL_ROOT_PASSWORD: password
