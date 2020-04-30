@@ -40,7 +40,7 @@
         "runserver": "drush runserver 0.0.0.0",
         "chromedriver": "chromedriver --port=9515 --verbose --whitelisted-ips --log-path=/tmp/chromedriver.log --no-sandbox",
         "create-symlinks": "cd web/modules/${PWD##*/} && find ../../.. -maxdepth 1 ! -name .git ! -name web ! -name vendor -print | while read file; do ln -s $file .; done",
-        "unit": "phpunit --verbose web/modules/${PWD##*/}",
+        "unit": "phpunit --verbose --printer '\\Drupal\\Tests\\Listeners\\HtmlOutputPrinter' web/modules/${PWD##*/}",
         "post-update-cmd": [
             "DIR=${PWD##*/} && rm -rf web/modules/$DIR && mkdir -p web/modules/$DIR",
             "@create-symlinks"

@@ -7,8 +7,9 @@ yarn.lock
 /.editorconfig
 /.gitattributes
 
-#JUnit phpunit output
+#PHPUnit output
 junit.xml
+.phpunit.result.cache
 
 # Ignore local overrides.
 docker-compose.override.yml
