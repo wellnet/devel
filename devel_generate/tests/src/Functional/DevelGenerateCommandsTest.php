@@ -149,7 +149,7 @@ class DevelGenerateCommandsTest extends BrowserTestBase {
     $nodes = \Drupal::entityQuery('node')->execute();
     $this->assertCount(55, $nodes);
     $messages = $this->getErrorOutput();
-    $this->assertContains('Finished 55 elements created successfully.', $messages, 'devel-generate-content batch ending message not found', TRUE);
+    $this->assertStringContainsStringIgnoringCase('Finished 55 elements created successfully.', $messages, 'devel-generate-content batch ending message not found');
 
     // Generate content with specified language.
     $this->drush('devel-generate-content', [10], ['kill' => NULL, 'languages' => 'fr']);
@@ -186,7 +186,7 @@ class DevelGenerateCommandsTest extends BrowserTestBase {
     $nodes = \Drupal::entityQuery('node')->condition('type', 'page')->execute();
     $this->assertCount(9, $nodes);
     $messages = $this->getErrorOutput();
-    $this->assertContains('Created 9 nodes', $messages, 'batch end message not found', TRUE);
+    $this->assertStringContainsStringIgnoringCase('Created 9 nodes', $messages, 'batch end message not found');
     // Load the final node and verify that the title starts with the label.
     $node = Node::load(end($nodes));
     $this->assertEquals('Basic Page - ', substr($node->title->value, 0, 13));
@@ -203,7 +203,7 @@ class DevelGenerateCommandsTest extends BrowserTestBase {
     $this->drush('devel-generate-media', [53], ['kill' => NULL]);
     $this->assertCount(53, \Drupal::entityQuery('media')->execute());
     $messages = $this->getErrorOutput();
-    $this->assertContains('Finished 53 elements created successfully.', $messages, 'devel-generate-media batch ending message not found', TRUE);
+    $this->assertStringContainsStringIgnoringCase('Finished 53 elements created successfully.', $messages, 'devel-generate-media batch ending message not found');
 
     // Test also with a non-batch process. We're testing also --kill here.
     $this->drush('devel-generate-media', [7], [

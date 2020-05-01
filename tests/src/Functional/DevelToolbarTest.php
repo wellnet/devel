@@ -187,8 +187,9 @@ class DevelToolbarTest extends DevelBrowserTestBase {
     foreach ($devel_menu_items as $link) {
       $item_selector = sprintf('ul.toolbar-menu a:contains("%s")', $link['title']);
       $item = $this->assertSession()->elementExists('css', $item_selector, $toolbar_tray);
-      // TODO: find a more correct way to test link url.
-      $this->assertContains(strtok($link['url'], '?'), $item->getAttribute('href'));
+      // Only test the url up to the ? as the destination and token parameters
+      // will vary and are not checkable.
+      $this->assertEquals(strtok($link['url'], '?'), strtok($item->getAttribute('href'), '?'));
 
       $not_visible = !in_array($link['id'], $this->defaultToolbarItems);
       $this->assertTrue($not_visible === $item->hasClass('toolbar-horizontal-item-hidden'));
