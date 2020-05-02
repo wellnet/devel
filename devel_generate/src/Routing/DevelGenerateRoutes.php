@@ -32,7 +32,7 @@ class DevelGenerateRoutes implements ContainerInjectionInterface {
   }
 
   /**
-   *
+   * Define routes for all devel_generate plugins.
    */
   public function routes() {
     $devel_generate_plugins = $this->DevelGenerateManager->getDefinitions();
@@ -53,6 +53,19 @@ class DevelGenerateRoutes implements ContainerInjectionInterface {
         ]
       );
     }
+
+    // Add the route for the 'Generate' admin group on the admin/config page.
+    // This also provides the page for all devel_generate links.
+    $routes['devel_generate.admin_config_generate'] = new Route(
+      '/admin/config/development/generate',
+      [
+        '_controller' => '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage',
+        '_title' => 'Generate',
+      ],
+      [
+        '_permission' => 'administer devel_generate',
+      ]
+    );
 
     return $routes;
   }
