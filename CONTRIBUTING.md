@@ -4,7 +4,7 @@ Local Development
 ===========
 1. Clone devel `git clone --branch 8.x-3.x https://git.drupalcode.org/project/devel.git`
 1. `cd devel`
-1. Assemble a codebase (i.e. get Drupal core). `composer install`. Your source tree now looks like : ![Folder tree](/icons/folders.png)
+1. Assemble a codebase (i.e. get Drupal core). `composer install`. Your source tree now looks like: ![Folder tree](/icons/folders.png)
 1. Install a testing site `composer si`
 1. Configure a web server to serve devel's `/web` directory as docroot. __Any__ of these works fine:
     1. `composer runserver`
