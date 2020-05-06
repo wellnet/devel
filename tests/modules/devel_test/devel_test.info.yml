@@ -2,5 +2,4 @@ name: 'Devel test module'
 type: module
 description: 'Support module for Devel testing.'
 package: Testing
-version: VERSION
 core_version_requirement: ^8.8 || ^9

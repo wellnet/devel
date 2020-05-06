@@ -68,4 +68,3 @@ services:
 volumes:
   mariadb-datavolume:
   postgres-datavolume:
-
