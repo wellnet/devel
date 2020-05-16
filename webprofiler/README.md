@@ -1,3 +1,5 @@
+[[_TOC_]]
+
 #### Dependencies
 - d3.js: Webprofiler module requires D3 library 3.x (not 4.x) to render data.
 - highlight.js: Webprofiler module requires highlight 9.7.x library to syntax highlight collected queries.

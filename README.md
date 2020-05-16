@@ -9,18 +9,14 @@ inquisitive admins:
  - A block for masquerading as other users (useful for testing)
  - A mail-system class which redirects outbound email to files
  - Drush commands such as fn-hook, fn-event, ...
- - Docs at https://api.drupal.org/api/devel
- - more
+ - *Webprofiler*. Adds a debug bar at bottom of all pages with tons of useful
+ information like a query list, cache hit/miss data, memory profiling, page
+ speed, php info, session info, etc.
+ - *Devel Generate*. Bulk creates nodes, users, comment, terms for development. Has
+ Drush integration.
 
 This module is safe to use on a production site. Just be sure to only grant
 _access development information_ permission to developers.
-
-#### Included Modules and Features
-- *Webprofiler*. Adds a debug bar at bottom of all pages with tons of useful
-information like a query list, cache hit/miss data, memory profiling, page
-speed, php info, session info, etc.
-- *Devel Generate*. Bulk creates nodes, users, comment, terms for development. Has
-Drush integration.
 
 #### Recommended Modules
 

@@ -1,4 +1,10 @@
-## Devel Generate
+This module may be used to create entities that contain sample content. This is
+useful when showing off your site to a client, for example. Even if the content
+is not yet available, the site can show its look and feel and behavior.
+
+The sample entities may be created via the Web or via the included Drush commands.
+
+## Custom plugins.
 
 This module creates the _DevelGenerate_ plugin type.
 
