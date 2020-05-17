@@ -18,9 +18,26 @@ inquisitive admins:
 This module is safe to use on a production site. Just be sure to only grant
 _access development information_ permission to developers.
 
-#### Recommended Modules
+Devel comes with a modern and useful development environment.
 
-- [Devel Images Provider](http://drupal.org/project/devel_image_provider) allows to configure external providers for images.
+#### Local Development
+1. Clone devel `git clone --branch 8.x-3.x https://git.drupalcode.org/project/devel.git`
+1. `cd devel`
+1. Assemble a codebase (i.e. get Drupal core). `composer install`. Your source tree now looks like: ![Folder tree](/icons/folders.png)
+1. Install a testing site `composer si`
+1. Configure a web server to serve devel's `/web` directory as docroot. __Any__ of these works fine:
+    1. `composer runserver`
+	1. Setup Apache/Nginx/Other. A virtual host will work fine. Any domain name works.
+	1. docker-compose.yml is available for local development if you wish. More info at [wodby/php](https://github.com/wodby/php).
+
+#### Testing
+- [CI docs](https://gitlab.com/drupalspoons/webmasters/-/blob/master/docs/ci.md) give info on running tests.
+- See [develCommandsTest.php](tests/src/Functional/DevelCommandsTest.php) for an example of Drush command testing. This uses Drush's own test framework, based on PHPUnit.
+
+#### DrupalSpoons
+https://gitlab.com/drupalspoons/devel is our workplace for code, MRs, and CI. We push back to git.drupalcode.org in order to keep
+[Security Team](https://www.drupal.org/security) coverage and packages.drupal.org integration.
+Devel would love to migrate back to a fully featured git.drupalcode.org, in the future.
 
 #### Maintainers
 

@@ -1,10 +1,16 @@
+[[_TOC_]]
+
 This module may be used to create entities that contain sample content. This is
 useful when showing off your site to a client, for example. Even if the content
 is not yet available, the site can show its look and feel and behavior.
 
 The sample entities may be created via the Web or via the included Drush commands.
 
-## Custom plugins.
+#### Recommended Modules
+
+- [Devel Images Provider](http://drupal.org/project/devel_image_provider) allows to configure external providers for images.
+
+#### Custom plugins
 
 This module creates the _DevelGenerate_ plugin type.
 
@@ -37,7 +43,7 @@ values.
 1. Implement the `generateElements` method. You can write here your business
 logic using the array of values.
 
-### Notes:
+#### Notes
 
 - You can alter existing properties for every plugin by implementing
 `hook_devel_generate_info_alter`.
