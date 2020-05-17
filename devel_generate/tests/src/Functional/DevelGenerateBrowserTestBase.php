@@ -42,8 +42,6 @@ abstract class DevelGenerateBrowserTestBase extends BrowserTestBase {
    */
   public function setUp() {
     parent::setUp();
-    $admin_user = $this->drupalCreateUser(['administer devel_generate', 'access devel information']);
-    $this->drupalLogin($admin_user);
     $this->setUpData();
   }
 

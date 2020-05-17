@@ -74,6 +74,7 @@ function devel_generate_drush_command() {
     'options' => [
       'kill' => 'Delete all content before generating new content.',
       'bundles' => 'A comma delimited list of content types to create. Defaults to page,article.',
+      'authors' => 'A comma delimited list of authors ids. Default is all users.',
       'feedback' => 'An integer representing interval for insertion rate logging. Defaults to 1000',
       'skip-fields' => 'A comma delimited list of fields to omit when generating random values',
       'languages' => 'A comma-separated list of language codes',

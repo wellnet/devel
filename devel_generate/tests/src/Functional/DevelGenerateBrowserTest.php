@@ -42,6 +42,7 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
     // First we create a node in order to test the Delete content checkbox.
     $this->drupalCreateNode(['type' => 'article']);
 
+    // Generate articles with comments and aliases.
     $edit = [
       'num' => 4,
       'kill' => TRUE,
@@ -69,6 +70,7 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
       $this->assertSession()->pageTextContains($node->getTitle(), 'Generated url alias for the node works.');
     }
 
+    // Generate articles with translations.
     $edit = [
       'num' => 3,
       'kill' => TRUE,
@@ -121,7 +123,7 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
     $node = Node::load(end($pages));
     $this->assertFalse($node->hasTranslation('fr'));
 
-    // Create content with add-content-label option.
+    // Create articles with add-type-label option.
     $edit = [
       'num' => 5,
       'kill' => TRUE,
@@ -139,6 +141,40 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
     // Load the final node and verify that the title starts with the label.
     $node = Node::load(end($nodes));
     $this->assertEquals('Article - ', substr($node->title->value, 0, 10));
+
+    // Test creating content with specified authors. First create 15 more users
+    // making 18 in total, to make the test much stronger.
+    for ($i = 0; $i < 15; $i++) {
+      $this->drupalCreateUser();
+    }
+    $edit = [
+      'num' => 10,
+      'kill' => TRUE,
+      'node_types[article]' => TRUE,
+      'authors[3]' => TRUE,
+      'authors[4]' => TRUE,
+    ];
+    $this->drupalPostForm('admin/config/development/generate/content', $edit, 'Generate');
+
+    // Display the full content list for information and debug only.
+    $this->drupalGet('admin/content');
+
+    // Count all the articles by user 3 and 4 and by others. We count the two
+    // users nodes separately to ensure that there are some by each user.
+    $nodes_by_user_3 = \Drupal::entityQuery('node')->condition('type', 'article')->condition('uid', ['3'], 'IN')->execute();
+    $nodes_by_user_4 = \Drupal::entityQuery('node')->condition('type', 'article')->condition('uid', ['4'], 'IN')->execute();
+    $nodes_by_others = \Drupal::entityQuery('node')->condition('type', 'article')->condition('uid', ['3', '4'], 'NOT IN')->execute();
+
+    // If the user option was not working correctly and users were assigned at
+    // random, then the chance that these assertions will correctly detect the
+    // error is 1 - (2/18 ** 10) = 99.99%.
+    $this->assertEquals(10, count($nodes_by_user_3) + count($nodes_by_user_4));
+    $this->assertCount(0, $nodes_by_others);
+
+    // If the user option is coded correctly the chance of either of these
+    // assertions giving a false failure is 1/2 ** 10 = 0.097%.
+    $this->assertGreaterThan(0, count($nodes_by_user_3));
+    $this->assertGreaterThan(0, count($nodes_by_user_4));
   }
 
   /**

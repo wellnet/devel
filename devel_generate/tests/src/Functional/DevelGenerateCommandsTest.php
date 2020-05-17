@@ -190,6 +190,19 @@ class DevelGenerateCommandsTest extends BrowserTestBase {
     // Load the final node and verify that the title starts with the label.
     $node = Node::load(end($nodes));
     $this->assertEquals('Basic Page - ', substr($node->title->value, 0, 13));
+
+    // Generate articles with a specified users.
+    $this->drush('devel-generate-content -v', [10], [
+      'kill' => NULL,
+      'bundles' => 'article',
+      'authors' => '2',
+    ]);
+    // Count the nodes assigned to user 2. We have two other users (0 and 1) so
+    // if the code was broken and users were assigned randomly the chance that
+    // this fauly would be detected is 1 - (1/3 ** 10) = 99.998%.
+    $nodes = \Drupal::entityQuery('node')->condition('type', 'article')->condition('uid', ['2'], 'IN')->execute();
+    $this->assertCount(10, $nodes);
+
   }
 
   /**

@@ -30,6 +30,14 @@ trait DevelGenerateSetupTrait {
    * General set-up for all tests.
    */
   public function setUpData() {
+    // Create user with devel_generate permissions and access to admin/content.
+    $admin_user = $this->drupalCreateUser([
+      'administer devel_generate',
+      'access devel information',
+      'access content overview',
+    ]);
+    $this->drupalLogin($admin_user);
+
     $entity_type_manager = $this->container->get('entity_type.manager');
     // Create Basic page and Article node types.
     if ($this->profile != 'standard') {

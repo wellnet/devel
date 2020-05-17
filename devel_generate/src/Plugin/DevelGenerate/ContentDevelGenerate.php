@@ -19,6 +19,7 @@ use Drupal\devel_generate\DevelGenerateBase;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\node\NodeInterface;
 use Drupal\path_alias\PathAliasStorage;
+use Drupal\user\UserStorageInterface;
 use Drush\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -55,6 +56,13 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
    * @var \Drupal\Core\Entity\EntityStorageInterface
    */
   protected $nodeTypeStorage;
+
+  /**
+   * The user storage.
+   *
+   * @var \Drupal\user\UserStorageInterface
+   */
+  protected $userStorage;
 
   /**
    * The module handler.
@@ -139,6 +147,8 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
    *   The node storage.
    * @param \Drupal\Core\Entity\EntityStorageInterface $node_type_storage
    *   The node type storage.
+   * @param \Drupal\user\UserStorageInterface $user_storage
+   *   The user storage.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
    * @param \Drupal\comment\CommentManagerInterface $comment_manager
@@ -158,12 +168,13 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
    * @param \Drupal\Core\Database\Connection $database
    *   Database connection.
    */
-  public function __construct(array $configuration, $plugin_id, array $plugin_definition, EntityStorageInterface $node_storage, EntityStorageInterface $node_type_storage, ModuleHandlerInterface $module_handler, CommentManagerInterface $comment_manager = NULL, LanguageManagerInterface $language_manager, ContentTranslationManagerInterface $content_translation_manager = NULL, UrlGeneratorInterface $url_generator, PathAliasStorage $alias_storage, DateFormatterInterface $date_formatter, Time $time, Connection $database) {
+  public function __construct(array $configuration, $plugin_id, array $plugin_definition, EntityStorageInterface $node_storage, EntityStorageInterface $node_type_storage, UserStorageInterface $user_storage, ModuleHandlerInterface $module_handler, CommentManagerInterface $comment_manager = NULL, LanguageManagerInterface $language_manager, ContentTranslationManagerInterface $content_translation_manager = NULL, UrlGeneratorInterface $url_generator, PathAliasStorage $alias_storage, DateFormatterInterface $date_formatter, Time $time, Connection $database) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->moduleHandler = $module_handler;
     $this->nodeStorage = $node_storage;
     $this->nodeTypeStorage = $node_type_storage;
+    $this->userStorage = $user_storage;
     $this->commentManager = $comment_manager;
     $this->languageManager = $language_manager;
     $this->contentTranslationManager = $content_translation_manager;
@@ -183,6 +194,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       $configuration, $plugin_id, $plugin_definition,
       $entity_type_manager->getStorage('node'),
       $entity_type_manager->getStorage('node_type'),
+      $entity_type_manager->getStorage('user'),
       $container->get('module_handler'),
       $container->has('comment.manager') ? $container->get('comment.manager') : NULL,
       $container->get('language_manager'),
@@ -324,6 +336,36 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
 
     // Add the language and translation options.
     $form += $this->getLanguageForm('nodes');
+
+    // Add the user selection checkboxes.
+    $author_header = [
+      'id' => $this->t('User ID'),
+      'user' => $this->t('Name'),
+      'role' => $this->t('Role(s)'),
+    ];
+
+    $author_rows = [];
+    /** @var \Drupal\user\UserInterface $user */
+    foreach ($this->userStorage->loadMultiple() as $user) {
+      $author_rows[$user->id()] = [
+        'id' => ['#markup' => $user->id()],
+        'user' => ['#markup' => $user->getAccountName()],
+        'role' => ['#markup' => implode(", ", $user->getRoles())],
+      ];
+    }
+
+    $form['authors-wrap'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Users'),
+      '#open' => FALSE,
+      '#description' => $this->t('Select users for randomly assigning as authors of the generated content. Leave blank to use all users.'),
+    ];
+
+    $form['authors-wrap']['authors'] = [
+      '#type' => 'tableselect',
+      '#header' => $author_header,
+      '#options' => $author_rows,
+    ];
 
     $form['#redirect'] = FALSE;
 
@@ -513,6 +555,10 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     if (array_diff($node_types, $all_types)) {
       throw new \Exception(dt('One or more content types have been entered that don\'t exist on this site'));
     }
+
+    $authors = $this->isDrush8() ? drush_get_option('authors') : $options['authors'];
+    $values['authors'] = is_null($authors) ? [] : explode(',', $authors);
+
     if ($this->isBatch($values['num'], $values['max_comments'])) {
       $this->drushBatch = TRUE;
       $this->develGenerateContentPreNode($values);
@@ -553,9 +599,23 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
    *   Results information.
    */
   protected function develGenerateContentPreNode(array &$results) {
-    // Get an array of user ids.
-    $users = $this->getUsers();
-    $results['users'] = $users;
+    $authors = $results['authors'];
+    // Remove non-selected users. !== 0 will leave the Anonymous user in if it
+    // was selected on the form or entered in the drush parameters.
+    $authors = array_filter($authors, function ($k) {
+      return $k !== 0;
+    });
+    // If no users are specified then get a random set up to a maximum of 50.
+    // There is no direct way randomise the selection using entity queries, so
+    // we use a database query instead.
+    if (empty($authors)) {
+      $query = $this->database->select('users', 'u')
+        ->fields('u', ['uid'])
+        ->range(0, 50)
+        ->orderRandom();
+      $authors = $query->execute()->fetchCol();
+    }
+    $results['users'] = $authors;
   }
 
   /**
@@ -669,18 +729,6 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       }
       $results['num_translations']++;
     }
-  }
-
-  /**
-   * Retrieve 50 uids from the database.
-   */
-  protected function getUsers() {
-    $users = [];
-    $result = $this->database->queryRange("SELECT uid FROM {users}", 0, 50);
-    foreach ($result as $record) {
-      $users[] = $record->uid;
-    }
-    return $users;
   }
 
 }
