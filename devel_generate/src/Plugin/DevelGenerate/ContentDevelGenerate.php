@@ -358,7 +358,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       '#type' => 'details',
       '#title' => $this->t('Users'),
       '#open' => FALSE,
-      '#description' => $this->t('Select users for randomly assigning as authors of the generated content. Leave blank to use all users.'),
+      '#description' => $this->t('Select users for randomly assigning as authors of the generated content. Leave all unchecked to use a random selection of 50 users.'),
     ];
 
     $form['authors-wrap']['authors'] = [
