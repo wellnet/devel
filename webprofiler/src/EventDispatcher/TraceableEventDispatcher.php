@@ -65,7 +65,7 @@ class TraceableEventDispatcher extends ContainerAwareEventDispatcher implements 
 
       // Invoke listeners and resolve callables if necessary.
       foreach ($this->listeners[$event_name] as $priority => &$definitions) {
-        foreach ($definitions as $key => &$definition) {
+        foreach ($definitions as &$definition) {
           if (!isset($definition['callable'])) {
             $definition['callable'] = [
               $this->container->get($definition['service'][0]),

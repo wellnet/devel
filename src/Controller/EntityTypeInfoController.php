@@ -169,7 +169,7 @@ class EntityTypeInfoController extends ControllerBase {
    *   If the requested entity type is not defined.
    */
   public function entityTypeFields($entity_type_id) {
-    if (!$entity_type = $this->entityTypeManager()->getDefinition($entity_type_id, FALSE)) {
+    if (!$this->entityTypeManager()->getDefinition($entity_type_id, FALSE)) {
       throw new NotFoundHttpException();
     }
 

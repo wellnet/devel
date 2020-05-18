@@ -113,7 +113,7 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
     $hits = [];
     foreach ($this->data['cache'] as $bin => $caches) {
       $hits[$bin] = 0;
-      foreach ($caches as $cid => $cache) {
+      foreach ($caches as $cache) {
         $hits[$bin] += $cache->{$type};
       }
     }
