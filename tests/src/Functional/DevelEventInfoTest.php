@@ -36,6 +36,7 @@ class DevelEventInfoTest extends DevelBrowserTestBase {
    * Tests event info page.
    */
   public function testEventList() {
+    /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher */
     $event_dispatcher = \Drupal::service('event_dispatcher');
 
     $this->drupalGet('/devel/events');
@@ -103,7 +104,8 @@ class DevelEventInfoTest extends DevelBrowserTestBase {
         $this->assertEquals($callable_name, $cell_callable->getText());
 
         $cell_methods = $cells[2];
-        $this->assertEquals($index, $cell_methods->getText());
+        $priority = $event_dispatcher->getListenerPriority($event_name, $listener);
+        $this->assertEquals($priority, $cell_methods->getText());
       }
     }
 
