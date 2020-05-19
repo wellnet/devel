@@ -80,7 +80,7 @@ class DevelQueryDebugTest extends KernelTestBase {
     $query->execute();
 
     $messages = $this->getDrupalMessages();
-    $this->assertTrue(!empty($messages['status']));
+    $this->assertNotEmpty($messages['status']);
     $this->assertCount(1, $messages['status']);
     $actual_message = strip_tags($messages['status'][0]);
     // In Drupal 9 the literals are quoted, but not in Drupal 8. We only need
@@ -116,7 +116,7 @@ class DevelQueryDebugTest extends KernelTestBase {
     $query->execute();
 
     $messages = $this->getDrupalMessages();
-    $this->assertTrue(!empty($messages['status']));
+    $this->assertNotEmpty($messages['status']);
     $this->assertCount(1, $messages['status']);
     $actual_message = strip_tags($messages['status'][0]);
     $actual_message = str_replace(['"', "'"], ['', ''], $actual_message);

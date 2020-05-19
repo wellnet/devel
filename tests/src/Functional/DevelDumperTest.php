@@ -90,19 +90,19 @@ class DevelDumperTest extends DevelBrowserTestBase {
 
     $this->drupalGet('devel_dumper_test/dump');
     $elements = $this->xpath('//body/pre[contains(text(), :message)]', [':message' => 'AvailableTestDumper::dump() Test output']);
-    $this->assertTrue(!empty($elements), 'Dumped message is present.');
+    $this->assertNotEmpty($elements, 'Dumped message is present.');
 
     $this->drupalGet('devel_dumper_test/message');
     $elements = $this->xpath('//div[@aria-label="Status message"]/pre[contains(text(), :message)]', [':message' => 'AvailableTestDumper::export() Test output']);
-    $this->assertTrue(!empty($elements), 'Dumped message is present.');
+    $this->assertNotEmpty($elements, 'Dumped message is present.');
 
     $this->drupalGet('devel_dumper_test/export');
     $elements = $this->xpath('//div[@class="layout-content"]//pre[contains(text(), :message)]', [':message' => 'AvailableTestDumper::export() Test output']);
-    $this->assertTrue(!empty($elements), 'Dumped message is present.');
+    $this->assertNotEmpty($elements, 'Dumped message is present.');
 
     $this->drupalGet('devel_dumper_test/export_renderable');
     $elements = $this->xpath('//div[@class="layout-content"]//pre[contains(text(), :message)]', [':message' => 'AvailableTestDumper::exportAsRenderable() Test output']);
-    $this->assertTrue(!empty($elements), 'Dumped message is present.');
+    $this->assertNotEmpty($elements, 'Dumped message is present.');
     // Ensures that plugins can add libraries to the page when the
     // ::exportAsRenderable() method is used.
     $this->assertSession()->responseContains('devel_dumper_test/css/devel_dumper_test.css');
