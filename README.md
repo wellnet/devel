@@ -18,10 +18,14 @@ inquisitive admins:
 This module is safe to use on a production site. Just be sure to only grant
 _access development information_ permission to developers.
 
-Devel comes with a modern and useful development environment.
+#### DrupalSpoons
+https://gitlab.com/drupalspoons/devel is our workplace for code, MRs, and CI. See
+[DrupalSpoons](https://gitlab.com/drupalcontrib/webmasters/-/blob/master/README.md)
+for more info. We push back to git.drupalcode.org in order to keep
+[Security Team](https://www.drupal.org/security) coverage and packages.drupal.org integration.
 
 #### Local Development
-1. Clone devel `git clone --branch 8.x-3.x https://git.drupalcode.org/project/devel.git`
+1. Clone devel `git clone https://git.drupalcode.org/project/devel.git`
 1. `cd devel`
 1. Assemble a codebase (i.e. get Drupal core). `composer install`. Your source tree now looks like: ![Folder tree](/icons/folders.png)
 1. Install a testing site `composer si`
@@ -33,11 +37,6 @@ Devel comes with a modern and useful development environment.
 #### Testing
 - [CI docs](https://gitlab.com/drupalspoons/webmasters/-/blob/master/docs/ci.md) give info on running tests.
 - See [develCommandsTest.php](tests/src/Functional/DevelCommandsTest.php) for an example of Drush command testing. This uses Drush's own test framework, based on PHPUnit.
-
-#### DrupalSpoons
-https://gitlab.com/drupalspoons/devel is our workplace for code, MRs, and CI. We push back to git.drupalcode.org in order to keep
-[Security Team](https://www.drupal.org/security) coverage and packages.drupal.org integration.
-Devel would love to migrate back to a fully featured git.drupalcode.org, in the future.
 
 #### Maintainers
 
