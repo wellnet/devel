@@ -2,10 +2,12 @@
 
 namespace Drupal\webprofiler {
 
+  use Symfony\Component\Stopwatch\Stopwatch as SymfonyStopwatch;
+
   /**
    * Class Stopwatch.
    */
-  class Stopwatch extends \Symfony\Component\Stopwatch\Stopwatch {
+  class Stopwatch extends SymfonyStopwatch {
 
   }
 
