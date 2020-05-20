@@ -3,8 +3,6 @@
 namespace Drupal\Tests\webprofiler\FunctionalJavascript;
 
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
-use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit_Framework_AssertionFailedError;
 
 /**
  * Class WebprofilerTestBase.
