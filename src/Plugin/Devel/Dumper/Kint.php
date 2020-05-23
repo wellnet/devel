@@ -51,15 +51,30 @@ class Kint extends DevelDumperBase {
       call_user_func_array(['Kint', 'dump'], $input);
       $name = NULL;
     }
+    elseif ($name !== NULL) {
+      // In order to get the correct access path information returned from Kint
+      // we have to give a second parameter here. This is due to a fault in
+      // Kint::getSingleCall which returns no info when the number of arguments
+      // passed to Kint::dump does not match the number in the original call
+      // that invoked the export (such as dsm). However, this second parameter
+      // is just treated as the next variable to dump, it is not used as the
+      // label. So we give a dummy value that we can remove below.
+      // @see https://gitlab.com/drupalspoons/devel/-/issues/252
+      \Kint::dump($input, '---remove-this---');
+    }
     else {
       \Kint::dump($input);
     }
     $dump = ob_get_clean();
-
-    // Kint does't allow to assign a title to the dump. Workaround to use the
-    // passed in name as dump title.
     if ($name) {
-      $dump = preg_replace('/\$input/', $name, $dump, 1);
+      // Kint no longer treats an additional parameter as a custom title, but we
+      // can add in the required $name to the dump output. Providing that a
+      // variable starting with $ was passed to the original call, we can find
+      // the place where this starts and add in our custom $name.
+      $dump = str_replace('<dfn>$', '<dfn>' . $name . ': $', $dump);
+
+      // Remove the entire output for the second dummy parameter.
+      $dump = str_replace('<dl><dt><var>string</var> (17) "---remove-this---"</dt></dl>', '', $dump);
     }
 
     return $this->setSafeMarkup($dump);
