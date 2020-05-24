@@ -73,8 +73,10 @@ class Kint extends DevelDumperBase {
       // the place where this starts and add in our custom $name.
       $dump = str_replace('<dfn>$', '<dfn>' . $name . ': $', $dump);
 
-      // Remove the entire output for the second dummy parameter.
-      $dump = str_replace('<dl><dt><var>string</var> (17) "---remove-this---"</dt></dl>', '', $dump);
+      // Remove the output for the second dummy parameter. $1 will be the greedy
+      // match of everything before <dl><dt> related to the section to remove.
+      $pattern = '/(.*)(<dl><dt>)(.*)("---remove-this---"<\/dt><\/dl>)/';
+      $dump = preg_replace($pattern, '$1', $dump, 1);
     }
 
     return $this->setSafeMarkup($dump);
