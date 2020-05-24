@@ -202,6 +202,42 @@ abstract class DevelGenerateBase extends PluginBase implements DevelGenerateBase
   }
 
   /**
+   * Generates a random sentence of specific length.
+   *
+   * Words are randomly selected with length from 2 up to the optional parameter
+   * $max_word_length. The first word is capitalised. No ending period is added.
+   *
+   * @param int $sentence_length
+   *   The total length of the sentence, including the word-separating spaces.
+   * @param int $max_word_length
+   *   (optional) Maximum length of each word. Defaults to 8.
+   *
+   * @return string
+   *   A sentence of the required length.
+   */
+  protected function randomSentenceOfLength($sentence_length, $max_word_length = 8) {
+    // Maximum word length cannot be longer than the sentence length.
+    $max_word_length = min($sentence_length, $max_word_length);
+    $words = [];
+    $remainder = $sentence_length;
+    do {
+      if ($remainder <= $max_word_length) {
+        // If near enough to the end then generate the exact length word to fit.
+        $next_word = $remainder;
+      }
+      else {
+        // Cannot fill the remaining space with one word, so choose a random
+        // length, short enough for a following word of at least minimum length.
+        $next_word = mt_rand(2, min($max_word_length, $remainder - 3));
+      }
+      $words[] = $this->getRandom()->word($next_word);
+      $remainder = $remainder - $next_word - 1;
+    } while ($remainder > 0);
+    $sentence = ucfirst(implode(' ', $words));
+    return $sentence;
+  }
+
+  /**
    * Determines if Drush is version 8.
    *
    * Later versions do not have the 'drush_drupal_load_autoloader' function so

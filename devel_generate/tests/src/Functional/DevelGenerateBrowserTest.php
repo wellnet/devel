@@ -228,22 +228,35 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
 
   /**
    * Tests generating menus.
+   *
+   * @todo Add test coverage to check:
+   *   - title_length is not exceeded.
+   *   - max_depth and max_width work as designed.
+   *   - generating links in existing menus, and then deleting them with kill.
+   *   - using specific link_types settings only create those links.
    */
   public function testDevelGenerateMenus() {
     $edit = [
       'num_menus' => 5,
       'num_links' => 7,
-      'title_length' => 12,
-      'link_types[node]' => 1,
-      'link_types[front]' => 1,
-      'link_types[external]' => 1,
-      'max_depth' => 4,
-      'max_width' => 6,
+    ];
+    $this->drupalPostForm('admin/config/development/generate/menu', $edit, 'Generate');
+    $this->assertSession()->pageTextContains('Created the following 5 new menus: ');
+    $this->assertSession()->pageTextContains('Created 7 new menu links');
+    $this->assertSession()->pageTextContains('Generate process complete.');
+
+    // Use big numbers for menus and links, but short text, to test for clashes.
+    // Also verify the kill option.
+    $edit = [
+      'num_menus' => 160,
+      'num_links' => 380,
+      'title_length' => 3,
       'kill' => 1,
     ];
     $this->drupalPostForm('admin/config/development/generate/menu', $edit, 'Generate');
-    $this->assertSession()->pageTextContains('Created the following new menus: ');
-    $this->assertSession()->pageTextContains('Created 7 new menu links');
+    $this->assertSession()->pageTextContains('Deleted 5 menu(s) and 0 other link(s).');
+    $this->assertSession()->pageTextContains('Created the following 160 new menus: ');
+    $this->assertSession()->pageTextContains('Created 380 new menu links');
     $this->assertSession()->pageTextContains('Generate process complete.');
   }
 
