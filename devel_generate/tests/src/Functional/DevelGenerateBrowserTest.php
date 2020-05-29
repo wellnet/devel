@@ -26,6 +26,12 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
     $this->assertText('4 users created.');
     $this->assertText('Generate process complete.');
 
+  }
+
+  /**
+   * Tests generating content.
+   */
+  public function testDevelGenerateContent() {
     // Tests that if no content types are selected an error message is shown.
     $edit = [
       'num' => 4,
@@ -33,13 +39,8 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
     ];
     $this->drupalPostForm('admin/config/development/generate/content', $edit, 'Generate');
     $this->assertText('Please select at least one content type');
-  }
 
-  /**
-   * Tests generating content.
-   */
-  public function testDevelGenerateContent() {
-    // First we create a node in order to test the Delete content checkbox.
+    // Create a node in order to test the Delete content checkbox.
     $this->drupalCreateNode(['type' => 'article']);
 
     // Generate articles with comments and aliases.
