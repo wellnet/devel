@@ -200,7 +200,7 @@ function backtrace_error_handler($error_level, $message, $filename = NULL, $line
     if ($error_level & error_reporting()) {
       $types = drupal_error_levels();
       list($severity_msg, $severity_level) = $types[$error_level];
-      $backtrace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS );
+      $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
       $caller = Error::getLastCaller($backtrace);
 
       // We treat recoverable errors as fatal.
@@ -242,7 +242,7 @@ function backtrace_error_handler($error_level, $message, $filename = NULL, $line
     $types = drupal_error_levels();
     list($severity_msg, $severity_level) = $types[$error_level];
 
-    $backtrace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS );
+    $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
     $caller = Error::getLastCaller($backtrace);
     $variables = [
       '%type' => isset($types[$error_level]) ? $severity_msg : 'Unknown error',
@@ -561,7 +561,7 @@ function dvr($input, $export = FALSE, $name = NULL) {
 function dargs($always = TRUE) {
   static $printed;
   if ($always || !$printed) {
-    $bt = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS );
+    $bt = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
     print kpr($bt[1]['args'], TRUE);
     $printed = TRUE;
   }
