@@ -211,6 +211,32 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
     $this->assertTrue($term->hasTranslation('ca'));
     $this->assertFalse($term->hasTranslation('de'));
     $this->assertFalse($term->hasTranslation('fr'));
+
+    // Generate terms in vocabulary 2 only.
+    $edit = [
+      'vids[]' => $this->vocabulary2->id(),
+      'num' => 4,
+    ];
+    $this->drupalPostForm('admin/config/development/generate/term', $edit, 'Generate');
+    // Check the term count in each vocabulary.
+    $terms1 = \Drupal::entityQuery('taxonomy_term')->condition('vid', $this->vocabulary->id())->execute();
+    $this->assertCount(8, $terms1);
+    $terms2 = \Drupal::entityQuery('taxonomy_term')->condition('vid', $this->vocabulary2->id())->execute();
+    $this->assertCount(4, $terms2);
+
+    // Generate in vocabulary 2 with 'kill' to remove the existing vocab 2 terms.
+    $edit = [
+      'vids[]' => $this->vocabulary2->id(),
+      'num' => 6,
+      'kill' => TRUE,
+    ];
+    $this->drupalPostForm('admin/config/development/generate/term', $edit, 'Generate');
+    // Check the term count in vocabulary 1 has not changed.
+    $terms1 = \Drupal::entityQuery('taxonomy_term')->condition('vid', $this->vocabulary->id())->execute();
+    $this->assertCount(8, $terms1);
+    // Check the term count in vocabulary 2 is just from the second call.
+    $terms2 = \Drupal::entityQuery('taxonomy_term')->condition('vid', $this->vocabulary2->id())->execute();
+    $this->assertCount(6, $terms2);
   }
 
   /**

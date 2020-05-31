@@ -20,11 +20,18 @@ trait DevelGenerateSetupTrait {
   use EntityReferenceTestTrait;
 
   /**
-   * Vocabulary for testing.
+   * Vocabulary for testing generation of terms.
    *
    * @var \Drupal\taxonomy\VocabularyInterface
    */
   protected $vocabulary;
+
+  /**
+   * Second vocabulary for testing generation of terms.
+   *
+   * @var \Drupal\taxonomy\VocabularyInterface
+   */
+  protected $vocabulary2;
 
   /**
    * General set-up for all tests.
@@ -55,11 +62,10 @@ trait DevelGenerateSetupTrait {
 
     // Creating a vocabulary to associate taxonomy terms generated.
     $this->vocabulary = Vocabulary::create([
-      'name' => $this->randomMachineName(),
+      'name' => 'Vocab 1 ' . $this->randomString(15),
       'description' => $this->randomMachineName(),
-      'vid' => mb_strtolower($this->randomMachineName()),
+      'vid' => 'vocab_1_' . mb_strtolower($this->randomMachineName()),
       'langcode' => Language::LANGCODE_NOT_SPECIFIED,
-      'weight' => mt_rand(0, 10),
     ]);
     $this->vocabulary->save();
     // Enable translation for terms in this vocabulary.
@@ -89,6 +95,15 @@ trait DevelGenerateSetupTrait {
         'type' => 'entity_reference_label',
       ])
       ->save();
+
+    // Create the second vocabulary.
+    $this->vocabulary2 = Vocabulary::create([
+      'name' => 'Vocab 2 ' . $this->randomString(15),
+      'vid' => 'vocab_2_' . mb_strtolower($this->randomMachineName()),
+      'langcode' => Language::LANGCODE_NOT_SPECIFIED,
+    ]);
+    $this->vocabulary2->save();
+
   }
 
 }

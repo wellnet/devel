@@ -13,7 +13,7 @@ class VocabularyStorageDecorator extends ConfigEntityStorageDecorator implements
    * {@inheritdoc}
    */
   public function getToplevelTids($vids) {
-    $this->getOriginalObject()->getToplevelTids($vids);
+    return $this->getOriginalObject()->getToplevelTids($vids);
   }
 
 }
