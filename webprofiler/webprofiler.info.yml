@@ -3,7 +3,7 @@ type: module
 description: 'Drupal Web Profiler.'
 package: Development
 core_version_requirement: ^8.8 || ^9
-php: 7.1
+php: 7.2
 configure: webprofiler.settings
 tags:
  - developer

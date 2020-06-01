@@ -337,12 +337,12 @@ class MediaDevelGenerate extends DevelGenerateBase implements ContainerFactoryPl
    *
    * @param array $vars
    *   The input values from the settings form.
-   * @param array $context
+   * @param iterable $context
    *   Batch job context.
    *
    * @see self::preGenerate()
    */
-  public function batchPreGenerate(array $vars, &$context) {
+  public function batchPreGenerate(array $vars, iterable &$context) {
     $context['results'] = $vars;
     $context['results']['num'] = 0;
     $this->preGenerate($context['results']);
