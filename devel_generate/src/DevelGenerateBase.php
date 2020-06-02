@@ -112,7 +112,8 @@ abstract class DevelGenerateBase extends PluginBase implements DevelGenerateBase
     /* @var \Drupal\field\FieldConfigInterface[] $instances */
     $instances = $field_config_storage->loadByProperties($properties);
 
-    if ($skips = function_exists('drush_get_option') ? drush_get_option('skip-fields', '') : @$_REQUEST['skip-fields']) {
+    // @todo not implemented for Drush9+. Possibly remove.
+    if ($skips = @$_REQUEST['skip-fields']) {
       foreach (explode(',', $skips) as $skip) {
         unset($instances[$skip]);
       }
@@ -235,16 +236,6 @@ abstract class DevelGenerateBase extends PluginBase implements DevelGenerateBase
     } while ($remainder > 0);
     $sentence = ucfirst(implode(' ', $words));
     return $sentence;
-  }
-
-  /**
-   * Determines if Drush is version 8.
-   *
-   * Later versions do not have the 'drush_drupal_load_autoloader' function so
-   * will return FALSE for 9 and higher.
-   */
-  protected function isDrush8() {
-    return function_exists('drush_drupal_load_autoloader');
   }
 
   /**

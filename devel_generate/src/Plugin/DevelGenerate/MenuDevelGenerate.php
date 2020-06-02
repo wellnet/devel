@@ -240,8 +240,8 @@ class MenuDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
     $values = [
       'num_menus' => array_shift($args),
       'num_links' => array_shift($args),
-      'kill' => $this->isDrush8() ? drush_get_option('kill') : $options['kill'],
-      'pipe' => $this->isDrush8() ? drush_get_option('pipe') : $options['pipe'],
+      'kill' => $options['kill'],
+      'pipe' => $options['pipe'],
       'link_types' => array_combine($link_types, $link_types),
     ];
 

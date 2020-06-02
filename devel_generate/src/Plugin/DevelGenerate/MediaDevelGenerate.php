@@ -274,12 +274,12 @@ class MediaDevelGenerate extends DevelGenerateBase implements ContainerFactoryPl
       $start = time();
       for ($i = 1; $i <= $values['num']; $i++) {
         $this->createMediaItem($values);
-        if ($this->isDrush8() && function_exists('drush_log') && $i % drush_get_option('feedback', 1000) == 0) {
+        if (isset($values['feedback']) && $i % $values['feedback'] == 0) {
           $now = time();
-          drush_log(dt('Completed !feedback media items (!rate media/min)', [
-            '!feedback' => drush_get_option('feedback', 1000),
-            '!rate' => (drush_get_option('feedback', 1000) * 60) / ($now - $start),
-          ]), 'ok');
+          $this->messenger()->addStatus(dt('Completed !feedback media items (!rate media/min)', [
+            '!feedback' => $values['feedback'],
+            '!rate' => ($values['feedback'] * 60) / ($now - $start),
+          ]));
           $start = $now;
         }
       }
@@ -398,7 +398,7 @@ class MediaDevelGenerate extends DevelGenerateBase implements ContainerFactoryPl
    * {@inheritdoc}
    */
   public function validateDrushParams(array $args, array $options = []) {
-    $add_language = $this->isDrush8() ? drush_get_option('languages') : $options['languages'];
+    $add_language = $options['languages'];
     if (!empty($add_language)) {
       $add_language = explode(',', str_replace(' ', '', $add_language));
       // Intersect with the enabled languages to make sure the language args
@@ -406,17 +406,13 @@ class MediaDevelGenerate extends DevelGenerateBase implements ContainerFactoryPl
       $values['values']['add_language'] = array_intersect($add_language, array_keys($this->languageManager->getLanguages(LanguageInterface::STATE_ALL)));
     }
 
-    $values['kill'] = $this->isDrush8() ? drush_get_option('kill') : $options['kill'];
+    $values['kill'] = $options['kill'];
+    $values['feedback'] = $options['feedback'];
     $values['name_length'] = 6;
     $values['num'] = array_shift($args);
 
     $all_media_types = array_values($this->mediaTypeStorage->getQuery()->execute());
-    if ($this->isDrush8()) {
-      $requested_media_types = _convert_csv_to_array(drush_get_option('media-types', $all_media_types));
-    }
-    else {
-      $requested_media_types = StringUtils::csvToArray($options['media-types'] ?: $all_media_types);
-    }
+    $requested_media_types = StringUtils::csvToArray($options['media-types'] ?: $all_media_types);
 
     if (empty($requested_media_types)) {
       throw new \Exception(dt('No media types available'));

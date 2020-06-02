@@ -411,13 +411,13 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       $values['num_translations'] = 0;
       for ($i = 1; $i <= $values['num']; $i++) {
         $this->develGenerateContentAddNode($values);
-        if ($this->isDrush8() && function_exists('drush_log') && $i % drush_get_option('feedback', 1000) == 0) {
+        if (isset($values['feedback']) && $i % $values['feedback'] == 0) {
           $now = time();
           $options = [
-            '@feedback' => drush_get_option('feedback', 1000),
-            '@rate' => (drush_get_option('feedback', 1000) * 60) / ($now - $start),
+            '@feedback' => $values['feedback'],
+            '@rate' => ($values['feedback'] * 60) / ($now - $start),
           ];
-          drush_log(dt('Completed @feedback nodes (@rate nodes/min)', $options), 'ok');
+          $this->messenger()->addStatus(dt('Completed @feedback nodes (@rate nodes/min)', $options));
           $start = $now;
         }
       }
@@ -515,30 +515,25 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
    * {@inheritdoc}
    */
   public function validateDrushParams(array $args, array $options = []) {
-    $add_language = $this->isDrush8() ?
-      explode(',', drush_get_option('languages', '')) : StringUtils::csvToArray($options['languages']);
+    $add_language = StringUtils::csvToArray($options['languages']);
     // Intersect with the enabled languages to make sure the language args
     // passed are actually enabled.
     $valid_languages = array_keys($this->languageManager->getLanguages(LanguageInterface::STATE_ALL));
     $values['add_language'] = array_intersect($add_language, $valid_languages);
 
-    $translate_language = $this->isDrush8() ?
-      explode(',', drush_get_option('translations', '')) : StringUtils::csvToArray($options['translations']);
+    $translate_language = StringUtils::csvToArray($options['translations']);
     $values['translate_language'] = array_intersect($translate_language, $valid_languages);
 
-    $values['add_type_label'] = $this->isDrush8() ? drush_get_option('add-type-label') : $options['add-type-label'];
-    $values['kill'] = $this->isDrush8() ? drush_get_option('kill') : $options['kill'];
+    $values['add_type_label'] = $options['add-type-label'];
+    $values['kill'] = $options['kill'];
+    $values['kill'] = $options['kill'];
+    $values['feedback'] = $options['feedback'];
     $values['title_length'] = 6;
     $values['num'] = array_shift($args);
     $values['max_comments'] = array_shift($args);
     $all_types = array_keys(node_type_get_names());
     $default_types = array_intersect(['page', 'article'], $all_types);
-    if ($this->isDrush8()) {
-      $selected_types = _convert_csv_to_array(drush_get_option('bundles', $default_types));
-    }
-    else {
-      $selected_types = StringUtils::csvToArray($options['bundles'] ?: $default_types);
-    }
+    $selected_types = StringUtils::csvToArray($options['bundles'] ?: $default_types);
 
     if (empty($selected_types)) {
       throw new \Exception(dt('No content types available'));
@@ -556,8 +551,8 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       throw new \Exception(dt('One or more content types have been entered that don\'t exist on this site'));
     }
 
-    $authors = $this->isDrush8() ? drush_get_option('authors') : $options['authors'];
-    $values['authors'] = is_null($authors) ? [] : explode(',', $authors);
+    $values['authors'] = is_null($options['authors']) ? [] : explode(',',
+      $options['authors']);
 
     if ($this->isBatch($values['num'], $values['max_comments'])) {
       $this->drushBatch = TRUE;

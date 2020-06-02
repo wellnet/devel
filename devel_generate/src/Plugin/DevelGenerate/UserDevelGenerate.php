@@ -196,22 +196,10 @@ class UserDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
     $values = [
       'num' => array_shift($args),
       'time_range' => 0,
+      'roles' => StringUtils::csvToArray($options['roles']),
+      'kill' => $options['kill'],
+      'pass' => $options['pass'],
     ];
-
-    if ($this->isDrush8()) {
-      $values += [
-        'roles' => explode(',', drush_get_option('roles', '')),
-        'kill' => drush_get_option('kill'),
-        'pass' => drush_get_option('pass', NULL),
-      ];
-    }
-    else {
-      $values += [
-        'roles' => StringUtils::csvToArray($options['roles']),
-        'kill' => $options['kill'],
-        'pass' => $options['pass'],
-      ];
-    }
     return $values;
   }
 

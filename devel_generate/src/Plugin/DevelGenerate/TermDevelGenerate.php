@@ -332,12 +332,7 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
    * {@inheritdoc}
    */
   public function validateDrushParams(array $args, array $options = []) {
-    if ($this->isDrush8()) {
-      $bundles = _convert_csv_to_array(drush_get_option('bundles'));
-    }
-    else {
-      $bundles = StringUtils::csvToarray($options['bundles']);
-    }
+    $bundles = StringUtils::csvToarray($options['bundles']);
     if (count($bundles) < 1) {
       throw new \Exception(dt('Please provide a vocabulary machine name (--bundles).'));
     }
@@ -360,21 +355,17 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
 
     $values = [
       'num' => $number,
-      'kill' => $this->isDrush8() ? drush_get_option('kill') : $options['kill'],
+      'kill' => $options['kill'],
       'title_length' => 12,
       'vids' => $bundles,
     ];
-    $add_language = $this->isDrush8() ?
-      explode(',', drush_get_option('languages', '')) :
-      StringUtils::csvToArray($options['languages']);
+    $add_language = StringUtils::csvToArray($options['languages']);
     // Intersect with the enabled languages to make sure the language args
     // passed are actually enabled.
     $valid_languages = array_keys($this->languageManager->getLanguages(LanguageInterface::STATE_ALL));
     $values['add_language'] = array_intersect($add_language, $valid_languages);
 
-    $translate_language = $this->isDrush8() ?
-      explode(',', drush_get_option('translations', '')) :
-      StringUtils::csvToArray($options['translations']);
+    $translate_language = StringUtils::csvToArray($options['translations']);
     $values['translate_language'] = array_intersect($translate_language, $valid_languages);
 
     return $values;
