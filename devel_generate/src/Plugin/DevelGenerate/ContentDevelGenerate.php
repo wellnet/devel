@@ -526,7 +526,6 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
 
     $values['add_type_label'] = $options['add-type-label'];
     $values['kill'] = $options['kill'];
-    $values['kill'] = $options['kill'];
     $values['feedback'] = $options['feedback'];
     $values['title_length'] = 6;
     $values['num'] = array_shift($args);
