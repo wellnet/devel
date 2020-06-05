@@ -1,7 +1,7 @@
 include:
   - project: 'drupalspoons/webmasters'
     # Best practice is to pin to a tag or a SHA1. https://docs.gitlab.com/ee/ci/yaml/#includefile
-    ref: 1.5.0
+    ref: 1.6.0-rc1
     file: 'templates/.gitlab-ci.yml'
 
 # Projects can override anything in the included template. See https://docs.gitlab.com/ee/ci/yaml/README.html#include
