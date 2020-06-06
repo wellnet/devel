@@ -27,16 +27,25 @@ for more info. We push back to git.drupalcode.org in order to keep
 #### Local Development
 1. Clone devel `git clone https://git.drupalcode.org/project/devel.git`
 1. `cd devel`
-1. Assemble a codebase (i.e. get Drupal core). `composer install`. Your source tree now looks like: ![Folder tree](/icons/folders.png)
-1. Install a testing site `composer si`
+1. Assemble a codebase (i.e. get Drupal core). `composer install`. Your source tree now looks like: 
+![Folder tree](/icons/folder.png)
 1. Configure a web server to serve devel's `/web` directory as docroot. __Any__ of these works fine:
     1. `composer runserver`
 	1. Setup Apache/Nginx/Other. A virtual host will work fine. Any domain name works.
 	1. docker-compose.yml is available for local development if you wish. More info at [wodby/php](https://github.com/wodby/php).
+1. Configure a database server and a database.	
+1. Install a testing site `composer si -- --db-url=mysql://user:pass@localhost/db`. Adjust as needed.
 
 #### Testing
 - [CI docs](https://gitlab.com/drupalspoons/webmasters/-/blob/master/docs/ci.md) give info on running tests.
 - See [develCommandsTest.php](tests/src/Functional/DevelCommandsTest.php) for an example of Drush command testing. This uses Drush's own test framework, based on PHPUnit.
+
+#### Version Compatibility
+| Devel version | Drupal core | PHP | Drush |
+| ------ | ------ | ----- | ----- |
+| 4.x |8.8+ | 7.2+ | 9+
+| 8.x-2.x | 8.x |7.0+ | 8+
+
 
 #### Maintainers
 
