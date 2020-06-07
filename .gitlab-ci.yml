@@ -1,7 +1,7 @@
 include:
   - project: 'drupalspoons/webmasters'
     # Best practice is to pin to a tag or a SHA1. https://docs.gitlab.com/ee/ci/yaml/#includefile
-    ref: 1.6.0-rc2
+    ref: 1.6.0-rc3
     # The template below may be inspected at https://gitlab.com/drupalspoons/webmasters/-/blob/master/templates/.gitlab-ci.yml
     file: 'templates/.gitlab-ci.yml'
 
