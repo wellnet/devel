@@ -13,7 +13,7 @@ inquisitive admins:
  - *Webprofiler*. Adds a debug bar at bottom of all pages with tons of useful
  information like a query list, cache hit/miss data, memory profiling, page
  speed, php info, session info, etc.
- - *Devel Generate*. Bulk creates nodes, users, comment, terms for development. Has
+ - *Devel Generate*. Bulk creates nodes, users, comment, taxonomy, media, menus for development. Has
  Drush integration.
 
 This module is safe to use on a production site. Just be sure to only grant
