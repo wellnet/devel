@@ -10,7 +10,7 @@ inquisitive admins:
  - Debug a SQL query `dpq($query` or print a backtrace `ddebug_backtrace()`
  - A block for masquerading as other users (useful for testing)
  - A mail-system class which redirects outbound email to files
- - Drush commands such as fn-hook, fn-event, ...
+ - Drush commands such as `fn-hook`, `fn-event`, `token`, `uuid`, and `devel-services`
  - *Webprofiler*. Adds a debug bar at bottom of all pages with tons of useful
  information like a query list, cache hit/miss data, memory profiling, page
  speed, php info, session info, etc.
