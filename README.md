@@ -6,6 +6,7 @@ Devel module contains helper functions and pages for Drupal developers and
 inquisitive admins:
 
  - A block and toolbar for quickly accessing devel pages
+ - Debug functions for inspecting a variable such as `dpm($variable)`.
  - A block for masquerading as other users (useful for testing)
  - A mail-system class which redirects outbound email to files
  - Drush commands such as fn-hook, fn-event, ...
