@@ -5,8 +5,7 @@
   "support": {
     "issues": "https://gitlab.com/drupalspoons/devel/-/issues",
     "slack": "https://drupal.slack.com/archives/C012WAW1MH6",
-    "docs": "https://www.drupal.org/docs/8/modules/devel",
-    "source": "https://gitlab.com/drupalspoons/devel/-/tree/8.x-3.x"
+    "source": "https://gitlab.com/drupalspoons/devel"
   },
   "license": "GPL-2.0-or-later",
   "minimum-stability": "dev",
