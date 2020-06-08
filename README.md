@@ -27,7 +27,7 @@ for more info.
 - Chat with us at [#devel](https://drupal.slack.com/archives/C012WAW1MH6) on Drupal Slack.
 
 #### Local Development
-1. Clone devel `git clone https://git.drupalcode.org/project/devel.git`
+1. Clone devel `git clone https://gitlab.com/drupalforks/devel.git`
 1. `cd devel`
 1. Assemble a codebase (i.e. get Drupal core). `composer install`. Your source tree now looks like:
 ![Folder tree](/icons/folder.png)
