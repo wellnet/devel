@@ -7,7 +7,7 @@ include:
 
 #
 # Projects may override anything in the template above.
-# The code below is specific to devel project. You dont need to copy it to your new project.variables:
+# The code below is specific to devel project. You dont need to copy it to your new project.
 #
 
 # Run tests on Drupal 9 by default.

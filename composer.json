@@ -41,11 +41,11 @@
         "lint": "parallel-lint --exclude web --exclude vendor .",
         "runserver": "drush runserver 0.0.0.0",
         "chromedriver": "chromedriver --port=9515 --verbose --whitelisted-ips --log-path=/tmp/chromedriver.log --no-sandbox",
-        "create-symlinks": "cd web/modules/${PWD##*/} && find ../../.. -maxdepth 1 ! -name .git ! -name web ! -name vendor -print | while read file; do ln -s $file .; done",
-        "unit": "phpunit --verbose --printer '\\Drupal\\Tests\\Listeners\\HtmlOutputPrinter' web/modules/${PWD##*/}",
-        "phpstan": "phpstan analyse web/modules/${PWD##*/}",
+        "create-symlinks": "cd web/modules/project && find ../../.. -maxdepth 1 ! -name .git ! -name web ! -name vendor -print | while read file; do ln -s $file .; done",
+        "unit": "phpunit --verbose web/modules/project",
+        "phpstan": "phpstan analyse web/modules/project",
         "post-update-cmd": [
-            "DIR=${PWD##*/} && rm -rf web/modules/$DIR && mkdir -p web/modules/$DIR",
+            "rm -rf web/modules/project && mkdir -p web/modules/project",
             "@create-symlinks"
         ]
     },
