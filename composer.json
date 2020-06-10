@@ -35,25 +35,24 @@
   "config": {
   	"process-timeout": 36000
   },
-    "scripts": {
-        "si": "drush si -v --db-url=${SIMPLETEST_DB:-mysql://root:password@mariadb/db} testing",
-        "phpcs": "PWD=$(pwd) && phpcs --runtime-set ignore_warnings_on_exit 1 --runtime-set ignore_errors_on_exit 1 --ignore=$PWD/web/,$PWD/vendor/",
-        "lint": "parallel-lint --exclude web --exclude vendor .",
-        "runserver": "drush runserver 0.0.0.0",
-        "chromedriver": "chromedriver --port=9515 --verbose --whitelisted-ips --log-path=/tmp/chromedriver.log --no-sandbox",
-        "create-symlinks": "cd web/modules/project && find ../../.. -maxdepth 1 ! -name .git ! -name web ! -name vendor -print | while read file; do ln -s $file .; done",
-        "unit": "phpunit --verbose web/modules/project",
-        "phpstan": "phpstan analyse web/modules/project",
-        "post-update-cmd": [
-            "rm -rf web/modules/project && mkdir -p web/modules/project",
-            "@create-symlinks"
-        ]
-    },
+  "autoload": {
+      "classmap": [".spoons/ScriptHandler.php"]
+  },
+  "scripts": {
+      "si": "drush si -v --db-url=${SIMPLETEST_DB:-mysql://root:password@mariadb/db} testing",
+      "phpcs": "PWD=$(pwd) && phpcs --runtime-set ignore_warnings_on_exit 1 --runtime-set ignore_errors_on_exit 1 --ignore=$PWD/web/,$PWD/vendor/",
+      "lint": "parallel-lint --exclude web --exclude vendor .",
+      "runserver": "drush runserver 0.0.0.0",
+      "chromedriver": "chromedriver --port=9515 --verbose --whitelisted-ips --log-path=/tmp/chromedriver.log --no-sandbox",
+      "unit": "phpunit --verbose web/modules/custom",
+      "phpstan": "phpstan analyse web/modules/custom",
+      "post-update-cmd": ["Spoons\\Spoons::createSymlinks"]
+  },
   "extra": {
     "installer-paths": {
       "web/core": ["type:drupal-core"],
       "web/libraries/{$name}": ["type:drupal-library"],
-      "web/modules/{$name}": ["type:drupal-module"],
+      "web/modules/contrib{$name}": ["type:drupal-module"],
       "web/profiles/{$name}": ["type:drupal-profile"],
       "web/themes/{$name}": ["type:drupal-theme"],
       "drush/{$name}": ["type:drupal-drush"]

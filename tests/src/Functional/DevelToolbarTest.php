@@ -146,7 +146,7 @@ class DevelToolbarTest extends DevelBrowserTestBase {
    * Tests toolbar integration.
    */
   public function testToolbarIntegration() {
-    $library_css_url = 'devel/css/devel.toolbar.css';
+    $library_css_url = 'css/devel.toolbar.css';
     $toolbar_selector = '#toolbar-bar .toolbar-tab';
     $toolbar_tab_selector = '#toolbar-bar .toolbar-tab a.toolbar-icon-devel';
     $toolbar_tray_selector = '#toolbar-bar .toolbar-tab #toolbar-item-devel-tray';
