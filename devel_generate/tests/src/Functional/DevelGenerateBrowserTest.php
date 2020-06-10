@@ -189,7 +189,8 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
       'title_length' => 12,
     ];
     $this->drupalPostForm('admin/config/development/generate/term', $edit, 'Generate');
-    $this->assertSession()->pageTextContains('Created the following new terms: ');
+    $this->assertSession()->pageTextContains('Created 5 new terms');
+    $this->assertSession()->pageTextContains('In vocabulary ' . $this->vocabulary->label());
     $this->assertSession()->pageTextNotContains('translations');
     $this->assertSession()->pageTextContains('Generate process complete.');
     $this->assertCount(5, \Drupal::entityQuery('taxonomy_term')->execute());
@@ -202,6 +203,8 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
       'translate_language[]' => ['ca'],
     ];
     $this->drupalPostForm('admin/config/development/generate/term', $edit, 'Generate');
+    $this->assertSession()->pageTextNotContains('Deleted');
+    $this->assertSession()->pageTextContains('Created 3 new terms');
     $this->assertSession()->pageTextContains('Created 3 term translations');
     // Not using 'kill' so there should be 8 terms.
     $terms = \Drupal::entityQuery('taxonomy_term')->execute();
@@ -218,25 +221,45 @@ class DevelGenerateBrowserTest extends DevelGenerateBrowserTestBase {
       'num' => 4,
     ];
     $this->drupalPostForm('admin/config/development/generate/term', $edit, 'Generate');
+    $this->assertSession()->pageTextContains('Created 4 new terms');
+    $this->assertSession()->pageTextNotContains('In vocabulary ' . $this->vocabulary->label());
+    $this->assertSession()->pageTextContains('In vocabulary ' . $this->vocabulary2->label());
     // Check the term count in each vocabulary.
     $terms1 = \Drupal::entityQuery('taxonomy_term')->condition('vid', $this->vocabulary->id())->execute();
     $this->assertCount(8, $terms1);
     $terms2 = \Drupal::entityQuery('taxonomy_term')->condition('vid', $this->vocabulary2->id())->execute();
     $this->assertCount(4, $terms2);
 
-    // Generate in vocabulary 2 with 'kill' to remove the existing vocab 2 terms.
+    // Generate in vocabulary 2 with 'kill' to remove the existing vocab2 terms.
     $edit = [
       'vids[]' => $this->vocabulary2->id(),
       'num' => 6,
       'kill' => TRUE,
     ];
     $this->drupalPostForm('admin/config/development/generate/term', $edit, 'Generate');
+    $this->assertSession()->pageTextContains('Deleted 4 existing terms');
+    $this->assertSession()->pageTextContains('Created 6 new terms');
     // Check the term count in vocabulary 1 has not changed.
     $terms1 = \Drupal::entityQuery('taxonomy_term')->condition('vid', $this->vocabulary->id())->execute();
     $this->assertCount(8, $terms1);
     // Check the term count in vocabulary 2 is just from the second call.
     $terms2 = \Drupal::entityQuery('taxonomy_term')->condition('vid', $this->vocabulary2->id())->execute();
     $this->assertCount(6, $terms2);
+
+    // Generate in both vocabularies and specify minimum and maximum depth.
+    $edit = [
+      'vids[]' => [$this->vocabulary->id(), $this->vocabulary2->id()],
+      'num' => 9,
+      'minimum_depth' => 2,
+      'maximum_depth' => 6,
+    ];
+    $this->drupalPostForm('admin/config/development/generate/term', $edit, 'Generate');
+    $this->assertSession()->pageTextContains('Created 9 new terms');
+    // Check the total term count is 8 + 6 + 9 = 23.
+    $terms1 = \Drupal::entityQuery('taxonomy_term')->condition('vid', $this->vocabulary->id())->execute();
+    $terms2 = \Drupal::entityQuery('taxonomy_term')->condition('vid', $this->vocabulary2->id())->execute();
+    $this->assertCount(23, $terms1 + $terms2);
+
   }
 
   /**

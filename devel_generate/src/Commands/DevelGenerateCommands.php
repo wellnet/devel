@@ -14,6 +14,11 @@ use Drush\Commands\DrushCommands;
  *
  * In addition to a commandfile like this one, you need to add a
  * drush.services.yml in the root of your module like this module does.
+ *
+ * Note: Integer values for defaults need to be in quotes, otherwise they can
+ * match with numeric constants such as InputOption::VALUE_OPTIONAL in
+ * Consolidation\AnnotatedCommand\Parser\CommandInfo::createInputOptions()
+ * and consequently get removed from the help output.
  */
 class DevelGenerateCommands extends DrushCommands {
 
@@ -142,13 +147,15 @@ class DevelGenerateCommands extends DrushCommands {
    * @param array $options
    *   Array of options as described below.
    *
-   * @option kill Delete all terms before generating new ones.
+   * @option kill Delete all terms in these vocabularies before generating new ones.
    * @option bundles A comma-delimited list of machine names for the vocabularies where terms will be created.
    * @option feedback An integer representing interval for insertion rate logging.
    * @option languages A comma-separated list of language codes
    * @option translations A comma-separated list of language codes for translations.
+   * @option min-depth The minimum depth of hierarchy for the new terms.
+   * @option max-depth The maximum depth of hierarchy for the new terms.
    */
-  public function terms($num = 50, array $options = ['kill' => FALSE, 'bundles' => NULL, 'feedback' => 1000, 'languages' => NULL, 'translations' => NULL]) {
+  public function terms($num = 50, array $options = ['kill' => FALSE, 'bundles' => NULL, 'feedback' => '1000', 'languages' => NULL, 'translations' => NULL, 'min-depth' => '1', 'max-depth' => '4']) {
     $this->generate();
   }
 
