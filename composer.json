@@ -46,7 +46,7 @@
       "chromedriver": "chromedriver --port=9515 --verbose --whitelisted-ips --log-path=/tmp/chromedriver.log --no-sandbox",
       "unit": "phpunit --verbose web/modules/custom",
       "phpstan": "phpstan analyse web/modules/custom",
-      "post-update-cmd": ["Spoons\\Spoons::createSymlinks"]
+      "post-update-cmd": ["Spoons\\ScriptHandler::createSymlinks"]
   },
   "extra": {
     "installer-paths": {
