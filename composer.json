@@ -52,7 +52,7 @@
     "installer-paths": {
       "web/core": ["type:drupal-core"],
       "web/libraries/{$name}": ["type:drupal-library"],
-      "web/modules/contrib{$name}": ["type:drupal-module"],
+      "web/modules/contrib/{$name}": ["type:drupal-module"],
       "web/profiles/{$name}": ["type:drupal-profile"],
       "web/themes/{$name}": ["type:drupal-theme"],
       "drush/{$name}": ["type:drupal-drush"]
