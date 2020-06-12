@@ -15,9 +15,9 @@ css_js_style:
   dependencies:
     - composer
   script:
-    - cd web/core && yarn install
-    - composer stylelint
+    - yarn --cwd web/core install
     - composer eslint -- --format junit --output-file junit-eslint.xml
+    - composer stylelint
   allow_failure: true
   artifacts:
     expose_as: junit
