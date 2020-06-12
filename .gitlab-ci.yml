@@ -12,21 +12,21 @@ include:
 
 css_js_style:
   stage: test
-    dependencies:
-      - composer
-    script:
-      - cd web/core && yarn add eslint stylelint
-      - composer stylelint
-      - composer eslint -- --format junit --output-file junit-eslint.xml
-    allow_failure: true
-    artifacts:
-      expose_as: junit
-      expire_in: 6 mos
-      paths:
-        #- junit-stylelint.xml
-        - junit-eslint.xml
-      reports:
-        junit: junit-eslint.xml
+  dependencies:
+    - composer
+  script:
+    - cd web/core && yarn add eslint stylelint
+    - composer stylelint
+    - composer eslint -- --format junit --output-file junit-eslint.xml
+  allow_failure: true
+  artifacts:
+    expose_as: junit
+    expire_in: 6 mos
+    paths:
+      #- junit-stylelint.xml
+      - junit-eslint.xml
+    reports:
+      junit: junit-eslint.xml
 
 # Run tests on Drupal 9 by default.
 composer:
