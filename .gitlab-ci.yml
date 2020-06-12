@@ -15,7 +15,8 @@ css_js_style:
   dependencies:
     - composer
   script:
-    - yarn --cwd web/core install
+    - yarn --cwd web/core add stylelint-junit-formatter
+    # - yarn --cwd web/core install
     - composer eslint -- --format junit --output-file junit-eslint.xml || true
     - composer stylelint -- --color || true
     - composer stylelint -- --color --custom-formatter node_modules/stylelint-junit-formatter > junit-stylelint.xml || true
