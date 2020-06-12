@@ -15,7 +15,7 @@ css_js_style:
   dependencies:
     - composer
   script:
-    - cd web/core && yarn add eslint stylelint
+    - cd web/core && yarn install
     - composer stylelint
     - composer eslint -- --format junit --output-file junit-eslint.xml
   allow_failure: true
@@ -23,10 +23,11 @@ css_js_style:
     expose_as: junit
     expire_in: 6 mos
     paths:
-      #- junit-stylelint.xml
-      - junit-eslint.xml
+      - web/core/node_modules
+      #- web/core/junit-stylelint.xml
+      - web/core/junit-eslint.xml
     reports:
-      junit: junit-eslint.xml
+      junit: web/core/junit-eslint.xml
 
 # Run tests on Drupal 9 by default.
 composer:
