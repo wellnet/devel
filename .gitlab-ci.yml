@@ -16,8 +16,8 @@ css_js_style:
     - composer
   script:
     - yarn --cwd web/core install
-    - composer eslint -- --format junit --output-file junit-eslint.xml
-    - composer stylelint
+    - composer eslint -- --format junit --output-file junit-eslint.xml || true
+    - composer stylelint || true
   allow_failure: true
   artifacts:
     expose_as: junit
