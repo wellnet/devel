@@ -10,28 +10,6 @@ include:
 # The code below is specific to devel project. You dont need to copy it to your new project.
 #
 
-css_js_style:
-  stage: test
-  dependencies:
-    - composer
-  script:
-    - yarn --cwd web/core add stylelint-junit-formatter
-    # - yarn --cwd web/core install
-    - composer eslint -- --format junit --output-file junit-eslint.xml || true
-    - composer stylelint -- --color || true
-    - composer stylelint -- --color --custom-formatter node_modules/stylelint-junit-formatter > junit-stylelint.xml || true
-  allow_failure: true
-  artifacts:
-    expose_as: junit
-    expire_in: 6 mos
-    paths:
-      - web/core/node_modules
-      - junit-stylelint.xml
-      - junit-eslint.xml
-    reports:
-#      junit: junit-eslint.xml
-      junit: junit-stylelint.xml
-
 # Run tests on Drupal 9 by default.
 composer:
   variables:
