@@ -26,11 +26,11 @@ css_js_style:
     expire_in: 6 mos
     paths:
       - web/core/node_modules
-      - web/core/junit-stylelint.xml
-      - web/core/junit-eslint.xml
+      - junit-stylelint.xml
+      - junit-eslint.xml
     reports:
-#      junit: web/core/junit-eslint.xml
-      junit: web/core/junit-stylelint.xml
+#      junit: junit-eslint.xml
+      junit: junit-stylelint.xml
 
 # Run tests on Drupal 9 by default.
 composer:
