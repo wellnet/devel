@@ -46,8 +46,8 @@
       "chromedriver": "chromedriver --port=9515 --verbose --whitelisted-ips --log-path=/tmp/chromedriver.log --no-sandbox",
       "unit": "phpunit --verbose web/modules/custom",
       "phpstan": "phpstan analyse web/modules/custom",
-      "stylelint": "cd web/core && yarn stylelint --formatter verbose --config ./.stylelintrc.json ../modules/custom/**/*.css",
-      "eslint": "cd web/core && yarn eslint -c ./.eslintrc.json ../modules/custom",
+      "stylelint": "yarn --silent --cwd web/core stylelint --formatter verbose --config ./.stylelintrc.json ../modules/custom/**/*.css",
+      "eslint": "yarn --silent --cwd web/core eslint -c ./.eslintrc.json ../modules/custom",
       "post-update-cmd": ["Spoons\\ScriptHandler::createSymlinks"]
   },
   "extra": {
