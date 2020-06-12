@@ -11,7 +11,7 @@ include:
 #
 
 # Run tests on Drupal 9 by default.
-composer:
+composer_node:
   variables:
     DRUPAL_CORE_CONSTRAINT: ^9
 
