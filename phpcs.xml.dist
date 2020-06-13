@@ -17,9 +17,6 @@
   <!-- Ignore all files that match these patterns. They are matched against -->
   <!-- the full file path and there is an implied wildcard at each end. -->
   <!-- Periods must be escaped using \. -->
-  <!-- The first two are key to isolating just this project's files. -->
-  <exclude-pattern>devel/web/</exclude-pattern>
-  <exclude-pattern>devel/vendor/</exclude-pattern>
   <exclude-pattern>_ignore</exclude-pattern>
   <exclude-pattern>\.patch</exclude-pattern>
   <exclude-pattern>interdif</exclude-pattern>
