@@ -26,9 +26,13 @@
     <exclude-pattern>\.md</exclude-pattern>
   </rule>
 
-  <!-- Example how you would disable an external rule you do not like:
-  <rule ref="PEAR.Functions.ValidDefaultValue.NotAtEnd">
+  <!-- Example how you disable rules you do not like -->
+  <rule ref="Drupal.Commenting.DocComment.ParamNotFirst">
+    <!-- Drush commands are most readable with @command at top. -->
+    <exclude-pattern>Commands\.php</exclude-pattern>
+  </rule>
+  <rule ref="Drupal.Arrays.Array.LongLineDeclaration">
+    <!-- Method declarations should be exempt. -->
     <severity>0</severity>
   </rule>
-  -->
 </ruleset>
