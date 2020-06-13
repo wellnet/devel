@@ -39,10 +39,10 @@
       "classmap": [".spoons/ScriptHandler.php"]
   },
   "scripts": {
-      "si": "drush si -v --db-url=${SIMPLETEST_DB:-mysql://root:password@mariadb/db} testing",
+      "si": "drush si -v --db-url=${SIMPLETEST_DB:-mysql://root:password@mariadb/db}",
       "phpcs": "phpcs --runtime-set ignore_warnings_on_exit 1 --runtime-set ignore_errors_on_exit 1 web/modules/custom",
       "lint": "parallel-lint --exclude web --exclude vendor .",
-      "runserver": "drush runserver 0.0.0.0",
+      "webserver": "cd web && php -S 0.0.0.0:8888 .ht.router.php",
       "chromedriver": "chromedriver --port=9515 --verbose --whitelisted-ips --log-path=/tmp/chromedriver.log --no-sandbox",
       "unit": "phpunit --verbose web/modules/custom",
       "phpstan": "phpstan analyse web/modules/custom",

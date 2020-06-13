@@ -4,6 +4,7 @@ services:
   # More info at https://github.com/wodby/php
   drupal:
     image: wodby/php:${PHP_TAG-7.3-dev}
+    command: composer webserver
     environment:
       PHP_SENDMAIL_PATH: /dev/null
       COLUMNS: ${COLUMNS-80} # Set 80 columns for docker exec -it.
