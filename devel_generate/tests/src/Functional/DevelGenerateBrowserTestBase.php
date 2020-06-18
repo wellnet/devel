@@ -19,7 +19,7 @@ abstract class DevelGenerateBrowserTestBase extends BrowserTestBase {
    * Modules to enable.
    *
    * Note: Webprofiler is not being tested here directly, but is enabled to help
-   * highlight any places where it may interfere with DevelGenerate processing. 
+   * highlight any places where it may interfere with DevelGenerate processing.
    *
    * @var array
    */
