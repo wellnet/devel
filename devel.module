@@ -468,7 +468,7 @@ if (!function_exists('ksm')) {
       $name = '__ARGS__';
     }
 
-    return \Drupal::service('devel.dumper')->message($args, $name, 'kint');
+    return \Drupal::service('devel.dumper')->message($args, $name, MessengerInterface::TYPE_STATUS, 'kint');
   }
 
 }
