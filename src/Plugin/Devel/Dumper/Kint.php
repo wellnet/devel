@@ -68,10 +68,8 @@ class Kint extends DevelDumperBase {
     $dump = ob_get_clean();
     if ($name) {
       // Kint no longer treats an additional parameter as a custom title, but we
-      // can add in the required $name to the dump output. Providing that a
-      // variable starting with $ was passed to the original call, we can find
-      // the place where this starts and add in our custom $name.
-      $dump = str_replace('<dfn>$', '<dfn>' . $name . ': $', $dump);
+      // can add the required $name as a label at the top of the output.
+      $dump = str_replace('<div class="kint-rich">', '<div class="kint-rich">' . $name . ': ', $dump);
 
       // Remove the output from the second dummy parameter. The pattern in [ ]
       // matches the minimum to ensure we get just the string to be removed.
