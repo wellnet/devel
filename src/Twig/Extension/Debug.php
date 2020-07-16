@@ -52,6 +52,8 @@ class Debug extends \Twig_Extension {
     return [
       new \Twig_SimpleFunction('devel_dump', [$this, 'dump'], $options),
       new \Twig_SimpleFunction('kpr', [$this, 'dump'], $options),
+      //  Preserve familiar kint() function for dumping
+      new \Twig_SimpleFunction('kint', [$this, 'dump'], $options),
       new \Twig_SimpleFunction('devel_message', [$this, 'message'], $options),
       new \Twig_SimpleFunction('dpm', [$this, 'message'], $options),
       new \Twig_SimpleFunction('dsm', [$this, 'message'], $options),
