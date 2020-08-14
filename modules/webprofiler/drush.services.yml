@@ -1,0 +1,6 @@
+services:
+  webprofiler.commands:
+    class: Drupal\webprofiler\Commands\WebprofilerCommands
+    arguments: ['@webprofiler.config_entity_storage_decorator_generator']
+    tags:
+      - { name: drush.command }

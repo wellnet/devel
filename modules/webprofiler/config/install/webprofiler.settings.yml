@@ -1,0 +1,4 @@
+exclude_paths: "/contextual/*\r\n/toolbar/*\r\n/edit/*\r\n*.js\r\n*.css"
+intercept_redirects: false
+only_exceptions: false
+only_master_requests: false

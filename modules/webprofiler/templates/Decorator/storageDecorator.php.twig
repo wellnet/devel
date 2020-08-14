@@ -1,0 +1,13 @@
+<?php
+
+namespace Drupal\webprofiler\Entity;
+
+class {{ decorator }} extends ConfigEntityStorageDecorator implements {{ interface }} {
+
+  {% for method in methods %}
+    public function {{ method.name }}({% for param in method.params %}${{ param.name }}{% if not loop.last %}, {% endif %}{% endfor %}) {
+      return $this->getOriginalObject()->{{ method.name }}({% for param in method.params %}${{ param.name }}{% if not loop.last %}, {% endif %}{% endfor %});
+  }
+  {% endfor %}
+
+}

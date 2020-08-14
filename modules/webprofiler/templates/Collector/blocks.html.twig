@@ -1,0 +1,29 @@
+{% block toolbar %}
+  {% set icon %}
+    {{ include('@webprofiler/Icon/blocks.svg') }}
+    <span class="sf-toolbar-value">{{ collector.getRenderedBlocksCount }}</span>
+  {% endset %}
+
+  {% set text %}
+    <div class="sf-toolbar-info-group">
+      <div class="sf-toolbar-info-piece">
+        <b>Loaded blocks</b>
+        <span>{{ collector.getLoadedBlocksCount }}</span>
+      </div>
+      <div class="sf-toolbar-info-piece">
+        <b>Rendered blocks</b>
+        <span>{{ collector.getRenderedBlocksCount }}</span>
+      </div>
+    </div>
+  {% endset %}
+
+  {{ include('@webprofiler/Profiler/toolbar_item.html.twig', { link: profiler_url }) }}
+{% endblock %}
+
+{% block panel %}
+
+  <h2>
+    Blocks
+  </h2>
+
+{% endblock %}

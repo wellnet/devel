@@ -12,7 +12,8 @@
   "prefer-stable": true,
   "require": {
     "symfony/var-dumper": "^4 || ^5",
-    "doctrine/common": "^2.7"
+    "doctrine/common": "^2.7",
+    "nikic/php-parser": "~4.0"
   },
   "require-dev": {
     "composer/installers": "^1",

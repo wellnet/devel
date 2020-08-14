@@ -1,0 +1,52 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function webprofiler_theme() {
+  return [
+    'webprofiler_toolbar_js' => [
+      'template' => 'Profiler/toolbar_js',
+      'variables' => [
+        'excluded_ajax_paths' => '',
+        'token' => '',
+        'request' => NULL,
+        'csp_script_nonce' => '',
+        'csp_style_nonce' => '',
+      ],
+    ],
+    'webprofiler_toolbar' => [
+      'template' => 'Profiler/toolbar',
+      'variables' => [
+        'request' => NULL,
+        'profile' => NULL,
+        'templates' => '',
+        'profiler_url' => '',
+        'token' => '',
+        'csp_script_nonce' => '',
+        'csp_style_nonce' => '',
+      ],
+    ],
+    'webprofiler_toolbar_redirect' => [
+      'template' => 'Profiler/toolbar_redirect',
+      'variables' => [
+        'location' => '',
+      ],
+    ],
+    'webprofiler_panel_js' => [
+      'template' => 'Profiler/panel_js',
+      'variables' => [
+        'token' => '',
+        'name' => '',
+      ],
+    ],
+    'webprofiler_panel' => [
+      'template' => 'Profiler/panel',
+      'variables' => [
+        'profile' => NULL,
+        'template' => '',
+        'name' => '',
+      ],
+    ],
+  ];
+}

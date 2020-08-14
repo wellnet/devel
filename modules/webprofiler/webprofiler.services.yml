@@ -1,0 +1,71 @@
+services:
+  logger.channel.webprofiler:
+    class: Drupal\Core\Logger\LoggerChannel
+    factory: logger.factory:get
+    arguments: ['webprofiler']
+
+  webprofiler.config_entity_storage_decorator_generator:
+    class: Drupal\webprofiler\Entity\ConfigEntityStorageDecoratorGenerator
+    arguments: ['@entity_type.manager', '@logger.channel.webprofiler']
+
+  webprofiler.file_storage:
+    class: Symfony\Component\HttpKernel\Profiler\FileProfilerStorage
+    arguments: ['%webprofiler.file_profiler_storage_dns%']
+
+  webprofiler.profiler:
+    class: Symfony\Component\HttpKernel\Profiler\Profiler
+    arguments: ['@webprofiler.file_storage', '@logger.channel.webprofiler']
+
+  webprofiler.matcher:
+    class: Drupal\webprofiler\RequestMatcher\WebprofilerRequestMatcher
+    arguments: ['@config.factory', '@path.matcher']
+
+  webprofiler.profiler_listener:
+    class: Drupal\webprofiler\EventListener\ProfilerListener
+    arguments: ['@webprofiler.profiler', '@request_stack', '@webprofiler.matcher', '@config.factory']
+    tags:
+      - { name: event_subscriber }
+
+  webprofiler.nonce_generator:
+    class: Drupal\webprofiler\Csp\NonceGenerator
+
+  webprofiler.csp:
+    class: Drupal\webprofiler\Csp\ContentSecurityPolicyHandler
+    arguments: ['@webprofiler.nonce_generator']
+
+  webprofiler.template_manager:
+    class: Drupal\webprofiler\Profiler\TemplateManager
+    arguments: ['@webprofiler.profiler', '@twig', '%data_collector.templates%']
+
+  webprofiler.toolbar_listener:
+    class: Drupal\webprofiler\EventListener\WebDebugToolbarListener
+    arguments: ['@renderer', '@current_user', '@url_generator', '@webprofiler.csp', '@config.factory']
+    tags:
+      - { name: event_subscriber }
+
+  # twig profiler
+  twig.profile:
+    class: Twig\Profiler\Profile
+
+  twig.extension.profiler:
+    class: Drupal\webprofiler\Twig\Extension\ProfilerExtension
+    arguments: ['@twig.profile']
+    tags:
+      - { name: twig.extension, priority: 100 }
+
+  # data collectors
+  webprofiler.request:
+    class: Drupal\webprofiler\DataCollector\RequestDataCollector
+    arguments: ['@controller_resolver']
+    tags:
+      - { name: data_collector, template: '@webprofiler/Collector/request.html.twig', id: 'request', title: 'Request', priority: 100 }
+      - { name: event_subscriber }
+
+  # debug services
+  webprofiler.debug.entity_type.manager:
+    class: Drupal\webprofiler\Entity\EntityTypeManagerWrapper
+    public: false
+    decorates: entity_type.manager
+    arguments: ['@webprofiler.debug.entity_type.manager.inner']
+    properties:
+      _serviceId: 'entity_type.manager'

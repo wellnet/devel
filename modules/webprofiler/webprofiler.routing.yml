@@ -1,0 +1,21 @@
+webprofiler.toolbar:
+  path: '/profiler/{token}'
+  defaults:
+    _controller: '\Drupal\webprofiler\Controller\ProfilerController::toolbarAction'
+  requirements:
+    _permission: 'view webprofiler toolbar'
+
+webprofiler.dashboard:
+  path: '/admin/reports/profiler/view/{token}'
+  defaults:
+    _title: 'Dashboard'
+    _form: '\Drupal\webprofiler\Form\Dashboard'
+  requirements:
+    _permission: 'access webprofiler'
+
+webprofiler.panel:
+  path: '/admin/reports/profiler/view/{token}/panel/{name}'
+  defaults:
+    _controller: '\Drupal\webprofiler\Controller\ProfilerController::panelAction'
+  requirements:
+    _permission: 'view webprofiler toolbar'

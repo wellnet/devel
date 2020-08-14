@@ -1,0 +1,7 @@
+name: Webprofiler
+type: module
+description: 'Drupal Web Profiler.'
+package: Development
+core_version_requirement: ^8.8 || ^9
+dependencies:
+  - devel:devel

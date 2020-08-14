@@ -1,0 +1,18 @@
+# Schema for the configuration files of the webprofiler module.
+
+webprofiler.settings.yml:
+  type: config_object
+  label: 'Webprofiler settings'
+  mapping:
+    exclude_paths:
+      type: string
+      label: 'Paths to exclude from profiling'
+    only_exceptions:
+      type: boolean
+      label: 'Only exceptions'
+    only_master_requests:
+      type: boolean
+      label: 'Only master requests'
+    intercept_redirects:
+      type: boolean
+      label: 'Intercept redirects'
