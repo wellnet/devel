@@ -9,6 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 
+/**
+ *
+ */
 class BlocksDataCollector extends DataCollector {
 
   /**
@@ -79,6 +82,9 @@ class BlocksDataCollector extends DataCollector {
     return count($this->getLoadedBlocks());
   }
 
+  /**
+   *
+   */
   public function reset() {
 
   }
@@ -96,7 +102,7 @@ class BlocksDataCollector extends DataCollector {
     /** @var \Drupal\block\BlockInterface $block */
     foreach ($decorator->getEntities() as $block) {
       /** @var \Drupal\block\Entity\Block $entity */
-      if (null !== $block && $entity = $storage->load($block->get('id'))) {
+      if (NULL !== $block && $entity = $storage->load($block->get('id'))) {
 
         $route = '';
         if ($entity->hasLinkTemplate('edit-form')) {

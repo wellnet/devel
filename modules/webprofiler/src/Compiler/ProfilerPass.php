@@ -17,7 +17,7 @@ class ProfilerPass implements CompilerPassInterface {
    * {@inheritDoc}
    */
   public function process(ContainerBuilder $container) {
-    if (false === $container->hasDefinition('webprofiler.profiler')) {
+    if (FALSE === $container->hasDefinition('webprofiler.profiler')) {
       return;
     }
 
@@ -25,9 +25,9 @@ class ProfilerPass implements CompilerPassInterface {
 
     $collectors = new \SplPriorityQueue();
     $order = PHP_INT_MAX;
-    foreach ($container->findTaggedServiceIds('data_collector', true) as $id => $attributes) {
+    foreach ($container->findTaggedServiceIds('data_collector', TRUE) as $id => $attributes) {
       $priority = isset($attributes[0]['priority']) ? $attributes[0]['priority'] : 0;
-      $template = null;
+      $template = NULL;
 
       if (isset($attributes[0]['template'])) {
         if (!isset($attributes[0]['id'])) {
@@ -51,4 +51,5 @@ class ProfilerPass implements CompilerPassInterface {
     $path = 'file:' . DRUPAL_ROOT . '/' . PublicStream::basePath() . '/profiler';
     $container->setParameter('webprofiler.file_profiler_storage_dns', $path);
   }
+
 }

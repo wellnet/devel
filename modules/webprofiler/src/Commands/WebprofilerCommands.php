@@ -15,6 +15,9 @@ class WebprofilerCommands extends DrushCommands {
    */
   private $generator;
 
+  /**
+   *
+   */
   public function __construct(DecoratorGeneratorInterface $generator) {
     parent::__construct();
 
@@ -30,7 +33,8 @@ class WebprofilerCommands extends DrushCommands {
   public function generateDecorators() {
     try {
       $this->generator->generate();
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       $this->writeln($e->getMessage());
     }
   }

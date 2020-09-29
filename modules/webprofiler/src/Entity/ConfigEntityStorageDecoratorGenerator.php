@@ -2,10 +2,10 @@
 
 namespace Drupal\webprofiler\Entity;
 
+use PhpParser\Node\Stmt\ClassMethod;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\PhpStorage\PhpStorageFactory;
 use Drupal\webprofiler\DecoratorGeneratorInterface;
-use Exception;
 use PhpParser\Error;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -15,7 +15,6 @@ use PhpParser\NodeVisitor\FindingVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
 use Psr\Log\LoggerInterface;
-use ReflectionClass;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -56,8 +55,9 @@ class ConfigEntityStorageDecoratorGenerator implements DecoratorGeneratorInterfa
       try {
         $php = $this->createDecorator($class);
         $this->writeDecorator($class['id'], $php);
-      } catch (Exception $e) {
-        throw new Exception('Unable to generate decorator for class ' . $class['class'] . '. ' . $e->getMessage());
+      }
+      catch (\Exception $e) {
+        throw new \Exception('Unable to generate decorator for class ' . $class['class'] . '. ' . $e->getMessage());
       }
     }
   }
@@ -70,7 +70,7 @@ class ConfigEntityStorageDecoratorGenerator implements DecoratorGeneratorInterfa
       'taxonomy_vocabulary' => '\Drupal\webprofiler\Entity\VocabularyStorageDecorator',
       'user_role' => '\Drupal\webprofiler\Entity\RoleStorageDecorator',
       'shortcut_set' => '\Drupal\webprofiler\Entity\ShortcutSetStorageDecorator',
-      'image_style' => '\Drupal\webprofiler\Entity\ImageStyleStorageDecorator'
+      'image_style' => '\Drupal\webprofiler\Entity\ImageStyleStorageDecorator',
     ];
   }
 
@@ -97,7 +97,7 @@ class ConfigEntityStorageDecoratorGenerator implements DecoratorGeneratorInterfa
 
         $nodes = $visitor->getFoundNodes();
 
-        /** @var Class_ $node */
+        /** @var \PhpParser\Node\Stmt\Class_ $node */
         foreach ($nodes as $node) {
           $classes[$definition->id()] = [
             'id' => $definition->id(),
@@ -106,10 +106,12 @@ class ConfigEntityStorageDecoratorGenerator implements DecoratorGeneratorInterfa
             'decoratorClass' => '\\Drupal\\webprofiler\\Entity\\' . $node->name->name . 'Decorator',
           ];
         }
-      } catch (Error $error) {
+      }
+      catch (Error $error) {
         echo "Parse error: {$error->getMessage()}\n";
         return [];
-      } catch (\ReflectionException $error) {
+      }
+      catch (\ReflectionException $error) {
         echo "Reflection error: {$error->getMessage()}\n";
         return [];
       }
@@ -126,7 +128,7 @@ class ConfigEntityStorageDecoratorGenerator implements DecoratorGeneratorInterfa
    * @throws \ReflectionException
    */
   private function getClassPath(string $class): string {
-    $reflector = new ReflectionClass($class);
+    $reflector = new \ReflectionClass($class);
     $classPath = $reflector->getFileName();
 
     return $classPath;
@@ -135,7 +137,7 @@ class ConfigEntityStorageDecoratorGenerator implements DecoratorGeneratorInterfa
   /**
    * @param string $classPath
    *
-   * @return Node\Stmt[]|null
+   * @return \PhpParser\Node\Stmt[]|null
    */
   private function getAST(string $classPath): array {
     $code = file_get_contents($classPath);
@@ -177,7 +179,7 @@ class ConfigEntityStorageDecoratorGenerator implements DecoratorGeneratorInterfa
 
     $nodeFinder = new NodeFinder();
     $nodes = $nodeFinder->find($ast, function (Node $node) {
-      return $node instanceof Node\Stmt\ClassMethod;
+      return $node instanceof ClassMethod;
     });
 
     $methods = [];
@@ -207,12 +209,15 @@ class ConfigEntityStorageDecoratorGenerator implements DecoratorGeneratorInterfa
       ]);
 
       return $php;
-    } catch (LoaderError $e) {
-      throw new Exception('Unable to create a decorator. ' . $e->getMessage());
-    } catch (RuntimeError $e) {
-      throw new Exception('Unable to create a decorator. ' . $e->getMessage());
-    } catch (SyntaxError $e) {
-      throw new Exception('Unable to create a decorator. ' . $e->getMessage());
+    }
+    catch (LoaderError $e) {
+      throw new \Exception('Unable to create a decorator. ' . $e->getMessage());
+    }
+    catch (RuntimeError $e) {
+      throw new \Exception('Unable to create a decorator. ' . $e->getMessage());
+    }
+    catch (SyntaxError $e) {
+      throw new \Exception('Unable to create a decorator. ' . $e->getMessage());
     }
   }
 

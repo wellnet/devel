@@ -41,6 +41,9 @@ class ProfilerController extends ControllerBase {
     );
   }
 
+  /**
+   *
+   */
   public function __construct(UrlGeneratorInterface $generator, Profiler $profiler, RendererInterface $renderer, TemplateManager $templateManager, ContentSecurityPolicyHandler $cspHandler) {
     $this->generator = $generator;
     $this->profiler = $profiler;
@@ -52,7 +55,7 @@ class ProfilerController extends ControllerBase {
   /**
    * Renders the Web Debug Toolbar.
    *
-   * @param Request $request
+   * @param \Symfony\Component\HttpFoundation\Request $request
    *   The current HTTP Request.
    * @param string $token
    *   The profiler token.
@@ -76,7 +79,8 @@ class ProfilerController extends ControllerBase {
     $url = NULL;
     try {
       $url = $this->generator->generate('webprofiler.toolbar', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       // The profiler is not enabled.
     }
 

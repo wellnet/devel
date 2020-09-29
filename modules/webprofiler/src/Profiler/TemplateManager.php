@@ -9,7 +9,6 @@ use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Loader\ExistsLoaderInterface;
 use Twig\Loader\SourceContextLoaderInterface;
-use Twig\Template;
 
 /**
  * Profiler Templates Manager.
@@ -25,6 +24,9 @@ class TemplateManager {
 
   protected $profiler;
 
+  /**
+   *
+   */
   public function __construct(Profiler $profiler, Environment $twig, array $templates) {
     $this->profiler = $profiler;
     $this->twig = $twig;
@@ -34,12 +36,12 @@ class TemplateManager {
   /**
    * Gets the template name for a given panel.
    *
-   * @param Profile $profile
+   * @param \Symfony\Component\HttpKernel\Profiler\Profile $profile
    * @param string $panel
    *
    * @return mixed
    *
-   * @throws NotFoundHttpException
+   * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
    */
   public function getName(Profile $profile, $panel) {
     $templates = $this->getNames($profile);
@@ -86,7 +88,9 @@ class TemplateManager {
     return $templates;
   }
 
-  // to be removed when the minimum required version of Twig is >= 2.0
+  /**
+   * To be removed when the minimum required version of Twig is >= 2.0.
+   */
   protected function templateExists($template) {
     $loader = $this->twig->getLoader();
     if ($loader instanceof ExistsLoaderInterface) {
@@ -102,7 +106,8 @@ class TemplateManager {
       }
 
       return TRUE;
-    } catch (LoaderError $e) {
+    }
+    catch (LoaderError $e) {
     }
 
     return FALSE;

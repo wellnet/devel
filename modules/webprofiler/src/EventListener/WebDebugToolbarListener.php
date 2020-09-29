@@ -44,6 +44,9 @@ class WebDebugToolbarListener implements EventSubscriberInterface {
    */
   private $config;
 
+  /**
+   *
+   */
   public function __construct(RendererInterface $renderer, AccountInterface $currentUser, UrlGeneratorInterface $urlGenerator, ContentSecurityPolicyHandler $cspHandler, ConfigFactoryInterface $config) {
     $this->renderer = $renderer;
     $this->currentUser = $currentUser;
@@ -65,7 +68,8 @@ class WebDebugToolbarListener implements EventSubscriberInterface {
           'X-Debug-Token-Link',
           $this->urlGenerator->generate('webprofiler.toolbar', ['token' => $response->headers->get('X-Debug-Token')], UrlGeneratorInterface::ABSOLUTE_URL)
         );
-      } catch (\Exception $e) {
+      }
+      catch (\Exception $e) {
         $response->headers->set('X-Debug-Error', \get_class($e) . ': ' . preg_replace('/\s+/', ' ', $e->getMessage()));
       }
     }
@@ -76,7 +80,7 @@ class WebDebugToolbarListener implements EventSubscriberInterface {
 
     $nonces = $this->cspHandler ? $this->cspHandler->updateResponseHeaders($request, $response) : [];
 
-    // do not capture redirects or modify XML HTTP Requests
+    // Do not capture redirects or modify XML HTTP Requests.
     if ($request->isXmlHttpRequest()) {
       return;
     }
@@ -84,7 +88,7 @@ class WebDebugToolbarListener implements EventSubscriberInterface {
     if ($response->headers->has('X-Debug-Token') && $response->isRedirect() && $this->config->get('intercept_redirects') && 'html' === $request->getRequestFormat()) {
       $session = $request->getSession();
       if (NULL !== $session && $session->isStarted() && $session->getFlashBag() instanceof AutoExpireFlashBag) {
-        // keep current flashes for one more request if using AutoExpireFlashBag
+        // Keep current flashes for one more request if using AutoExpireFlashBag.
         $session->getFlashBag()->setAll($session->getFlashBag()->peekAll());
       }
 

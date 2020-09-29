@@ -2,7 +2,6 @@
 
 namespace Drupal\webprofiler\Twig\Extension;
 
-
 use Symfony\Component\VarDumper\Cloner\Data;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Twig\Environment;
@@ -11,12 +10,12 @@ use Twig\Profiler\Profile;
 use Twig\TwigFunction;
 
 /**
- * Class ProfilerExtension
+ * Class ProfilerExtension.
  */
 class ProfilerExtension extends ProfilerExtensionAlias {
 
   /**
-   * @var HtmlDumper
+   * @var \Symfony\Component\VarDumper\Dumper\HtmlDumper
    */
   private $dumper;
 
@@ -25,6 +24,9 @@ class ProfilerExtension extends ProfilerExtensionAlias {
    */
   private $output;
 
+  /**
+   *
+   */
   public function __construct(Profile $profile, HtmlDumper $dumper = NULL) {
     parent::__construct($profile);
 

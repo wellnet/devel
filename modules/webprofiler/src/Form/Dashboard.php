@@ -5,7 +5,6 @@ namespace Drupal\webprofiler\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 
 /**
@@ -29,6 +28,9 @@ class Dashboard extends FormBase {
     );
   }
 
+  /**
+   *
+   */
   public function __construct(Profiler $profiler) {
     $this->profiler = $profiler;
   }
@@ -54,7 +56,7 @@ class Dashboard extends FormBase {
     ];
 
     $collectors = $this->profiler->all();
-    /** @var DataCollectorInterface $collector */
+    /** @var \Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface $collector */
     foreach ($collectors as $collector) {
       $name = $collector->getName();
       $form[$name] = [

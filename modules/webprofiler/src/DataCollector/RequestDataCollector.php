@@ -7,6 +7,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\RequestDataCollector as BaseRequestDataCollector;
 
+/**
+ *
+ */
 class RequestDataCollector extends BaseRequestDataCollector {
 
   use DrupalDataCollectorTrait;
@@ -47,7 +50,6 @@ class RequestDataCollector extends BaseRequestDataCollector {
    * @param $service_id
    * @param $callable
    * @param \Symfony\Component\HttpFoundation\Request $request
-   *
    */
   public function addAccessCheck($service_id, $callable, Request $request) {
     $this->accessCheck[$request->getPathInfo()][] = [

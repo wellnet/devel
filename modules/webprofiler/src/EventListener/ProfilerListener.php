@@ -29,7 +29,7 @@ class ProfilerListener extends SymfonyProfilerListener {
   public function __construct(Profiler $profiler, RequestStack $requestStack, RequestMatcherInterface $matcher, ConfigFactoryInterface $config) {
     $this->config = $config->get('webprofiler.settings');
 
-    parent::__construct($profiler, $requestStack, $matcher, $this->config->get('only_exceptions'), $this->config->get('only_master_requests'));
+    parent::__construct($profiler, $requestStack, $matcher, FALSE, FALSE);
   }
 
 }
