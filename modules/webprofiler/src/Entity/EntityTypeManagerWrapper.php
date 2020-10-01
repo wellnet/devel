@@ -2,19 +2,22 @@
 
 namespace Drupal\webprofiler\Entity;
 
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\Entity\ConfigEntityStorageInterface;
-use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\DependencyInjection\ClassResolverInterface;
+use Drupal\Core\Entity\EntityLastInstalledSchemaRepositoryInterface;
+use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityViewBuilderInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\PhpStorage\PhpStorageFactory;
-use Drupal\Core\Plugin\DefaultPluginManager;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class EntityTypeManagerWrapper.
  */
-class EntityTypeManagerWrapper extends DefaultPluginManager implements EntityTypeManagerInterface, ContainerAwareInterface {
+class EntityTypeManagerWrapper extends EntityTypeManager implements EntityTypeManagerInterface, ContainerAwareInterface {
 
   /**
    * @var array
@@ -33,9 +36,25 @@ class EntityTypeManagerWrapper extends DefaultPluginManager implements EntityTyp
 
   /**
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
+   *   The original entity manager service.
+   * @param \Traversable $namespaces
+   *   An object that implements \Traversable which contains the root paths
+   *   keyed by the corresponding namespace to look for plugin implementations.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   The cache backend to use.
+   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
+   *   The string translation.
+   * @param \Drupal\Core\DependencyInjection\ClassResolverInterface $class_resolver
+   *   The class resolver.
+   * @param \Drupal\Core\Entity\EntityLastInstalledSchemaRepositoryInterface $entity_last_installed_schema_repository
+   *   The entity last installed schema repository.
    */
-  public function __construct(EntityTypeManagerInterface $entity_manager) {
+  public function __construct(EntityTypeManagerInterface $entity_manager, \Traversable $namespaces, ModuleHandlerInterface $module_handler, CacheBackendInterface $cache, TranslationInterface $string_translation, ClassResolverInterface $class_resolver, EntityLastInstalledSchemaRepositoryInterface $entity_last_installed_schema_repository) {
     $this->entityManager = $entity_manager;
+
+    parent::__construct($namespaces, $module_handler, $cache, $string_translation, $class_resolver, $entity_last_installed_schema_repository);
   }
 
   /**
@@ -97,139 +116,12 @@ class EntityTypeManagerWrapper extends DefaultPluginManager implements EntityTyp
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function useCaches($use_caches = FALSE) {
-    $this->entityManager->useCaches($use_caches);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function hasDefinition($plugin_id) {
-    return $this->entityManager->hasDefinition($plugin_id);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getAccessControlHandler($entity_type) {
-    return $this->entityManager->getAccessControlHandler($entity_type);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function clearCachedDefinitions() {
-    $this->entityManager->clearCachedDefinitions();
-    $this->loaded = NULL;
-    $this->rendered = NULL;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getListBuilder($entity_type) {
-    return $this->entityManager->getListBuilder($entity_type);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getFormObject($entity_type, $operation) {
-    return $this->entityManager->getFormObject($entity_type, $operation);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getRouteProviders($entity_type) {
-    return $this->entityManager->getRouteProviders($entity_type);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function hasHandler($entity_type, $handler_type) {
-    return $this->entityManager->hasHandler($entity_type, $handler_type);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getHandler($entity_type, $handler_type) {
-    return $this->entityManager->getHandler($entity_type, $handler_type);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function createHandlerInstance(
-    $class,
-    EntityTypeInterface $definition = NULL
-  ) {
-    return $this->entityManager->createHandlerInstance($class, $definition);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getDefinition($entity_type_id, $exception_on_invalid = TRUE) {
-    return $this->entityManager->getDefinition(
-      $entity_type_id,
-      $exception_on_invalid
-    );
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getDefinitions() {
-    return $this->entityManager->getDefinitions();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function createInstance($plugin_id, array $configuration = []) {
-    return $this->entityManager->createInstance($plugin_id, $configuration);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getInstance(array $options) {
-    return $this->entityManager->getInstance($options);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setContainer(ContainerInterface $container = NULL) {
-    $this->entityManager->setContainer($container);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getActiveDefinition($entity_type_id) {
-    return $this->entityManager->getActiveDefinition($entity_type_id);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getActiveFieldStorageDefinitions($entity_type_id) {
-    return $this->entityManager->getActiveFieldStorageDefinitions($entity_type_id);
-  }
-
-  /**
    * Return a decorator for the storage handler.
    *
    * @param $entity_type
    * @param $handler
    *
-   * @return \Drupal\webprofiler\Entity\EntityDecorator
+   * @return \Drupal\Core\Config\Entity\ConfigEntityStorageInterface
    */
   private function getStorageDecorator($entity_type, $handler) {
     // Loaded this way to avoid circular references.

@@ -66,6 +66,7 @@ services:
     class: Drupal\webprofiler\Entity\EntityTypeManagerWrapper
     public: false
     decorates: entity_type.manager
-    arguments: ['@webprofiler.debug.entity_type.manager.inner']
+    arguments: ['@webprofiler.debug.entity_type.manager.inner', '@container.namespaces', '@module_handler', '@cache.discovery', '@string_translation', '@class_resolver', '@entity.last_installed_schema.repository']
+    parent: container.trait
     properties:
       _serviceId: 'entity_type.manager'
