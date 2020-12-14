@@ -3,6 +3,4 @@ dashboard:
   js:
     js/dashboard.js: {}
   dependencies:
-    - core/jquery
-    - core/drupal
-    - core/drupalSettings
+    - core/drupal.ajax

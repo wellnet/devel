@@ -3,5 +3,8 @@ type: module
 description: 'Drupal Web Profiler.'
 package: Development
 core_version_requirement: ^8.8 || ^9
+php: 7.2
 dependencies:
   - devel:devel
+tags:
+  - developer

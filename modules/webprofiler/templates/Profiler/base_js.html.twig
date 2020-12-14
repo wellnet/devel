@@ -418,14 +418,6 @@
                 return this;
             },
 
-            loadPanel: function(token, name) {
-                this.load(
-                    'panel-' + name,
-                    '{{ path("webprofiler.panel", { "token": "xxxxxx", "name": "yyyyyy" }) }}'.replace(/xxxxxx/, token).replace(/yyyyyy/, name));
-
-                return this;
-            },
-
             loadToolbar: function(token, newToken) {
                 newToken = (newToken || token);
                 this.load(

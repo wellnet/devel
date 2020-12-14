@@ -8,7 +8,6 @@ use Drupal\Core\Routing\UrlGeneratorInterface;
 use Drupal\webprofiler\Csp\ContentSecurityPolicyHandler;
 use Drupal\webprofiler\Profiler\TemplateManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
@@ -99,44 +98,6 @@ class ProfilerController extends ControllerBase {
     ];
 
     $response->setContent($this->renderer->renderRoot($toolbar));
-
-    return $response;
-  }
-
-  /**
-   * Renders a profiler panel for the given token and type.
-   *
-   * @param string $token
-   *   The profiler token.
-   * @param string $name
-   *   The panel name to render.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   A Response instance.
-   */
-  public function panelAction($token, $name) {
-    if ('empty' === $token || NULL === $token || NULL === $name) {
-      return new JsonResponse('');
-    }
-
-    $this->profiler->disable();
-
-    if (!$profile = $this->profiler->loadProfile($token)) {
-      return new JsonResponse('');
-    }
-
-    $templates = $this->templateManager->getNames($profile);
-    $template = $templates[$name];
-
-    $content = [
-      '#theme' => 'webprofiler_panel',
-      '#profile' => $profile,
-      '#template' => $template,
-      '#name' => $name,
-    ];
-
-    $response = new Response('', 200, ['Content-Type' => 'text/html']);
-    $response->setContent($this->renderer->renderRoot($content));
 
     return $response;
   }

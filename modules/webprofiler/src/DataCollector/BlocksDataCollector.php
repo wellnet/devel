@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 class BlocksDataCollector extends DataCollector {
 
   /**
-   * @var \Drupal\Core\Entity\EntityManagerInterface
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   private $entityManager;
 

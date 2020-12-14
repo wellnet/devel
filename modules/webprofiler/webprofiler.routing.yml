@@ -9,13 +9,13 @@ webprofiler.dashboard:
   path: '/admin/reports/profiler/view/{token}'
   defaults:
     _title: 'Dashboard'
-    _form: '\Drupal\webprofiler\Form\Dashboard'
+    _controller: '\Drupal\webprofiler\Controller\DashboardController::dashboard'
   requirements:
     _permission: 'access webprofiler'
 
 webprofiler.panel:
   path: '/admin/reports/profiler/view/{token}/panel/{name}'
   defaults:
-    _controller: '\Drupal\webprofiler\Controller\ProfilerController::panelAction'
+    _controller: '\Drupal\webprofiler\Controller\DashboardController::panel'
   requirements:
     _permission: 'view webprofiler toolbar'

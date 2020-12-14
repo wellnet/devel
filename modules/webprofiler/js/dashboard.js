@@ -2,7 +2,7 @@
 
   Drupal.behaviors.webprofiler_dashboard = {
     attach(context) {
-      console.log('Dashboard loaded');
+
     }
   };
 

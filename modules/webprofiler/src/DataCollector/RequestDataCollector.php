@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\DataCollector\RequestDataCollector as BaseReque
  */
 class RequestDataCollector extends BaseRequestDataCollector {
 
-  use DrupalDataCollectorTrait;
+  use DataCollectorTrait;
 
   /**
    * @var \Drupal\Core\Controller\ControllerResolverInterface

@@ -37,19 +37,18 @@ function webprofiler_theme() {
         'location' => '',
       ],
     ],
-    'webprofiler_panel_js' => [
-      'template' => 'Profiler/panel_js',
+    'webprofiler_dashboard' => [
+      'template' => 'Profiler/dashboard',
       'variables' => [
+        'collectors' => [],
         'token' => '',
-        'name' => '',
       ],
     ],
-    'webprofiler_panel' => [
-      'template' => 'Profiler/panel',
+    'webprofiler_dashboard_panel' => [
+      'template' => 'Profiler/dashboard_panel',
       'variables' => [
-        'profile' => NULL,
-        'template' => '',
-        'name' => '',
+        'title' => '',
+        'data' => [],
       ],
     ],
   ];

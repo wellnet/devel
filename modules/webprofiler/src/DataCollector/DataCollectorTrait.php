@@ -3,9 +3,9 @@
 namespace Drupal\webprofiler\DataCollector;
 
 /**
- * Class DrupalDataCollectorTrait.
+ * Class DataCollectorTrait.
  */
-trait DrupalDataCollectorTrait {
+trait DataCollectorTrait {
 
   /**
    * {@inheritdoc}

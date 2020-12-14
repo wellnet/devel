@@ -1,0 +1,13 @@
+<div class="webprofiler--wrapper">
+  <div class="webprofiler--collectors" style="float: left;width: 10%;">
+    <ul>
+    {% for collector in collectors %}
+      <li class="webprofiler--collector"><a href="{{ path('webprofiler.panel', {'token': token, 'name': collector.name}) }}" class="use-ajax">{{ collector.name }}</a></li>
+    {% endfor %}
+    </ul>
+  </div>
+
+  <div class="webprofiler--collectors" id="js-webprofiler-panel" style="float: left;width: 90%;">
+    panel
+  </div>
+</div>

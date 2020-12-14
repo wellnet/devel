@@ -2,6 +2,7 @@
     "name": "drupal/webprofiler",
     "description": "This extension provides new commands for Drush.",
     "type": "drupal-drush",
+    "license": "GPL-2.0-or-later",
     "authors": [
         {
             "name": "Luca Lusso",

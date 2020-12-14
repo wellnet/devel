@@ -6,15 +6,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Twig\Environment;
-use Twig\Error\LoaderError;
-use Twig\Loader\ExistsLoaderInterface;
-use Twig\Loader\SourceContextLoaderInterface;
 
 /**
  * Profiler Templates Manager.
- *
- * @author Fabien Potencier <fabien@symfony.com>
- * @author Artur Wielogórski <wodor@wodor.net>
  */
 class TemplateManager {
 
@@ -25,7 +19,11 @@ class TemplateManager {
   protected $profiler;
 
   /**
+   * TemplateManager constructor.
    *
+   * @param \Symfony\Component\HttpKernel\Profiler\Profiler $profiler
+   * @param \Twig\Environment $twig
+   * @param array $templates
    */
   public function __construct(Profiler $profiler, Environment $twig, array $templates) {
     $this->profiler = $profiler;
@@ -68,7 +66,7 @@ class TemplateManager {
         continue;
       }
 
-      list($name, $template) = $arguments;
+      [$name, $template] = $arguments;
 
       if (!$this->profiler->has($name) || !$profile->hasCollector($name)) {
         continue;
@@ -78,7 +76,7 @@ class TemplateManager {
         $template = substr($template, 0, -10);
       }
 
-      if (!$this->templateExists($template . '.html.twig')) {
+      if (!$this->twig->getLoader()->exists($template . '.html.twig')) {
         throw new \UnexpectedValueException(sprintf('The profiler template "%s.html.twig" for data collector "%s" does not exist.', $template, $name));
       }
 
@@ -86,31 +84,6 @@ class TemplateManager {
     }
 
     return $templates;
-  }
-
-  /**
-   * To be removed when the minimum required version of Twig is >= 2.0.
-   */
-  protected function templateExists($template) {
-    $loader = $this->twig->getLoader();
-    if ($loader instanceof ExistsLoaderInterface) {
-      return $loader->exists($template);
-    }
-
-    try {
-      if ($loader instanceof SourceContextLoaderInterface || method_exists($loader, 'getSourceContext')) {
-        $loader->getSourceContext($template);
-      }
-      else {
-        $loader->getSource($template);
-      }
-
-      return TRUE;
-    }
-    catch (LoaderError $e) {
-    }
-
-    return FALSE;
   }
 
 }
