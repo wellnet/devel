@@ -13,18 +13,43 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 
 /**
- * Class ProfilerController.
+ * Controller for the Webprofiler toolbar.
  */
 class ProfilerController extends ControllerBase {
 
+  /**
+   * The Url generator service.
+   *
+   * @var \Drupal\Core\Routing\UrlGeneratorInterface
+   */
   private $generator;
 
+  /**
+   * The Profiler service.
+   *
+   * @var \Symfony\Component\HttpKernel\Profiler\Profiler
+   */
   private $profiler;
 
+  /**
+   * The Renderer service.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
   private $renderer;
 
+  /**
+   * The Template manager service.
+   *
+   * @var \Drupal\webprofiler\Profiler\TemplateManager
+   */
   private $templateManager;
 
+  /**
+   * The Content-Security-Policy service.
+   *
+   * @var \Drupal\webprofiler\Csp\ContentSecurityPolicyHandler
+   */
   private $cspHandler;
 
   /**
@@ -41,9 +66,20 @@ class ProfilerController extends ControllerBase {
   }
 
   /**
+   * ProfilerController constructor.
    *
+   * @param \Drupal\Core\Routing\UrlGeneratorInterface $generator
+   *   The Url generator service.
+   * @param \Symfony\Component\HttpKernel\Profiler\Profiler $profiler
+   *   The Profiler service.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The Renderer service.
+   * @param \Drupal\webprofiler\Profiler\TemplateManager $templateManager
+   *   The Template manager service.
+   * @param \Drupal\webprofiler\Csp\ContentSecurityPolicyHandler $cspHandler
+   *   The Content-Security-Policy service.
    */
-  public function __construct(UrlGeneratorInterface $generator, Profiler $profiler, RendererInterface $renderer, TemplateManager $templateManager, ContentSecurityPolicyHandler $cspHandler) {
+  final public function __construct(UrlGeneratorInterface $generator, Profiler $profiler, RendererInterface $renderer, TemplateManager $templateManager, ContentSecurityPolicyHandler $cspHandler) {
     $this->generator = $generator;
     $this->profiler = $profiler;
     $this->renderer = $renderer;

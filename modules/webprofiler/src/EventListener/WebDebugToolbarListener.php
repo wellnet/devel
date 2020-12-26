@@ -9,43 +9,63 @@ use Drupal\webprofiler\Csp\ContentSecurityPolicyHandler;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Flash\AutoExpireFlashBag;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * Class WebDebugToolbarListener.
+ * Listen to kernel response event to inject the toolbar.
  */
 class WebDebugToolbarListener implements EventSubscriberInterface {
 
   /**
+   * The renderer service.
+   *
    * @var \Drupal\Core\Render\RendererInterface
    */
   protected $renderer;
 
   /**
-   * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
-   */
-  protected $urlGenerator;
-
-  /**
-   * @var \Drupal\webprofiler\Csp\ContentSecurityPolicyHandler
-   */
-  private $cspHandler;
-
-  /**
+   * The current user.
+   *
    * @var \Drupal\Core\Session\AccountInterface
    */
   private $currentUser;
 
   /**
+   * The url generator service.
+   *
+   * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
+   */
+  protected $urlGenerator;
+
+  /**
+   * The Content-Security-Policy handler service.
+   *
+   * @var \Drupal\webprofiler\Csp\ContentSecurityPolicyHandler
+   */
+  private $cspHandler;
+
+  /**
+   * An immutable config object.
+   *
    * @var \Drupal\Core\Config\ImmutableConfig
    */
   private $config;
 
   /**
+   * WebDebugToolbarListener constructor.
    *
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer service.
+   * @param \Drupal\Core\Session\AccountInterface $currentUser
+   *   The current user.
+   * @param \Symfony\Component\Routing\Generator\UrlGeneratorInterface $urlGenerator
+   *   The url generator service.
+   * @param \Drupal\webprofiler\Csp\ContentSecurityPolicyHandler $cspHandler
+   *   The Content-Security-Policy handler service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config
+   *   The config factory service.
    */
   public function __construct(RendererInterface $renderer, AccountInterface $currentUser, UrlGeneratorInterface $urlGenerator, ContentSecurityPolicyHandler $cspHandler, ConfigFactoryInterface $config) {
     $this->renderer = $renderer;
@@ -56,7 +76,19 @@ class WebDebugToolbarListener implements EventSubscriberInterface {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public static function getSubscribedEvents() {
+    return [
+      KernelEvents::RESPONSE => ['onKernelResponse', -128],
+    ];
+  }
+
+  /**
+   * Listen for the kernel.response event.
+   *
    * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
+   *   A response event.
    */
   public function onKernelResponse(ResponseEvent $event) {
     $response = $event->getResponse();
@@ -86,12 +118,6 @@ class WebDebugToolbarListener implements EventSubscriberInterface {
     }
 
     if ($response->headers->has('X-Debug-Token') && $response->isRedirect() && $this->config->get('intercept_redirects') && 'html' === $request->getRequestFormat()) {
-      $session = $request->getSession();
-      if (NULL !== $session && $session->isStarted() && $session->getFlashBag() instanceof AutoExpireFlashBag) {
-        // Keep current flashes for one more request if using AutoExpireFlashBag.
-        $session->getFlashBag()->setAll($session->getFlashBag()->peekAll());
-      }
-
       $toolbarRedirect = [
         '#theme' => 'webprofiler_toolbar_redirect',
         '#location' => $response->headers->get('Location'),
@@ -120,8 +146,11 @@ class WebDebugToolbarListener implements EventSubscriberInterface {
    * Injects the web debug toolbar into the given Response.
    *
    * @param \Symfony\Component\HttpFoundation\Response $response
+   *   A response.
    * @param \Symfony\Component\HttpFoundation\Request $request
+   *   A request.
    * @param array $nonces
+   *   Nonces used in Content-Security-Policy header.
    */
   protected function injectToolbar(Response $response, Request $request, array $nonces) {
     $content = $response->getContent();
@@ -140,15 +169,6 @@ class WebDebugToolbarListener implements EventSubscriberInterface {
       $content = substr($content, 0, $pos) . $toolbar . substr($content, $pos);
       $response->setContent($content);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public static function getSubscribedEvents() {
-    return [
-      KernelEvents::RESPONSE => ['onKernelResponse', -128],
-    ];
   }
 
 }

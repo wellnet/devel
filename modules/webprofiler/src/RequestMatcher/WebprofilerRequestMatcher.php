@@ -8,26 +8,35 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestMatcherInterface;
 
 /**
- * Class WebprofilerRequestMatcher.
+ * Exclude some path to be profiled.
  */
 class WebprofilerRequestMatcher implements RequestMatcherInterface {
 
   /**
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   * An immutable config object.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
    */
-  private $configFactory;
+  private $config;
 
   /**
+   * The path matcher service.
+   *
    * @var \Drupal\Core\Path\PathMatcherInterface
    */
   private $pathMatcher;
 
   /**
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   * WebprofilerRequestMatcher constructor.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config
+   *   The config factory service.
    * @param \Drupal\Core\Path\PathMatcherInterface $pathMatcher
+   *   The path matcher service.
    */
-  public function __construct(ConfigFactoryInterface $configFactory, PathMatcherInterface $pathMatcher) {
-    $this->configFactory = $configFactory;
+  public function __construct(ConfigFactoryInterface $config, PathMatcherInterface $pathMatcher) {
+    $this->config = $config->get('webprofiler.settings');
+
     $this->pathMatcher = $pathMatcher;
   }
 
@@ -37,7 +46,7 @@ class WebprofilerRequestMatcher implements RequestMatcherInterface {
   public function matches(Request $request) {
     $path = $request->getPathInfo();
 
-    $patterns = $this->configFactory->get('webprofiler.settings')->get('exclude_paths');
+    $patterns = $this->config->get('exclude_paths');
 
     // Never add Webprofiler to phpinfo page.
     $patterns .= "\r\n/admin/reports/status/php";

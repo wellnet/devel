@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 
 /**
- * Class DashboardController.
+ * Controller for the Webprofiler dashboard.
  */
 class DashboardController extends ControllerBase {
 
@@ -35,23 +35,31 @@ class DashboardController extends ControllerBase {
   }
 
   /**
+   * DashboardController constructor.
    *
+   * @param \Symfony\Component\HttpKernel\Profiler\Profiler $profiler
+   *   The Profiler service.
    */
-  public function __construct(Profiler $profiler) {
+  final public function __construct(Profiler $profiler) {
     $this->profiler = $profiler;
   }
 
   /**
+   * Controller for the whole dashboard page.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   A Request.
+   *
    * @return array
+   *   A render array for webprofiler_dashboard theme.
    */
   public function dashboard(Request $request) {
     $this->profiler->disable();
 
-    $openPanel = $request->get('panel', 'request');
     $token = $request->get('token');
 
     /** @var \Symfony\Component\HttpKernel\DataCollector\DataCollector $el */
-    $collectors = array_filter($this->profiler->all(), function($el) {
+    $collectors = array_filter($this->profiler->all(), function ($el) {
       return [
         'name' => $el->getName(),
       ];
@@ -64,8 +72,8 @@ class DashboardController extends ControllerBase {
       '#attached' => [
         'library' => [
           'webprofiler/dashboard',
-        ]
-      ]
+        ],
+      ],
     ];
   }
 
@@ -93,7 +101,7 @@ class DashboardController extends ControllerBase {
 
     $panel = new RequestPanel();
 
-    $response = new AjaxResponse;
+    $response = new AjaxResponse();
     $response->addCommand(new HtmlCommand('#js-webprofiler-panel', $panel->render($token, $name)));
 
     return $response;

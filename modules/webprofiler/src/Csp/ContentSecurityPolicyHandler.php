@@ -8,30 +8,48 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Handles Content-Security-Policy HTTP header for the WebProfiler Bundle.
  *
- * @author Romain Neutron <imprec@gmail.com>
- *
  * @internal
  */
 class ContentSecurityPolicyHandler {
+
+  /**
+   * The nonce generator service.
+   *
+   * @var \Drupal\webprofiler\Csp\NonceGenerator
+   */
   private $nonceGenerator;
+
+  /**
+   * TRUE if the Content-Security-Policy is disabled.
+   *
+   * @var bool
+   */
   private $cspDisabled = FALSE;
 
   /**
+   * ContentSecurityPolicyHandler constructor.
    *
+   * @param \Drupal\webprofiler\Csp\NonceGenerator $nonceGenerator
+   *   The nonce generator service.
    */
   public function __construct(NonceGenerator $nonceGenerator) {
     $this->nonceGenerator = $nonceGenerator;
   }
 
   /**
-   * Returns an array of nonces to be used in Twig templates and Content-Security-Policy headers.
+   * Returns an array of nonces.
+   *
+   * To be used in Twig templates and Content-Security-Policy headers.
    *
    * Nonce can be provided by;
-   *  - The request - In case HTML content is fetched via AJAX and inserted in DOM, it must use the same nonce as origin
-   *  - The response -  A call to getNonces() has already been done previously. Same nonce are returned
+   *  - The request - In case HTML content is fetched via AJAX and inserted in
+   *    DOM, it must use the same nonce as origin
+   *  - The response - A call to getNonces() has already been done previously.
+   *    Same nonce are returned
    *  - They are otherwise randomly generated.
    *
    * @return array
+   *   An array of nonces.
    */
   public function getNonces(Request $request, Response $response) {
     if ($request->headers->has('X-SymfonyProfiler-Script-Nonce') && $request->headers->has('X-SymfonyProfiler-Style-Nonce')) {
@@ -71,7 +89,13 @@ class ContentSecurityPolicyHandler {
   /**
    * Cleanup temporary headers and updates Content-Security-Policy headers.
    *
-   * @return array Nonces used by the bundle in Content-Security-Policy header
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   A request.
+   * @param \Symfony\Component\HttpFoundation\Response $response
+   *   A response.
+   *
+   * @return array
+   *   Nonces used by the bundle in Content-Security-Policy header.
    */
   public function updateResponseHeaders(Request $request, Response $response) {
     if ($this->cspDisabled) {
@@ -88,7 +112,7 @@ class ContentSecurityPolicyHandler {
   }
 
   /**
-   *
+   * Remove nonces from headers.
    */
   private function cleanHeaders(Response $response) {
     $response->headers->remove('X-SymfonyProfiler-Script-Nonce');
@@ -96,7 +120,7 @@ class ContentSecurityPolicyHandler {
   }
 
   /**
-   *
+   * Remove Content-Security-Policy headers.
    */
   private function removeCspHeaders(Response $response) {
     $response->headers->remove('X-Content-Security-Policy');
@@ -107,7 +131,13 @@ class ContentSecurityPolicyHandler {
   /**
    * Updates Content-Security-Policy headers in a response.
    *
+   * @param \Symfony\Component\HttpFoundation\Response $response
+   *   A response.
+   * @param array $nonces
+   *   An array of nonces.
+   *
    * @return array
+   *   An array of nonces.
    */
   private function updateCspHeaders(Response $response, array $nonces = []) {
     $nonces = array_replace([
@@ -129,7 +159,8 @@ class ContentSecurityPolicyHandler {
             $headers[$header][$type] = $headers[$header]['default-src'];
           }
           else {
-            // If there is no script-src/style-src and no default-src, no additional rules required.
+            // If there is no script-src/style-src and no default-src,
+            // no additional rules required.
             continue;
           }
         }
@@ -156,6 +187,9 @@ class ContentSecurityPolicyHandler {
    * Generates a valid Content-Security-Policy nonce.
    *
    * @return string
+   *   A valid Content-Security-Policy nonce.
+   *
+   * @throws \Exception
    */
   private function generateNonce() {
     return $this->nonceGenerator->generate();
@@ -167,7 +201,8 @@ class ContentSecurityPolicyHandler {
    * @param array $directives
    *   The directive set.
    *
-   * @return string The Content-Security-Policy header
+   * @return string
+   *   The Content-Security-Policy header.
    */
   private function generateCspHeader(array $directives) {
     return array_reduce(array_keys($directives), function ($res, $name) use ($directives) {
@@ -181,7 +216,8 @@ class ContentSecurityPolicyHandler {
    * @param string $header
    *   The header value.
    *
-   * @return array The directive set
+   * @return array
+   *   The directive set.
    */
   private function parseDirectives($header) {
     $directives = [];
@@ -199,7 +235,7 @@ class ContentSecurityPolicyHandler {
   }
 
   /**
-   * Detects if the 'unsafe-inline' is prevented for a directive within the directive set.
+   * Detects if the 'unsafe-inline' is prevented for a directive.
    *
    * @param array $directivesSet
    *   The directive set.
@@ -207,6 +243,7 @@ class ContentSecurityPolicyHandler {
    *   The name of the directive to check.
    *
    * @return bool
+   *   TRUE if the 'unsafe-inline' is prevented for a directive.
    */
   private function authorizesInline(array $directivesSet, $type) {
     if (isset($directivesSet[$type])) {
@@ -223,7 +260,13 @@ class ContentSecurityPolicyHandler {
   }
 
   /**
+   * Return TRUE if a directive has an hash or a nonce.
    *
+   * @param array $directives
+   *   A set of directives.
+   *
+   * @return bool
+   *   TRUE if a directive has an hash or a nonce.
    */
   private function hasHashOrNonce(array $directives) {
     foreach ($directives as $directive) {
@@ -242,24 +285,36 @@ class ContentSecurityPolicyHandler {
   }
 
   /**
-   * Retrieves the Content-Security-Policy headers (either X-Content-Security-Policy or Content-Security-Policy) from
-   * a response.
+   * Retrieves the Content-Security-Policy headers.
    *
-   * @return array An associative array of headers
+   * Either X-Content-Security-Policy or Content-Security-Policy from a
+   * response.
+   *
+   * @return array
+   *   An associative array of headers.
    */
   private function getCspHeaders(Response $response) {
     $headers = [];
 
     if ($response->headers->has('Content-Security-Policy')) {
-      $headers['Content-Security-Policy'] = $this->parseDirectives($response->headers->get('Content-Security-Policy'));
+      $headers['Content-Security-Policy'] =
+        $this->parseDirectives(
+          $response->headers->get('Content-Security-Policy')
+        );
     }
 
     if ($response->headers->has('Content-Security-Policy-Report-Only')) {
-      $headers['Content-Security-Policy-Report-Only'] = $this->parseDirectives($response->headers->get('Content-Security-Policy-Report-Only'));
+      $headers['Content-Security-Policy-Report-Only'] =
+        $this->parseDirectives(
+          $response->headers->get('Content-Security-Policy-Report-Only')
+        );
     }
 
     if ($response->headers->has('X-Content-Security-Policy')) {
-      $headers['X-Content-Security-Policy'] = $this->parseDirectives($response->headers->get('X-Content-Security-Policy'));
+      $headers['X-Content-Security-Policy'] =
+        $this->parseDirectives(
+          $response->headers->get('X-Content-Security-Policy')
+        );
     }
 
     return $headers;

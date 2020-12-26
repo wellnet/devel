@@ -3,29 +3,20 @@
 namespace Drupal\webprofiler\DataCollector;
 
 /**
- * Class DataCollectorTrait.
+ * Trait with common code for data collectors.
  */
 trait DataCollectorTrait {
 
   /**
-   * {@inheritdoc}
-   */
-  public function getLibraries() {
-    return [];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getDrupalSettings() {
-    return [];
-  }
-
-  /**
-   * @param $class
-   * @param $method
+   * Return information about a method of a class.
+   *
+   * @param string $class
+   *   A class name.
+   * @param string $method
+   *   A method name.
    *
    * @return array
+   *   Array of information about a method of a class.
    */
   public function getMethodData($class, $method) {
     $class = is_object($class) ? get_class($class) : $class;
@@ -42,16 +33,21 @@ trait DataCollectorTrait {
       ];
     }
     catch (\ReflectionException $re) {
-      // TODO: handle the exception.
-    } finally {
+      // @todo handle the exception.
+    }
+    finally {
       return $data;
     }
   }
 
   /**
-   * @param $value
+   * Convert a numeric value to a human readable string.
+   *
+   * @param string $value
+   *   The value to convert.
    *
    * @return int|string
+   *   A human readable string.
    */
   private function convertToBytes($value) {
     if ('-1' === $value) {

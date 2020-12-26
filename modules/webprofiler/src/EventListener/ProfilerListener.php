@@ -9,11 +9,13 @@ use Symfony\Component\HttpKernel\EventListener\ProfilerListener as SymfonyProfil
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 
 /**
- * Class ProfilerListener.
+ * ProfilerListener collects data for the current request.
  */
 class ProfilerListener extends SymfonyProfilerListener {
 
   /**
+   * An immutable config object.
+   *
    * @var \Drupal\Core\Config\ImmutableConfig
    */
   private $config;
@@ -22,9 +24,13 @@ class ProfilerListener extends SymfonyProfilerListener {
    * ProfilerListener constructor.
    *
    * @param \Symfony\Component\HttpKernel\Profiler\Profiler $profiler
+   *   The profiler service.
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
+   *   The request stack service.
    * @param \Symfony\Component\HttpFoundation\RequestMatcherInterface $matcher
+   *   The request matcher service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config
+   *   The config factory service.
    */
   public function __construct(Profiler $profiler, RequestStack $requestStack, RequestMatcherInterface $matcher, ConfigFactoryInterface $config) {
     $this->config = $config->get('webprofiler.settings');

@@ -3,7 +3,7 @@
 namespace Drupal\webprofiler;
 
 /**
- * Interface DecoratorGeneratorInterface.
+ * Interface for decorator generators.
  */
 interface DecoratorGeneratorInterface {
 
@@ -15,9 +15,10 @@ interface DecoratorGeneratorInterface {
   public function generate();
 
   /**
-   * List available decorators.
+   * Return the list of all available decorators.
    *
    * @return array
+   *   The list of all available decorators.
    */
   public function getDecorators(): array;
 

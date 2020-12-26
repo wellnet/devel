@@ -12,15 +12,18 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class ConfigEntityStorageDecorator.
+ * Base class for a decorator of a config entity storage class.
  */
 class ConfigEntityStorageDecorator extends EntityDecorator implements ConfigEntityStorageInterface, ImportableEntityStorageInterface, EntityHandlerInterface {
 
   /**
-   * @param \Drupal\Core\Config\Entity\ConfigEntityStorageInterface $controller
+   * ConfigEntityStorageDecorator constructor.
+   *
+   * @param \Drupal\Core\Config\Entity\ConfigEntityStorageInterface $config_entity_storage
+   *   The config entity storage to decorate.
    */
-  public function __construct(ConfigEntityStorageInterface $controller) {
-    parent::__construct($controller);
+  final public function __construct(ConfigEntityStorageInterface $config_entity_storage) {
+    parent::__construct($config_entity_storage);
 
     $this->entities = [];
   }
@@ -137,6 +140,8 @@ class ConfigEntityStorageDecorator extends EntityDecorator implements ConfigEnti
 
   /**
    * {@inheritdoc}
+   *
+   * phpcs:disable Drupal.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
    */
   public static function getIDFromConfigName($config_name, $config_prefix) {
     return substr($config_name, strlen($config_prefix . '.'));

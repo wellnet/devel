@@ -8,7 +8,9 @@ namespace Drupal\webprofiler;
 class Decorator {
 
   /**
-   * @var
+   * The original object to decorate.
+   *
+   * @var object
    */
   protected $object;
 
@@ -16,7 +18,7 @@ class Decorator {
    * Class constructor.
    *
    * @param object $object
-   *   The object to decorate.
+   *   The original object to decorate.
    */
   public function __construct($object) {
     $this->object = $object;
@@ -37,13 +39,15 @@ class Decorator {
   }
 
   /**
-   * Returns true if $method is a PHP callable.
+   * Return the object if $method is a PHP callable, FALSE otherwise.
    *
    * @param string $method
    *   The method name.
    * @param bool $checkSelf
+   *   TRUE to check this decorator, FALSE to check the original object.
    *
    * @return bool|mixed
+   *   The object if $method is a PHP callable, FALSE otherwise.
    */
   public function isCallable($method, $checkSelf = FALSE) {
     // Check the original object.
@@ -51,44 +55,59 @@ class Decorator {
     if (is_callable([$object, $method])) {
       return $object;
     }
+
     // Check Decorators.
     $object = $checkSelf ? $this : $this->object;
     while ($object instanceof Decorator) {
       if (is_callable([$object, $method])) {
         return $object;
       }
+
       $object = $this->object;
     }
+
     return FALSE;
   }
 
   /**
-   * @param $method
-   * @param $args
+   * Call a method on the original object, with specific arguments.
+   *
+   * @param string $method
+   *   The method to call.
+   * @param array $args
+   *   The args to pass to the method.
    *
    * @return mixed
+   *   The return of the method invocation on the original object.
    *
    * @throws \Exception
    */
-  public function __call($method, $args) {
+  public function __call($method, array $args) {
     if ($object = $this->isCallable($method)) {
       return call_user_func_array([$object, $method], $args);
     }
+
     throw new \Exception(
       'Undefined method - ' . get_class($this->getOriginalObject()) . '::' . $method
     );
   }
 
   /**
-   * @param $property
+   * Return the value of a property from the original object.
    *
-   * @return null
+   * @param string $property
+   *   The property name.
+   *
+   * @return mixed|null
+   *   The value of a property from the original object or NULL if the property
+   *   doesn't exist on the original object.
    */
   public function __get($property) {
     $object = $this->getOriginalObject();
     if (property_exists($object, $property)) {
       return $object->$property;
     }
+
     return NULL;
   }
 

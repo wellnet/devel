@@ -15,26 +15,34 @@ use Drupal\Core\StringTranslation\TranslationInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
- * Class EntityTypeManagerWrapper.
+ * Wrap the entity type manager service to collect loaded and rendered entities.
  */
 class EntityTypeManagerWrapper extends EntityTypeManager implements EntityTypeManagerInterface, ContainerAwareInterface {
 
   /**
+   * Loaded entities.
+   *
    * @var array
    */
   private $loaded;
 
   /**
+   * Rendered entities.
+   *
    * @var array
    */
   private $rendered;
 
   /**
+   * The original entity type manager service.
+   *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   private $entityManager;
 
   /**
+   * EntityTypeManagerWrapper constructor.
+   *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
    *   The original entity manager service.
    * @param \Traversable $namespaces
@@ -63,14 +71,14 @@ class EntityTypeManagerWrapper extends EntityTypeManager implements EntityTypeMa
   public function getStorage($entity_type) {
     /** @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface $handler */
     $handler = $this->getHandler($entity_type, 'storage');
-    $type = ($handler instanceof ConfigEntityStorageInterface) ? 'config' : 'content';
+    $entity_kind = ($handler instanceof ConfigEntityStorageInterface) ? 'config' : 'content';
 
-    if (!isset($this->loaded[$type][$entity_type])) {
+    if (!isset($this->loaded[$entity_kind][$entity_type])) {
       $handler = $this->getStorageDecorator($entity_type, $handler);
-      $this->loaded[$type][$entity_type] = $handler;
+      $this->loaded[$entity_kind][$entity_type] = $handler;
     }
     else {
-      $handler = $this->loaded[$type][$entity_type];
+      $handler = $this->loaded[$entity_kind][$entity_type];
     }
 
     return $handler;
@@ -97,19 +105,28 @@ class EntityTypeManagerWrapper extends EntityTypeManager implements EntityTypeMa
   }
 
   /**
-   * @param $type
-   * @param $entity_type
+   * Return loaded entities.
+   *
+   * @param string $entity_kind
+   *   The kind of the entity: config or content.
+   * @param string $entity_type
+   *   The entity type.
    *
    * @return array
+   *   Loaded entities.
    */
-  public function getLoaded($type, $entity_type) {
-    return isset($this->loaded[$type][$entity_type]) ? $this->loaded[$type][$entity_type] : NULL;
+  public function getLoaded($entity_kind, $entity_type) {
+    return isset($this->loaded[$entity_kind][$entity_type]) ? $this->loaded[$entity_kind][$entity_type] : NULL;
   }
 
   /**
-   * @param $entity_type
+   * Return rendered entities.
+   *
+   * @param string $entity_type
+   *   The entity type.
    *
    * @return array
+   *   Rendered entities.
    */
   public function getRendered($entity_type) {
     return isset($this->rendered[$entity_type]) ? $this->rendered[$entity_type] : NULL;
@@ -118,10 +135,13 @@ class EntityTypeManagerWrapper extends EntityTypeManager implements EntityTypeMa
   /**
    * Return a decorator for the storage handler.
    *
-   * @param $entity_type
-   * @param $handler
+   * @param string $entity_type
+   *   The entity type.
+   * @param object $handler
+   *   The original storage handler.
    *
    * @return \Drupal\Core\Config\Entity\ConfigEntityStorageInterface
+   *   A decorator for the storage handler.
    */
   private function getStorageDecorator($entity_type, $handler) {
     // Loaded this way to avoid circular references.

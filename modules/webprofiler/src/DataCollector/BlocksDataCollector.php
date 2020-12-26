@@ -10,17 +10,22 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 
 /**
- *
+ * DataCollector for Drupal blocks.
  */
 class BlocksDataCollector extends DataCollector {
 
   /**
+   * The Entity type manager service.
+   *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   private $entityManager;
 
   /**
+   * BlocksDataCollector constructor.
+   *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityManager
+   *   The Entity type manager service.
    */
   public function __construct(EntityTypeManagerInterface $entityManager) {
     $this->entityManager = $entityManager;
@@ -55,45 +60,63 @@ class BlocksDataCollector extends DataCollector {
   }
 
   /**
+   * Return a list of rendered blocks.
+   *
    * @return array
+   *   A list of rendered blocks.
    */
   public function getRenderedBlocks() {
     return $this->data['blocks']['rendered'];
   }
 
   /**
+   * Return the number of rendered blocks.
+   *
    * @return int
+   *   The number of rendered blocks.
    */
   public function getRenderedBlocksCount() {
     return count($this->getRenderedBlocks());
   }
 
   /**
+   * Return a list of loaded blocks.
+   *
    * @return array
+   *   A list of loaded blocks.
    */
   public function getLoadedBlocks() {
     return $this->data['blocks']['loaded'];
   }
 
   /**
+   * Return the number of loaded blocks.
+   *
    * @return int
+   *   The number of rendered blocks.
    */
   public function getLoadedBlocksCount() {
     return count($this->getLoadedBlocks());
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function reset() {
 
   }
 
   /**
+   * Return the data to store about blocks.
+   *
    * @param \Drupal\webprofiler\Entity\EntityDecorator $decorator
+   *   An entity decorator.
    * @param \Drupal\Core\Entity\EntityStorageInterface $storage
+   *   The block storage service.
    *
    * @return array
+   *   The data to store about blocks.
+   *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
   private function getBlocksData(EntityDecorator $decorator, EntityStorageInterface $storage) {

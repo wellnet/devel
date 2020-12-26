@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Class ProfilerPass.
+ * Register data collectors services.
  */
 class ProfilerPass implements CompilerPassInterface {
 

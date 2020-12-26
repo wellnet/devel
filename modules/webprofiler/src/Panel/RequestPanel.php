@@ -2,8 +2,14 @@
 
 namespace Drupal\webprofiler\Panel;
 
-class RequestPanel {
+/**
+ * Panel to render collected data about the request.
+ */
+class RequestPanel implements PanelInterface {
 
+  /**
+   * {@inheritDoc}
+   */
   public function render($token, $name): array {
     /** @var \Symfony\Component\HttpKernel\Profiler\Profiler $profiler */
     $profiler = \Drupal::service('webprofiler.profiler');

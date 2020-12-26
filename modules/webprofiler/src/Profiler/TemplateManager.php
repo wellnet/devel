@@ -12,18 +12,36 @@ use Twig\Environment;
  */
 class TemplateManager {
 
+  /**
+   * The profiler service.
+   *
+   * @var \Symfony\Component\HttpKernel\Profiler\Profiler
+   */
+  protected $profiler;
+
+  /**
+   * The Twig environment service.
+   *
+   * @var \Twig\Environment
+   */
   protected $twig;
 
+  /**
+   * Data collector templates retrieved by ProfilerPass class.
+   *
+   * @var array
+   */
   protected $templates;
-
-  protected $profiler;
 
   /**
    * TemplateManager constructor.
    *
    * @param \Symfony\Component\HttpKernel\Profiler\Profiler $profiler
+   *   The profiler service.
    * @param \Twig\Environment $twig
+   *   The Twig environment service.
    * @param array $templates
+   *   Data collector templates retrieved by ProfilerPass class.
    */
   public function __construct(Profiler $profiler, Environment $twig, array $templates) {
     $this->profiler = $profiler;
@@ -32,12 +50,15 @@ class TemplateManager {
   }
 
   /**
-   * Gets the template name for a given panel.
+   * Get the template name for a given panel.
    *
    * @param \Symfony\Component\HttpKernel\Profiler\Profile $profile
+   *   A profile.
    * @param string $panel
+   *   A data collector name.
    *
-   * @return mixed
+   * @return string
+   *   The template name for a given panel.
    *
    * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
    */
@@ -52,11 +73,13 @@ class TemplateManager {
   }
 
   /**
-   * Gets template names of templates that are present in the viewed profile.
+   * Get template names of templates that are present in the viewed profile.
+   *
+   * @param \Symfony\Component\HttpKernel\Profiler\Profile $profile
+   *   A profile.
    *
    * @return array
-   *
-   * @throws \UnexpectedValueException
+   *   Template names of templates that are present in the viewed profile.
    */
   public function getNames(Profile $profile) {
     $templates = [];

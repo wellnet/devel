@@ -15,21 +15,23 @@ use PhpParser\NodeVisitor\FindingVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
 use Psr\Log\LoggerInterface;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
+use Twig\Error\Error as TwigError;
 
 /**
- * Class DecoratorGenerator.
+ * Generate decorators for config entity storage classes.
  */
 class ConfigEntityStorageDecoratorGenerator implements DecoratorGeneratorInterface {
 
   /**
+   * The Entity type manager service.
+   *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   private $entityTypeManager;
 
   /**
+   * The logger service.
+   *
    * @var \Psr\Log\LoggerInterface
    */
   private $log;
@@ -38,7 +40,9 @@ class ConfigEntityStorageDecoratorGenerator implements DecoratorGeneratorInterfa
    * DecoratorGenerator constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The Entity type manager service.
    * @param \Psr\Log\LoggerInterface $log
+   *   The logger service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, LoggerInterface $log) {
     $this->entityTypeManager = $entity_type_manager;
@@ -53,8 +57,8 @@ class ConfigEntityStorageDecoratorGenerator implements DecoratorGeneratorInterfa
 
     foreach ($classes as $class) {
       try {
-        $php = $this->createDecorator($class);
-        $this->writeDecorator($class['id'], $php);
+        $body = $this->createDecorator($class);
+        $this->writeDecorator($class['id'], $body);
       }
       catch (\Exception $e) {
         throw new \Exception('Unable to generate decorator for class ' . $class['class'] . '. ' . $e->getMessage());
@@ -75,7 +79,10 @@ class ConfigEntityStorageDecoratorGenerator implements DecoratorGeneratorInterfa
   }
 
   /**
+   * Return information about every config entity storage classes.
+   *
    * @return array
+   *   Information about every config entity storage classes.
    */
   public function getClasses(): array {
     $definitions = $this->entityTypeManager->getDefinitions();
@@ -84,7 +91,7 @@ class ConfigEntityStorageDecoratorGenerator implements DecoratorGeneratorInterfa
     foreach ($definitions as $definition) {
       try {
         $classPath = $this->getClassPath($definition->getStorageClass());
-        $ast = $this->getAST($classPath);
+        $ast = $this->getAst($classPath);
 
         $visitor = new FindingVisitor(function (Node $node) {
           return $this->isConfigEntityStorage($node);
@@ -121,25 +128,32 @@ class ConfigEntityStorageDecoratorGenerator implements DecoratorGeneratorInterfa
   }
 
   /**
+   * Get the filename of the file in which the class has been defined.
+   *
    * @param string $class
+   *   A class name.
    *
    * @return string
+   *   The filename of the file in which the class has been defined.
    *
    * @throws \ReflectionException
    */
   private function getClassPath(string $class): string {
     $reflector = new \ReflectionClass($class);
-    $classPath = $reflector->getFileName();
 
-    return $classPath;
+    return $reflector->getFileName();
   }
 
   /**
+   * Parses PHP code into a node tree.
+   *
    * @param string $classPath
+   *   The filename of the file in which a class has been defined.
    *
    * @return \PhpParser\Node\Stmt[]|null
+   *   Array of statements.
    */
-  private function getAST(string $classPath): array {
+  private function getAst(string $classPath): array {
     $code = file_get_contents($classPath);
     $parser = (new ParserFactory())->create(ParserFactory::ONLY_PHP7);
 
@@ -147,9 +161,13 @@ class ConfigEntityStorageDecoratorGenerator implements DecoratorGeneratorInterfa
   }
 
   /**
+   * Return TRUE if this Node represent a config entity storage class.
+   *
    * @param \PhpParser\Node $node
+   *   The Node to check.
    *
    * @return bool
+   *   TRUE if this Node represent a config entity storage class.
    */
   private function isConfigEntityStorage(Node $node): bool {
     if ($node instanceof Class_
@@ -165,9 +183,13 @@ class ConfigEntityStorageDecoratorGenerator implements DecoratorGeneratorInterfa
   }
 
   /**
+   * Create the decorator from class information.
+   *
    * @param array $class
+   *   The class information.
    *
    * @return string
+   *   The decorator class body.
    *
    * @throws \Exception
    */
@@ -175,7 +197,7 @@ class ConfigEntityStorageDecoratorGenerator implements DecoratorGeneratorInterfa
     $decorator = $class['class'] . 'Decorator';
 
     $classPath = $this->getClassPath($class['interface']);
-    $ast = $this->getAST($classPath);
+    $ast = $this->getAst($classPath);
 
     $nodeFinder = new NodeFinder();
     $nodes = $nodeFinder->find($ast, function (Node $node) {
@@ -202,34 +224,31 @@ class ConfigEntityStorageDecoratorGenerator implements DecoratorGeneratorInterfa
     try {
       /** @var \Twig\Environment $twig */
       $twig = \Drupal::service('twig');
-      $php = $twig->render('@webprofiler/Decorator/storageDecorator.php.twig', [
+
+      return $twig->render('@webprofiler/Decorator/storageDecorator.php.twig', [
         'decorator' => $decorator,
         'interface' => $class['interface'],
         'methods' => $methods,
       ]);
-
-      return $php;
     }
-    catch (LoaderError $e) {
-      throw new \Exception('Unable to create a decorator. ' . $e->getMessage());
-    }
-    catch (RuntimeError $e) {
-      throw new \Exception('Unable to create a decorator. ' . $e->getMessage());
-    }
-    catch (SyntaxError $e) {
+    catch (TwigError $e) {
       throw new \Exception('Unable to create a decorator. ' . $e->getMessage());
     }
   }
 
   /**
+   * Write a decorator class body to file.
+   *
    * @param string $name
-   * @param string $php
+   *   The class name.
+   * @param string $body
+   *   The class body.
    */
-  private function writeDecorator(string $name, string $php) {
+  private function writeDecorator(string $name, string $body) {
     $storage = PhpStorageFactory::get('webprofiler');
 
     if (!$storage->exists($name)) {
-      $storage->save($name, $php);
+      $storage->save($name, $body);
     }
   }
 
