@@ -23,7 +23,8 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
 
     // Add BlockDataCollector only if Block module is enabled.
     if (isset($modules['block'])) {
-      $container->register('webprofiler.blocks', 'Drupal\webprofiler\DataCollector\BlocksDataCollector')
+      $container->register('webprofiler.blocks',
+        'Drupal\webprofiler\DataCollector\BlocksDataCollector')
         ->addArgument(new Reference(('entity_type.manager')))
         ->addTag('data_collector', [
           'template' => '@webprofiler/Collector/blocks.html.twig',
@@ -32,6 +33,17 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
           'priority' => 78,
         ]);
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function alter(ContainerBuilder $container) {
+    // Replace the regular access_manager service with a traceable one.
+    $container->getDefinition('access_manager')
+      ->setClass('Drupal\webprofiler\Access\AccessManagerWrapper')
+      ->addMethodCall('setDataCollector',
+        [new Reference('webprofiler.request')]);
   }
 
 }

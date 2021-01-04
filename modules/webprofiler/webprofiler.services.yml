@@ -47,12 +47,6 @@ services:
   twig.profile:
     class: Twig\Profiler\Profile
 
-  twig.extension.profiler:
-    class: Drupal\webprofiler\Twig\Extension\ProfilerExtension
-    arguments: ['@twig.profile']
-    tags:
-      - { name: twig.extension, priority: 100 }
-
   # data collectors
   webprofiler.request:
     class: Drupal\webprofiler\DataCollector\RequestDataCollector

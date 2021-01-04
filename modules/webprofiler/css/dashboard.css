@@ -1,0 +1,23 @@
+.webprofiler {
+  display: grid;
+  grid-template-columns: 1fr 10fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 10px;
+  grid-row-gap: 0;
+}
+
+.webprofiler__collectors {
+  grid-area: 1 / 1 / 2 / 2;
+}
+
+.webprofiler__panels {
+  grid-area: 1 / 2 / 2 / 3;
+}
+
+.webprofiler__key {
+  width: 20%;
+}
+
+.webprofiler__value {
+  width: 80%;
+}

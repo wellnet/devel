@@ -5,6 +5,8 @@ namespace Drupal\webprofiler\DataCollector;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\webprofiler\Entity\EntityDecorator;
+use Drupal\webprofiler\Panel\BlocksPanel;
+use Drupal\webprofiler\Panel\PanelInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
@@ -12,7 +14,7 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 /**
  * DataCollector for Drupal blocks.
  */
-class BlocksDataCollector extends DataCollector {
+class BlocksDataCollector extends DataCollector implements DrupalDataCollectorInterface {
 
   /**
    * The Entity type manager service.
@@ -146,6 +148,13 @@ class BlocksDataCollector extends DataCollector {
     }
 
     return $blocks;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPanel(): PanelInterface {
+    return new BlocksPanel();
   }
 
 }

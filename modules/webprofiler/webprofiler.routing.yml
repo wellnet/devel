@@ -8,7 +8,7 @@ webprofiler.toolbar:
 webprofiler.dashboard:
   path: '/admin/reports/profiler/view/{token}'
   defaults:
-    _title: 'Dashboard'
+    _title: 'Webprofiler Dashboard'
     _controller: '\Drupal\webprofiler\Controller\DashboardController::dashboard'
   requirements:
     _permission: 'access webprofiler'

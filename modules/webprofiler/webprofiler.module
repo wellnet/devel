@@ -43,10 +43,18 @@ function webprofiler_theme() {
       'variables' => [
         'collectors' => [],
         'token' => '',
+        'profile' => NULL,
       ],
     ],
     'webprofiler_dashboard_panel' => [
       'template' => 'Profiler/dashboard_panel',
+      'variables' => [
+        'title' => '',
+        'data' => [],
+      ],
+    ],
+    'webprofiler_dashboard_table' => [
+      'template' => 'Profiler/dashboard_table',
       'variables' => [
         'title' => '',
         'data' => [],

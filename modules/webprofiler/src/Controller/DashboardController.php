@@ -7,7 +7,7 @@ namespace Drupal\webprofiler\Controller;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\webprofiler\Panel\RequestPanel;
+use Drupal\webprofiler\DataCollector\DrupalDataCollectorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,8 +58,14 @@ class DashboardController extends ControllerBase {
 
     $token = $request->get('token');
 
-    /** @var \Symfony\Component\HttpKernel\DataCollector\DataCollector $el */
-    $collectors = array_filter($this->profiler->all(), function ($el) {
+    $profile = $this->profiler->loadProfile($token);
+
+    if ($profile == NULL) {
+      return [];
+    }
+
+    /** @var \Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface $el */
+    $collectors = array_filter($profile->getCollectors(), function ($el) {
       return [
         'name' => $el->getName(),
       ];
@@ -69,6 +75,7 @@ class DashboardController extends ControllerBase {
       '#theme' => 'webprofiler_dashboard',
       '#collectors' => $collectors,
       '#token' => $token,
+      '#profile' => $profile,
       '#attached' => [
         'library' => [
           'webprofiler/dashboard',
@@ -89,20 +96,30 @@ class DashboardController extends ControllerBase {
    *   A Response instance.
    */
   public function panel($token, $name) {
+    $this->profiler->disable();
+
     if ('empty' === $token || NULL === $token || NULL === $name) {
       return new JsonResponse('');
     }
-
-    $this->profiler->disable();
 
     if (!$profile = $this->profiler->loadProfile($token)) {
       return new JsonResponse('');
     }
 
-    $panel = new RequestPanel();
+    $collector = $profile->getCollector($name);
+    if (!($collector instanceof DrupalDataCollectorInterface)) {
+      return new JsonResponse('');
+    }
+
+    $panel = $collector->getPanel();
 
     $response = new AjaxResponse();
-    $response->addCommand(new HtmlCommand('#js-webprofiler-panel', $panel->render($token, $name)));
+    $response->addCommand(
+      new HtmlCommand(
+        '#js-webprofiler-panel',
+        $panel->render($token, $name)
+      )
+    );
 
     return $response;
   }
