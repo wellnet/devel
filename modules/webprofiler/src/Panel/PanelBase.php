@@ -37,6 +37,9 @@ class PanelBase {
     $this->dumper = $dumper ?: new HtmlDumper();
     $this->dumper->setOutput($this->output = fopen('php://memory', 'r+b'));
     $this->dumper->setTheme('light');
+
+    $file_link_formatter = \Drupal::service('webprofiler.file_link_formatter');
+    $this->dumper->setDisplayOptions(['fileLinkFormat' => $file_link_formatter]);
   }
 
   /**

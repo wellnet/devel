@@ -62,3 +62,15 @@ function webprofiler_theme() {
     ],
   ];
 }
+
+/**
+ * Implements hook_cache_flush().
+ */
+function webprofiler_cache_flush() {
+  $config = \Drupal::configFactory()->get('webprofiler.settings');
+
+  if ($config->get('purge_on_cache_clear')) {
+    $profiler = \Drupal::service('webprofiler.profiler');
+    $profiler->purge();
+  }
+}

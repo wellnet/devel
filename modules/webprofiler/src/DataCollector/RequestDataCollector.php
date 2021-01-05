@@ -26,21 +26,14 @@ class RequestDataCollector extends BaseRequestDataCollector implements DrupalDat
    *
    * @var \Drupal\Core\Controller\ControllerResolverInterface
    */
-  private $controllerResolver;
-
-  /**
-   * A Request object.
-   *
-   * @var \Symfony\Component\HttpFoundation\Request
-   */
-  private $request;
+  private ControllerResolverInterface $controllerResolver;
 
   /**
    * The list of access checks applied to this request.
    *
    * @var array
    */
-  private $accessChecks;
+  private array $accessChecks;
 
   /**
    * RequestDataCollector constructor.
@@ -59,11 +52,10 @@ class RequestDataCollector extends BaseRequestDataCollector implements DrupalDat
    */
   public function collect(
     Request $request,
-    Response $response/*, \Throwable $exception = null*/
+    Response $response
+    /*, \Throwable $exception = null*/
   ) {
     parent::collect($request, $response);
-
-    $this->request = $request;
 
     if ($controller = $this->controllerResolver->getController($request)) {
       $this->data['controller'] = $this->getMethodData(
@@ -89,7 +81,7 @@ class RequestDataCollector extends BaseRequestDataCollector implements DrupalDat
    *   The callable that implement the access check.
    */
   public function addAccessCheck(
-    $service_id,
+    string $service_id,
     array $callable
   ) {
     $this->accessChecks[] = [

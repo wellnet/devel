@@ -2,6 +2,11 @@
 
 namespace Drupal\webprofiler\DataCollector;
 
+use Drupal\webprofiler\MethodData;
+use Symfony\Component\VarDumper\Caster\Caster;
+use Symfony\Component\VarDumper\Caster\LinkStub;
+use Symfony\Component\VarDumper\Cloner\Stub;
+
 /**
  * Trait with common code for data collectors.
  */
@@ -10,30 +15,30 @@ trait DataCollectorTrait {
   /**
    * Return information about a method of a class.
    *
-   * @param string $class
+   * @param mixed $class
    *   A class name.
    * @param string $method
    *   A method name.
    *
-   * @return array
+   * @return \Drupal\webprofiler\MethodData
    *   Array of information about a method of a class.
    */
-  public function getMethodData($class, $method) {
+  public function getMethodData($class, string $method): ?MethodData {
     $class = is_object($class) ? get_class($class) : $class;
-    $data = [];
+    $data = NULL;
 
     try {
       $reflectedMethod = new \ReflectionMethod($class, $method);
 
-      $data = [
-        'class' => $class,
-        'method' => $method,
-        'file' => $reflectedMethod->getFilename(),
-        'line' => $reflectedMethod->getStartLine(),
-      ];
+      $data = new MethodData(
+        $class,
+        $method,
+        $reflectedMethod->getFilename(),
+        $reflectedMethod->getStartLine()
+      );
     }
     catch (\ReflectionException $re) {
-      // @todo handle the exception.
+      return NULL;
     }
     finally {
       return $data;
@@ -46,10 +51,10 @@ trait DataCollectorTrait {
    * @param string $value
    *   The value to convert.
    *
-   * @return int|string
+   * @return int
    *   A human readable string.
    */
-  private function convertToBytes($value) {
+  private function convertToBytes(string $value) {
     if ('-1' === $value) {
       return -1;
     }
@@ -85,6 +90,20 @@ trait DataCollectorTrait {
     }
 
     return $max;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  protected function getCasters(): array {
+    return parent::getCasters() + [
+      MethodData::class => function (MethodData $md, array $a, Stub $stub) {
+          $a[Caster::PREFIX_DYNAMIC . 'link'] = new LinkStub($md->getClass() . '::' . $md->getMethod(),
+            $md->getLine(), 'file://' . $md->getFile());
+
+          return $a;
+      },
+    ];
   }
 
 }

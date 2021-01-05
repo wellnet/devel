@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Drupal\webprofiler\Controller;
 
 use Drupal\Core\Ajax\AjaxResponse;

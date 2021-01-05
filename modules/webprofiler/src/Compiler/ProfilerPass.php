@@ -33,7 +33,15 @@ class ProfilerPass implements CompilerPassInterface {
         if (!isset($attributes[0]['id'])) {
           throw new InvalidArgumentException(sprintf('Data collector service "%s" must have an id attribute in order to specify a template', $id));
         }
-        $template = [$attributes[0]['id'], $attributes[0]['template']];
+        if (!isset($attributes[0]['title'])) {
+          throw new \InvalidArgumentException(sprintf('Data collector service "%s" must have a title attribute', $id));
+        }
+
+        $template = [
+          $attributes[0]['id'],
+          $attributes[0]['template'],
+          $attributes[0]['title'],
+        ];
       }
 
       $collectors->insert([$id, $template], [$priority, --$order]);
@@ -45,7 +53,7 @@ class ProfilerPass implements CompilerPassInterface {
       $templates[$collector[0]] = $collector[1];
     }
 
-    $container->setParameter('data_collector.templates', $templates);
+    $container->setParameter('webprofiler.templates', $templates);
 
     // Set a parameter with the storage dns.
     $path = 'file:' . DRUPAL_ROOT . '/' . PublicStream::basePath() . '/profiler';

@@ -35,13 +35,24 @@ services:
 
   webprofiler.template_manager:
     class: Drupal\webprofiler\Profiler\TemplateManager
-    arguments: ['@webprofiler.profiler', '@twig', '%data_collector.templates%']
+    arguments: ['@webprofiler.profiler', '@twig', '%webprofiler.templates%']
 
   webprofiler.toolbar_listener:
     class: Drupal\webprofiler\EventListener\WebDebugToolbarListener
     arguments: ['@renderer', '@current_user', '@url_generator', '@webprofiler.csp', '@config.factory']
     tags:
       - { name: event_subscriber }
+
+  webprofiler.file_link_formatter:
+    class: Symfony\Component\HttpKernel\Debug\FileLinkFormatter
+    factory: Drupal\webprofiler\FileLinkFormatterFactory::getFileLinkFormatter
+    arguments: ['@request_stack', '@config.factory']
+
+  webprofiler.twig.code_extension:
+    class: Drupal\webprofiler\Twig\Extension\CodeExtension
+    arguments: [ '@webprofiler.file_link_formatter' ]
+    tags:
+      - { name: twig.extension, priority: 100 }
 
   # twig profiler
   twig.profile:

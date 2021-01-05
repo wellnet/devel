@@ -39,7 +39,7 @@ class BlocksPanel extends PanelBase implements PanelInterface {
    * @return array
    *   The render array of the list of blocks.
    */
-  protected function renderBlocks(array $blocks, $label): array {
+  protected function renderBlocks(array $blocks, string $label): array {
     if (count($blocks) == 0) {
       return [
         $label => [

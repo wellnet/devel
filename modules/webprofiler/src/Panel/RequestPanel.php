@@ -30,6 +30,10 @@ class RequestPanel extends PanelBase implements PanelInterface {
       $this->renderTable(
         $collector->getRequestCookies()->all(), 'Cookies'),
       $this->renderTable(
+        $collector->getSessionMetadata(), 'Session Metadata'),
+      $this->renderTable(
+        $collector->getSessionAttributes(), 'Session Attributes'),
+      $this->renderTable(
         $collector->getRequestHeaders()->all(), 'Request headers'),
       $this->renderContent(
         $collector->getContent(), 'Raw content'),
