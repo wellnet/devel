@@ -50,11 +50,7 @@ class RequestDataCollector extends BaseRequestDataCollector implements DrupalDat
   /**
    * {@inheritdoc}
    */
-  public function collect(
-    Request $request,
-    Response $response
-    /*, \Throwable $exception = null*/
-  ) {
+  public function collect(Request $request, Response $response, \Throwable $exception = NULL) {
     parent::collect($request, $response);
 
     if ($controller = $this->controllerResolver->getController($request)) {
