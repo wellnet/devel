@@ -1,17 +1,65 @@
-.webprofiler {
-  display: grid;
-  grid-template-columns: 1fr 10fr;
-  grid-template-rows: 1fr;
-  grid-column-gap: 10px;
-  grid-row-gap: 0;
+.webprofiler__dashboard {
+  overflow: hidden;
+  font-size: 0;
+  position: relative;
+  background: #f5f5f2;
+  border: 1px solid #ccc;
 }
 
 .webprofiler__collectors {
-  grid-area: 1 / 1 / 2 / 2;
+  display: inline-block;
+  float: left;
+  width: 15%;
+  font-size: 14px;
 }
 
+.webprofiler__collectors ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.webprofiler__collectors ul li {
+  background: #f5f5f2;
+}
+
+.webprofiler__collectors ul li a {
+  padding: 10px;
+  display: block;
+  border-bottom: 1px solid #ccc;
+}
+
+.webprofiler__collectors ul li a.selected {
+  background: #ffffff;
+  border-left: 3px solid #0074bd;
+  border-right: none;
+}
+
+.webprofiler__collectors ul li a .controller__item_summary {
+  display: block;
+  padding-top: 0.4em;
+  color: #666;
+}
+
+
 .webprofiler__panels {
-  grid-area: 1 / 2 / 2 / 3;
+  float: right;
+  width: 85%;
+  font-size: 14px;
+  background: #ffffff;
+}
+
+.webprofiler__panel {
+  padding: 0 10px;
+  border-left: 1px solid #ffffff;
+}
+
+.webprofiler__panel h3 {
+  padding-left: 10px;
+}
+
+.webprofiler__panel_wrapper {
+  overflow-x: auto;
 }
 
 .webprofiler__key {
@@ -20,4 +68,30 @@
 
 .webprofiler__value {
   width: 80%;
+}
+
+
+.webprofiler__information {
+  border: 1px solid #ccc;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  background-color: #f5f5f2;
+  font-size: 14px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.webprofiler__information p {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.webprofiler__information p .label {
+  font-weight: bold;
+}
+
+.webprofiler__information p.information__url {
+  display: block;
+  font-size: 20px;
+  margin-bottom: 0;
 }

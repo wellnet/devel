@@ -1,18 +1,27 @@
 <div class="webprofiler">
-  <div class="webprofiler__collectors">
-    <ul>
-      {% for collector in collectors %}
-        <li class="webprofiler__collector"><a
-            href="{{ path('webprofiler.panel', {'token': token, 'name': collector.name}) }}"
-            class="use-ajax">{{ collector.name|capitalize }}</a></li>
-      {% endfor %}
-    </ul>
+  <div class="webprofiler__information">
+    <p class="information__url">{{ profile.url }} </p>
+    <p><span class="label">{{ 'Method'|t }}:</span> {{ profile.method }}</p>
+    <p><span class="label"> IP:</span> {{ profile.ip }}</p>
+    <p><span class="label"> {{ 'Profiled on'|t }}:</span> {{ profile.time|date('l, j F  Y - H:i') }}</p>
   </div>
-  <div class="webprofiler__panels">
-    <p>{{ '@method @url from @ip at @time'|t({'@method': profile.method, '@url': profile.url,'@ip': profile.ip,'@time': profile.time}) }}</p>
 
-    <div class="webprofiler__panel" id="js-webprofiler-panel">
-      <p>{{ "Choose a panel on the left"|t }}</p>
+  <div class="webprofiler__dashboard">
+    <div class="webprofiler__collectors">
+      <ul>
+        {% for collector in collectors %}
+          <li class="webprofiler__collector"><a
+              href="{{ path('webprofiler.panel', {'token': token, 'name': collector.name}) }}"
+              class="use-ajax"><strong class="controller__item_title">{{ collector.name|capitalize }}</strong>
+              <span class="controller__item_summary"></span></a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="webprofiler__panels">
+      <div class="webprofiler__panel" id="js-webprofiler-panel">
+        <p>{{ "Choose a panel on the left"|t }}</p>
+      </div>
     </div>
   </div>
 </div>
