@@ -1,0 +1,38 @@
+{% block toolbar %}
+  {% set color_code = (collector.authenticated) ? 'green' : 'red' %}
+  {% set icon %}
+    {{ include('@webprofiler/Icon/user.svg') }}
+    <span class="sf-toolbar-value">{{ collector.username }}</span>
+    <span
+        class="sf-toolbar-info-piece-additional sf-toolbar-status sf-toolbar-status-{{ color_code }}">
+        {% if collector.authenticated %}
+          {{ collector.username }}
+        {% endif %}
+    </span>
+  {% endset %}
+
+  {% set text %}
+    {% if collector.authenticated %}
+      <div class="sf-toolbar-info-piece">
+        <b>{{ 'Logged in as'|t }}</b>
+        <span
+            class="sf-toolbar-status sf-toolbar-status-{{ color_code }}">{{ collector.username }}</span>
+      </div>
+      <div class="sf-toolbar-info-piece">
+        <b>{{ 'Roles'|t }}</b>
+        <span>
+          {{ collector.roles|join(', ') }}
+        </span>
+      </div>
+      <div class="sf-toolbar-info-piece">
+        <b>{{ 'Authenticated by'|t }}</b>
+        <span>{{ collector.provider }}</span>
+      </div>
+    {% else %}
+      {{ collector.anonymous }}
+    {% endif %}
+  {% endset %}
+
+  {{ include('@webprofiler/Profiler/toolbar_item.html.twig', { link: profiler_url }) }}
+{% endblock %}
+

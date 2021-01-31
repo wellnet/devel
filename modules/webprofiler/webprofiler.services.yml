@@ -66,6 +66,12 @@ services:
       - { name: data_collector, template: '@webprofiler/Collector/request.html.twig', id: 'request', title: 'Request', priority: 100 }
       - { name: event_subscriber }
 
+  webprofiler.user:
+    class: Drupal\webprofiler\DataCollector\UserDataCollector
+    arguments: [ '@current_user', '@entity_type.manager', '@config.factory', '@authentication_collector' ]
+    tags:
+      - { name: data_collector, template: '@webprofiler/Collector/user.html.twig', id: 'user',  title: 'User', priority: 70 }
+
   # debug services
   webprofiler.debug.entity_type.manager:
     class: Drupal\webprofiler\Entity\EntityTypeManagerWrapper
