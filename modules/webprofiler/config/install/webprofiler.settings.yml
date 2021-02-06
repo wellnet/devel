@@ -1,11 +1,11 @@
 exclude_paths: "/contextual/*\r\n/toolbar/*\r\n/edit/*\r\n*.js\r\n*.css"
 intercept_redirects: true
-purge_on_cache_clear: 1
+purge_on_cache_clear: true
 active_toolbar_items:
   blocks: blocks
   request: request
 query_sort: null
-query_highlight: ''
+query_highlight: null
 ide: 'phpstorm://open?file=%f&line=%l'
 ide_remote_path: ''
 ide_local_path: ''
