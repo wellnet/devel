@@ -26,14 +26,14 @@ class RequestDataCollector extends BaseRequestDataCollector implements DrupalDat
    *
    * @var \Drupal\Core\Controller\ControllerResolverInterface
    */
-  private ControllerResolverInterface $controllerResolver;
+  protected $controllerResolver;
 
   /**
    * The list of access checks applied to this request.
    *
    * @var array
    */
-  private array $accessChecks;
+  protected $accessChecks;
 
   /**
    * RequestDataCollector constructor.
@@ -50,11 +50,7 @@ class RequestDataCollector extends BaseRequestDataCollector implements DrupalDat
   /**
    * {@inheritdoc}
    */
-  public function collect(
-    Request $request,
-    Response $response
-    /*, \Throwable $exception = null*/
-  ) {
+  public function collect(Request $request, Response $response, \Exception $exception = NULL) {
     parent::collect($request, $response);
 
     if ($controller = $this->controllerResolver->getController($request)) {

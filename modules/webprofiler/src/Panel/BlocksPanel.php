@@ -18,7 +18,7 @@ class BlocksPanel extends PanelBase implements PanelInterface {
 
     $data = array_merge(
       $this->renderBlocks($collector->getLoadedBlocks(), 'Loaded'),
-      $this->renderBlocks($collector->getRenderedBlocks(), 'Rendered'),
+      $this->renderBlocks($collector->getRenderedBlocks(), 'Rendered')
     );
 
     return [
@@ -44,7 +44,7 @@ class BlocksPanel extends PanelBase implements PanelInterface {
       return [
         $label => [
           '#markup' => '<p>' . $this->t('No @label blocks collected',
-            ['@label' => $label]) . '</p>',
+              ['@label' => $label]) . '</p>',
         ],
       ];
     }
