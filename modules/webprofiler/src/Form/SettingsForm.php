@@ -125,7 +125,10 @@ class SettingsForm extends ConfigFormBase {
     $form['database']['query_sort'] = [
       '#type' => 'radios',
       '#title' => $this->t('Sort query log'),
-      '#options' => ['source' => $this->t('by source'), 'duration' => $this->t('by duration')],
+      '#options' => [
+        'source' => $this->t('by source'),
+        'duration' => $this->t('by duration'),
+      ],
       '#description' => $this->t('The query table can be sorted in the order that the queries were executed or by descending duration.'),
       '#default_value' => $config->get('query_sort'),
     ];
@@ -194,10 +197,7 @@ class SettingsForm extends ConfigFormBase {
   private function getCollectors() {
     $options = [];
     foreach ($this->templates as $template) {
-      // Drupal collector should not be disabled.
-      if ($template[0] != 'drupal') {
-        $options[$template[0]] = $template[2];
-      }
+      $options[$template[0]] = $template[2];
     }
 
     asort($options);
