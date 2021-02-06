@@ -16,7 +16,7 @@ class CodeExtension extends AbstractExtension {
    *
    * @var \Symfony\Component\HttpKernel\Debug\FileLinkFormatter
    */
-  private FileLinkFormatter $fileLinkFormat;
+  protected $fileLinkFormat;
 
   /**
    * CodeExtension constructor.

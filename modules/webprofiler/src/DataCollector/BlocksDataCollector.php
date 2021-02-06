@@ -46,7 +46,7 @@ class BlocksDataCollector extends DataCollector implements DrupalDataCollectorIn
   /**
    * {@inheritdoc}
    */
-  public function collect(Request $request, Response $response, \Throwable $exception = NULL) {
+  public function collect(Request $request, Response $response, \Exception $exception = NULL) {
     $storage = $this->entityManager->getStorage('block');
 
     $loaded = $this->entityManager->getLoaded('config', 'block');
